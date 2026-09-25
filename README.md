@@ -2,7 +2,7 @@
 
 <div align="center">
 
-![EAS30 Logo](https://i.ibb.co/wFY6Tn2y/7-F.png)
+![EAS30 Logo](https://files.catbox.moe/icnd8l.png)
 
 **A premium class profile & hobbies website for Class 8A of EAS (Baku)**
 
@@ -16,7 +16,7 @@
 
 ## 📌 Overview
 
-EAS30 is the official class website for **Class 8A** of the English-Azerbaijani School (EAS), Baku. It showcases each student's hobbies and personality, provides access to school resources, and delivers a uniquely interactive web experience complete with secret visual modes, AI chat, games, and more.
+EAS30 is the official class website for **Class 8A** of the European Azerbaijani School (EAS), Baku. It showcases each student's hobbies and personality, provides access to school resources, and delivers a uniquely interactive web experience complete with secret visual modes, AI chat, games, and more.
 
 > "At this website, people can see your hobby and know you better."
 
