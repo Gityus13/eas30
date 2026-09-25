@@ -1,0 +1,1023 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Games - EAS30</title>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-JXV858VBM0"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-JXV858VBM0');
+    </script>
+    <link rel="icon" type="image/png" href="https://i.ibb.co/wFY6Tn2y/7-F.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/animejs/lib/anime.iife.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,500;9..144,600;9..144,700&display=swap');
+        
+        /* Base styles */
+        * {
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background: linear-gradient(45deg, #0b1637, #3d2b7d, #7c3aed, #ec4899, #f472b6, #22d3ee, #0ea5e9, #4c1d95);
+            overflow-x: hidden;
+            animation: gradientShift 30s ease infinite;
+            background-size: 400% 400%;
+        }
+        
+        body.dark-mode {
+            background: linear-gradient(45deg, #0b1421, #172130, #2a3647, #3c4a59, #566477, #8b97a9, #b8c2d1, #d3dce7);
+        }
+        
+        @keyframes gradientShift {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+        
+        .max-w-3xl {
+            max-width: 66rem;
+        }
+        
+        .name-card {
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transform-style: preserve-3d;
+        }
+        
+        .name-card:hover {
+            transform: translateY(-15px) rotateY(5deg);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.3);
+        }
+        
+        .name-title {
+            font-family: 'Fraunces', serif;
+        }
+        
+        header {
+            background: rgba(0, 0, 0, 0.15);
+            backdrop-filter: blur(5px);
+        }
+        
+        body.dark-mode header {
+            background: rgba(0, 0, 0, 0.3);
+        }
+        
+        .container {
+            max-width: 1400px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+        
+        .floating {
+            animation: floating 3s ease-in-out infinite;
+        }
+        
+        .rounded-3xl {
+            border-radius: 1.5rem;
+        }
+        
+        @keyframes floating {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-25px); }
+            100% { transform: translateY(0px); }
+        }
+        
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+        
+        .shadow-2xl {
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        .p-10 {
+            padding: 2.5rem;
+        }
+        
+        .mb-5 {
+            margin-bottom: 1.25rem;
+        }
+        
+        .text-lg {
+            font-size: 1.125rem;
+            line-height: 1.75rem;
+        }
+        
+        .gradient-text {
+            background: linear-gradient(45deg, #ec4899, #22d3ee, #7c3aed, #f472b6, #4c1d95, #0ea5e9, #a855f7, #3d2b7d);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            background-size: 400% 400%;
+            animation: textGradientShift 8s ease infinite;
+            font-weight: 800;
+        }
+        
+        body.dark-mode .gradient-text {
+            background: linear-gradient(45deg, #ff9999, #7dd3d3, #70c1e0, #b8e2d4, #fcd77f, #ffb8e0, #99aef1, #a08bd9);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        @keyframes textGradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        .text-4xl {
+            font-size: 2.5rem;
+            line-height: 1.2;
+        }
+        
+        /* Dark mode toggle styles */
+        .dark-mode-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+        
+        .toggle-button {
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .toggle-button:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+        
+        .toggle-button i {
+            font-size: 20px;
+            color: white;
+        }
+        
+        body.dark-mode .toggle-button {
+            background: rgba(30, 41, 59, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        body.dark-mode .toggle-button:hover {
+            background: rgba(51, 65, 85, 0.9);
+        }
+        
+        body.dark-mode .toggle-button i {
+            color: #f1f5f9;
+        }
+        
+        /* Dark mode adjustments */
+        body.dark-mode .name-card {
+            background: rgba(30, 41, 59, 0.8) !important;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        body.dark-mode .name-card:hover {
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+            background: rgba(51, 65, 85, 0.9) !important;
+        }
+        
+        body.dark-mode .name-title {
+            color: #f1f5f9;
+        }
+        
+        body.dark-mode .name-card {
+            background: rgba(30, 41, 59, 0.8) !important;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        body.dark-mode .name-card:hover {
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+            background: rgba(51, 65, 85, 0.9) !important;
+        }
+        
+        body.dark-mode .name-title {
+            color: #f1f5f9;
+        }
+        
+        body.dark-mode p {
+            color: #cbd5e1 !important;
+        }
+        
+        body.dark-mode .gradient-text {
+            background: linear-gradient(45deg, #94a3b8, #cbd5e1, #e2e8f0, #f1f5f9);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        body.dark-mode footer {
+            background: rgba(15, 23, 42, 0.5);
+            backdrop-filter: blur(10px);
+        }
+        
+        body.dark-mode a[href="https://eas.managebac.com/student/home"] {
+            background: rgba(30, 41, 59, 0.5) !important;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        body.dark-mode a[href="https://eas.managebac.com/student/home"]:hover {
+            background: rgba(51, 65, 85, 0.7) !important;
+        }
+        
+        body.dark-mode .bg-white\/20 {
+            background: rgba(30, 41, 59, 极速加速器, 0.5) !important;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        body.dark-mode .bg-white\/20:hover {
+            background: rgba(51, 65, 85, 0.7) !important;
+        }
+        
+        body.dark-mode p {
+            color: #cbd5e1 !important;
+        }
+        
+        body.dark-mode .gradient-text {
+            background: linear-gradient(45deg, #94a3b8, #cbd5e1, #e2e8f0, #f1f5f9);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        body.dark-mode footer {
+            background: rgba(15, 23, 42, 0.5);
+            backdrop-filter: blur(10px);
+        }
+        
+        body.dark-mode a[href="https://eas.managebac.com/student/home"] {
+            background: rgba(30, 41, 59, 0.5) !important;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        body.dark-mode a[href="https://eas.managebac.com/student/home"]:hover {
+            background: rgba(51, 65, 85, 0.7) !important;
+        }
+        
+        body.dark-mode a[href="school.html"] {
+            background: rgba(30, 41, 59, 0.5) !important;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        body.dark-mode a[href="school.html"]:hover {
+            background: rgba(51, 65, 85, 0.7) !important;
+        }
+        
+        body.dark-mode .bg-white\/20 {
+            background: rgba(30, 41, 59, 0.5) !important;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        body.dark-mode .bg-white\/20:hover {
+            background: rgba(51, 65, 85, 0.7) !important;
+        }
+        
+        /* Star animations */
+        .star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle var(--duration) infinite ease-in-out;
+            opacity: 0;
+        }
+        
+        .py-12 {
+            padding-top: 3rem;
+            padding-bottom: 3rem;
+        }
+        
+        .text-xl {
+            font-size: 1.25rem;
+            line-height: 1.75rem;
+        }
+        
+        @keyframes twinkle {
+            0% { opacity: 0; transform: scale(0.5); }
+            50% { opacity: 1; transform: scale(1); }
+            100% { opacity: 0; transform: scale(0.5); }
+        }
+        
+        .gap-10 {
+            gap: 2.5rem;
+        }
+        
+        .p-5 {
+            padding: 1.25rem;
+        }
+        
+        .w-12, .h-12 {
+            width: 3rem;
+            height: 3rem;
+        }
+        
+        /* Game specific styles */
+        .game-container {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .game-title {
+            font-family: 'Fraunces', serif;
+            font-size: 2rem;
+            margin-bottom: 15px;
+            text-align: center;
+            color: white;
+        }
+        
+        .game-description {
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .game-canvas {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            display: block;
+            margin: 0 auto;
+        }
+        
+        .game-controls {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .game-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .game-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+        
+        .game-stats {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 15px;
+            color: white;
+        }
+        
+        .stat {
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+        
+        .stat-label {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+        
+        /* Memory Game Cards */
+        .memory-card {
+            height: 80px;
+            background-color: #6a11cb;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .memory-card.matched {
+            background-color: #2ecc71 !important;
+            cursor: default;
+        }
+        
+        /* Responsive Design */
+        /* Mobile First Approach */
+        
+        /* Header adjustments for mobile */
+        header {
+            padding: 2rem 1rem;
+        }
+        
+        /* Title size adjustments */
+        .name-title {
+            font-size: 2.5rem;
+        }
+        
+        /* Card adjustments */
+        .name-card {
+            padding: 1.5rem;
+        }
+        
+        /* Button container adjustments */
+        .button-container {
+            flex-direction: column;
+            gap: 1rem;
+        }
+        
+        .button-container a {
+            width: 100%;
+            text-align: center;
+            justify-content: center;
+        }
+        
+        /* Iframe adjustments */
+        iframe {
+            height: 400px;
+        }
+        
+        /* Tablet and larger screens */
+        @media (min-width: 640px) {
+            .name-title {
+                font-size: 3.5rem;
+            }
+            
+            .button-container {
+                flex-direction: row;
+                flex-wrap: wrap;
+            }
+            
+            .button-container a {
+                width: auto;
+            }
+        }
+        
+        @media (min-width: 768px) {
+            .name-title {
+                font-size: 4.5rem;
+            }
+            
+            .text-4xl {
+                font-size: 2.75rem;
+            }
+            
+            .text-xl {
+                font-size: 1.5rem;
+                line-height: 2rem;
+            }
+            
+            header {
+                padding: 5rem 1rem;
+            }
+            
+            .name-card {
+                padding: 2.5rem;
+            }
+        }
+        
+        @media (min-width: 1024px) {
+            .name-title {
+                font-size: 6rem;
+            }
+            
+            .text-4xl {
+                font-size: 3rem;
+            }
+            
+            .button-container {
+                flex-direction: row;
+                flex-wrap: nowrap;
+            }
+        }
+        
+        @media (min-width: 1280px) {
+            .name-title {
+                font-size: 7rem;
+            }
+        }
+        
+        /* Small mobile devices */
+        @media (max-width: 380px) {
+            .name-title {
+                font-size: 2rem;
+            }
+            
+            header p {
+                font-size: 1rem;
+            }
+            
+            .name-card {
+                padding: 1rem;
+            }
+            
+            .p-5 {
+                padding: 0.75rem;
+            }
+            
+            .w-12, .h-12 {
+                width: 2.5rem;
+                height: 2.5rem;
+            }
+            
+            iframe {
+                height: 350px;
+            }
+            
+            .dark-mode-toggle {
+                top: 10px;
+                right: 10px;
+            }
+            
+            .toggle-button {
+                width: 40px;
+                height: 40px;
+            }
+            
+            .toggle-button i {
+                font-size: 16px;
+            }
+            
+            .game-title {
+                font-size: 1.5rem;
+            }
+            
+            .game-canvas {
+                width: 300px;
+                height: 400px;
+            }
+        }
+        
+        /* Height adjustments for landscape mode on mobile */
+        @media (max-height: 600px) and (orientation: landscape) {
+            header {
+                padding: 1.5rem 1rem;
+            }
+            
+            .name-title {
+                font-size: 2.5rem;
+            }
+            
+            iframe {
+                height: 300px;
+            }
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+    <!-- Background stars -->
+    <div id="stars-container" class="fixed inset-0 overflow-hidden pointer-events-none"></div>
+    
+    <!-- Dark Mode Toggle -->
+    <div class="dark-mode-toggle">
+        <div class="toggle-button" id="darkModeToggle">
+            <i class="fas fa-moon"></i>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header class="relative py-8 md:py-20 text-center">
+        <div class="container mx-auto px-4">
+            <div class="flex justify-center mb-4 md:mb-6">
+                <img src="https://i.ibb.co/wFY6Tn2y/7-F.png" alt="Logo" class="h-24 w-24 md:h-32 md:w-32 floating rounded-full">
+            </div>
+            <h1 class="name-title font-bold text-white mb-4 md:mb-6 floating">
+                 EAS GAMES 
+            </h1>
+            <p class="text-lg md:text-2xl text-white/90 max-w-3xl mx-auto">
+                Enjoy our collection of fun and challenging games!
+            </p>
+        </div>
+    </header>
+    
+    <!-- Main Games Content -->
+    <main class="container mx-auto px-4 pb-12 md:pb-20">
+        
+        <!-- Memory Match Game -->
+        <div class="game-container" data-aos="fade-up">
+            <h2 class="game-title">Memory Match</h2>
+            <p class="game-description">Flip cards and match pairs of the same color!</p>
+            <div id="memory-game" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin: 0 auto; max-width: 400px;">
+                <!-- Cards will be generated here -->
+            </div>
+            <div class="game-stats">
+                <div class="stat">
+                    <div class="stat-value" id="match-count">0</div>
+                    <div class="stat-label">Matches</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value" id="move-count">0</div>
+                    <div class="stat-label">Moves</div>
+                </div>
+            </div>
+            <div class="game-controls">
+                <button class="game-btn" id="memory-reset">New Game</button>
+            </div>
+        </div>
+        
+        <!-- Reaction Time Test -->
+        <div class="game-container" data-aos="fade-up">
+            <h2 class="game-title">Reaction Time Test</h2>
+            <p class="game-description">Click the target as soon as it appears!</p>
+            <div id="reaction-test" style="width: 100%; height: 300px; background: rgba(0,0,0,0.2); position: relative; margin: 0 auto; border-radius: 10px;">
+                <div id="reaction-target" style="width: 50px; height: 50px; background: #ff6b6b; border-radius: 50%; position: absolute; display: none; cursor: pointer;"></div>
+            </div>
+            <div class="game-stats">
+                <div class="stat">
+                    <div class="stat-value" id="reaction-time">0</div>
+                    <div class="stat-label">Reaction Time (ms)</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value" id="attempts-count">0</div>
+                    <div class="stat-label">Attempts</div>
+                </div>
+            </div>
+            <div class="game-controls">
+                <button class="game-btn" id="reaction-start">Start Test</button>
+                <button class="game-btn" id="reaction-reset">Reset</button>
+            </div>
+        </div>
+        
+        <!-- Rock Paper Scissors -->
+        <div class="game-container" data-aos="fade-up">
+            <h2 class="game-title">Rock Paper Scissors</h2>
+            <p class="game-description">Choose your weapon and see if you can beat the computer!</p>
+            <div style="display: flex; justify-content: center; gap: 20px; margin: 20px 0;">
+                <button class="game-btn" data-choice="rock">✊ Rock</button>
+                <button class="game-btn" data-choice="paper">✋ Paper</button>
+                <button class="game-btn" data-choice="scissors">✌️ Scissors</button>
+            </div>
+            <div class="game-stats">
+                <div class="stat">
+                    <div class="stat-value" id="rps-result">-</div>
+                    <div class="stat-label">Result</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value" id="rps-score">0:0</div>
+                    <div class="stat-label">Wins:Losses</div>
+                </div>
+            </div>
+            <div class="game-controls">
+                <button class="game-btn" id="rps-reset">Reset Score</button>
+            </div>
+        </div>
+    </main>
+    
+    <!-- Navigation Section -->
+    <section class="container mx-auto px-4 mb-8 md:mb-10">
+        <div class="button-container flex justify-center gap-4 md:gap-6">
+            <a href="index.html" class="bg-white/20 hover:bg-white/30 backdrop-blur-sm text-white font-bold py-3 px-6 md:py-4 md:px-8 rounded-full transition-all duration-300 inline-flex items-center gap-2">
+                <i data-feather="home"></i>
+                Back to Home
+            </a>
+        </div>
+    </section>
+    
+    <!-- Footer -->
+    <footer class="bg-black/20 py-8 md:py-12 text-center text-white/80">
+        <div class="container mx-auto px-4">
+            <p class="text-base md:text-lg md:text-xl">Ⓡ-© 2026. Something incorrect, lie or you want to add something, etc contact for change +994 50 549 9933 or find Yusif.G 8a Or Farhad.A 8a Made by YUSAI And Farhadik. Logo By Rufiz.A Kenan the 3rd host</p>
+        </div>
+    </footer>
+    
+    <script>
+        // Initialize AOS
+        AOS.init({
+            duration: 1000,
+            once: true,
+            easing: 'ease-out-cubic',
+            offset: 100
+        });
+        
+        // Initialize Feather Icons
+        feather.replace();
+        
+        // Dark mode toggle functionality
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const toggleIcon = darkModeToggle.querySelector('i');
+        
+        // Check for saved theme preference or respect OS preference
+        const prefersDarkScheme = window.matchMedia('(prefers-color-scheme: dark)');
+        const currentTheme = localStorage.getItem('theme');
+        
+        if (currentTheme === 'dark') {
+            document.body.classList.add('dark-mode');
+            toggleIcon.classList.remove('fa-moon');
+            toggleIcon.classList.add('fa-sun');
+        }
+        
+        darkModeToggle.addEventListener('click', () => {
+            document.body.classList.toggle('dark-mode');
+            
+            // Update icon
+            if (document.body.classList.contains('dark-mode')) {
+                toggleIcon.classList.remove('fa-moon');
+                toggleIcon.classList.add('fa-sun');
+                localStorage.setItem('theme', 'dark');
+            } else {
+                toggleIcon.classList.remove('fa-sun');
+                toggleIcon.classList.add('fa-moon');
+                localStorage.setItem('theme', 'light');
+            }
+        });
+        
+        // Create background stars
+        function createStars() {
+            const container = document.getElementById('stars-container');
+            const starCount = 1000;
+            
+            for (let i = 0; i < starCount; i++) {
+                const star = document.createElement('div');
+                star.classList.add('star');
+                
+                // Random properties
+                const size = Math.random() * 3;
+                const posX = Math.random() * 100;
+                const posY = Math.random() * 100;
+                const duration = 2 + Math.random() * 5;
+                const delay = Math.random() * 5;
+                
+                star.style.width = `${size}px`;
+                star.style.height = `${size}px`;
+                star.style.left = `${posX}%`;
+                star.style.top = `${posY}%`;
+                star.style.setProperty('--duration', `${duration}s`);
+                star.style.animationDelay = `${delay}s`;
+                
+                container.appendChild(star);
+            }
+        }
+        
+        
+        // Memory Match Game
+        let memoryGame = {
+            hasFlippedCard: false,
+            lockBoard: false,
+            firstCard: null,
+            secondCard: null,
+            matchCount: 0,
+            moveCount: 0,
+            cards: ['red', 'red', 'blue', 'blue', 'green', 'green', 'yellow', 'yellow', 'purple', 'purple', 'orange', 'orange', 'pink', 'pink', 'teal', 'teal'],
+            
+            init: function() {
+                const memoryContainer = document.getElementById('memory-game');
+                memoryContainer.innerHTML = '';
+                
+                // Shuffle cards
+                this.cards.sort(() => Math.random() - 0.5);
+                
+                this.cards.forEach((card, index) => {
+                    const cardElement = document.createElement('div');
+                    cardElement.className = 'memory-card';
+                    cardElement.dataset.value = card;
+                    cardElement.innerHTML = '?';
+                    cardElement.addEventListener('click', () => this.flipCard(cardElement));
+                    memoryContainer.appendChild(cardElement);
+                });
+                
+                this.matchCount = 0;
+                this.moveCount = 0;
+                document.getElementById('match-count').textContent = this.matchCount;
+                document.getElementById('move-count').textContent = this.moveCount;
+            },
+            
+            flipCard: function(card) {
+                if (this.lockBoard) return;
+                if (card === this.firstCard) return;
+                if (card.classList.contains('matched')) return;
+                
+                card.style.backgroundColor = card.dataset.value;
+                card.innerHTML = '';
+                
+                if (!this.hasFlippedCard) {
+                    // First click
+                    this.hasFlippedCard = true;
+                    this.firstCard = card;
+                    return;
+                }
+                
+                // Second click
+                this.secondCard = card;
+                this.moveCount++;
+                document.getElementById('move-count').textContent = this.moveCount;
+                this.checkForMatch();
+            },
+            
+            checkForMatch: function() {
+                let isMatch = this.firstCard.dataset.value === this.secondCard.dataset.value;
+                
+                if (isMatch) {
+                    this.disableCards();
+                    this.matchCount++;
+                    document.getElementById('match-count').textContent = this.matchCount;
+                    
+                    if (this.matchCount === 8) {
+                        setTimeout(() => {
+                            alert(`Congratulations! You found all matches in ${this.moveCount} moves!`);
+                        }, 500);
+                    }
+                } else {
+                    this.unflipCards();
+                }
+            },
+            
+            disableCards: function() {
+                this.firstCard.classList.add('matched');
+                this.secondCard.classList.add('matched');
+                this.resetBoard();
+            },
+            
+            unflipCards: function() {
+                this.lockBoard = true;
+                
+                setTimeout(() => {
+                    this.firstCard.style.backgroundColor = '#6a11cb';
+                    this.firstCard.innerHTML = '?';
+                    this.secondCard.style.backgroundColor = '#6a11cb';
+                    this.secondCard.innerHTML = '?';
+                    this.resetBoard();
+                }, 1000);
+            },
+            
+            resetBoard: function() {
+                [this.hasFlippedCard, this.lockBoard] = [false, false];
+                [this.firstCard, this.secondCard] = [null, null];
+            },
+            
+            reset: function() {
+                this.init();
+            }
+        };
+        
+        // Reaction Time Test
+        let reactionTest = {
+            startTime: null,
+            timeoutId: null,
+            attemptsCount: 0,
+            totalReactionTime: 0,
+            
+            start: function() {
+                const target = document.getElementById('reaction-target');
+                const reactionTimeElement = document.getElementById('reaction-time');
+                
+                const showTarget = () => {
+                    // Random position
+                    const container = document.getElementById('reaction-test');
+                    const x = Math.random() * (container.offsetWidth - 50);
+                    const y = Math.random() * (container.offsetHeight - 50);
+                    
+                    target.style.left = x + 'px';
+                    target.style.top = y + 'px';
+                    target.style.display = 'block';
+                    
+                    this.startTime = new Date().getTime();
+                };
+                
+                const hideTarget = () => {
+                    target.style.display = 'none';
+                    
+                    // Random delay between 1-3 seconds
+                    const delay = Math.random() * 2000 + 1000;
+                    this.timeoutId = setTimeout(showTarget, delay);
+                };
+                
+                target.onclick = () => {
+                    const endTime = new Date().getTime();
+                    const reactionTime = endTime - this.startTime;
+                    reactionTimeElement.textContent = reactionTime;
+                    
+                    this.totalReactionTime += reactionTime;
+                    this.attemptsCount++;
+                    document.getElementById('attempts-count').textContent = this.attemptsCount;
+                    
+                    clearTimeout(this.timeoutId);
+                    hideTarget();
+                };
+                
+                // Start the test
+                hideTarget();
+            },
+            
+            reset: function() {
+                clearTimeout(this.timeoutId);
+                document.getElementById('reaction-target').style.display = 'none';
+                document.getElementById('reaction-time').textContent = '0';
+                document.getElementById('attempts-count').textContent = '0';
+                this.attemptsCount = 0;
+                this.totalReactionTime = 0;
+            }
+        };
+        
+        // Rock Paper Scissors
+        let rpsGame = {
+            wins: 0,
+            losses: 0,
+            
+            play: function(choice) {
+                const choices = ['rock', 'paper', 'scissors'];
+                const computerChoice = choices[Math.floor(Math.random() * 3)];
+                
+                let result;
+                
+                if (choice === computerChoice) {
+                    result = 'Tie!';
+                } else if (
+                    (choice === 'rock' && computerChoice === 'scissors') ||
+                    (choice === 'paper' && computerChoice === 'rock') ||
+                    (choice === 'scissors' && computerChoice === 'paper')
+                ) {
+                    result = 'You win!';
+                    this.wins++;
+                } else {
+                    result = 'Computer wins!';
+                    this.losses++;
+                }
+                
+                document.getElementById('rps-result').textContent = `${result} (You: ${choice}, Computer: ${computerChoice})`;
+                document.getElementById('rps-score').textContent = `${this.wins}:${this.losses}`;
+            },
+            
+            reset: function() {
+                this.wins = 0;
+                this.losses = 0;
+                document.getElementById('rps-result').textContent = '-';
+                document.getElementById('rps-score').textContent = '0:0';
+            }
+        };
+        
+        // Initialize games when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            createStars();
+            memoryGame.init();
+            reactionTest.reset();
+            rpsGame.reset();
+            
+            // Set up event listeners for game buttons
+            document.getElementById('memory-reset').addEventListener('click', () => memoryGame.reset());
+            document.getElementById('reaction-start').addEventListener('click', () => reactionTest.start());
+            document.getElementById('reaction-reset').addEventListener('click', () => reactionTest.reset());
+            document.getElementById('rps-reset').addEventListener('click', () => rpsGame.reset());
+            
+            // Set up RPS buttons
+            document.querySelectorAll('[data-choice]').forEach(button => {
+                button.addEventListener('click', (e) => {
+                    rpsGame.play(e.target.dataset.choice);
+                });
+            });
+            
+            // Animate header text
+            anime({
+                targets: '.name-title',
+                translateY: [-70, 0],
+                opacity: [0, 1],
+                duration: 2500,
+                easing: 'easeOutExpo'
+            });
+        });
+    </script>
+</body>
+</html>

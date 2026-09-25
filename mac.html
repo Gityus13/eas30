@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mac Experience - EAS30</title>
+    <link rel="icon" type="image/png" href="https://i.ibb.co/wFY6Tn2y/7-F.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,500;9..144,600;9..144,700&display=swap');
+        
+        * {
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background: linear-gradient(45deg, #0b1637, #3d2b7d, #7c3aed, #ec4899, #f472b6, #22d3ee, #0ea5e9, #4c1d95);
+            overflow-x: hidden;
+            animation: gradientShift 30s ease infinite;
+            background-size: 400% 400%;
+        }
+        
+        body.dark-mode {
+            background: linear-gradient(45deg, #0b1421, #172130, #2a3647, #3c4a59, #566477, #8b97a9, #b8c2d1, #d3dce7);
+        }
+        
+        @keyframes gradientShift {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+        
+        header {
+            background: rgba(0, 0, 0, 0.15);
+            backdrop-filter: blur(5px);
+        }
+        
+        body.dark-mode header {
+            background: rgba(0, 0, 0, 0.3);
+        }
+        
+        .container {
+            max-width: 1400px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+        
+        .rounded-3xl {
+            border-radius: 1.5rem;
+        }
+        
+        .gradient-text {
+            background: linear-gradient(45deg, #ec4899, #22d3ee, #7c3aed, #f472b6, #4c1d95, #0ea5e9, #a855f7, #3d2b7d);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            background-size: 400% 400%;
+            animation: textGradientShift 8s ease infinite;
+            font-weight: 800;
+        }
+        
+        body.dark-mode .gradient-text {
+            background: linear-gradient(45deg, #ff9999, #7dd3d3, #70c1e0, #b8e2d4, #fcd77f, #ffb8e0, #99aef1, #a08bd9);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        @keyframes textGradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        /* Dark mode toggle styles */
+        .dark-mode-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+        
+        .toggle-button {
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .toggle-button:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+        
+        .toggle-button i {
+            font-size: 20px;
+            color: white;
+        }
+        
+        body.dark-mode .toggle-button {
+            background: rgba(30, 41, 59, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        body.dark-mode .toggle-button:hover {
+            background: rgba(51, 65, 85, 0.9);
+        }
+        
+        body.dark-mode .toggle-button i {
+            color: #f1f5f9;
+        }
+        
+        body.dark-mode .mac-container {
+            background: rgba(30, 41, 59, 0.8) !important;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        body.dark-mode .mac-container:hover {
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+            background: rgba(51, 65, 85, 0.9) !important;
+        }
+        
+        body.dark-mode p {
+            color: #cbd5e1 !important;
+        }
+        
+        body.dark-mode .gradient-text {
+            background: linear-gradient(45deg, #94a3b8, #cbd5e1, #e2e8f0, #f1f5f9);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        body.dark-mode footer {
+            background: rgba(15, 23, 42, 0.5);
+            backdrop-filter: blur(10px);
+        }
+        
+        /* Responsive text sizes */
+        .name-title {
+            font-size: 3rem;
+            line-height: 1.2;
+        }
+        
+        @media (min-width: 640px) {
+            .name-title {
+                font-size: 4rem;
+            }
+        }
+        
+        @media (min-width: 768px) {
+            .name-title {
+                font-size: 5rem;
+            }
+            
+            .text-4xl {
+                font-size: 2.75rem;
+            }
+        }
+        
+        @media (min-width: 1024px) {
+            .name-title {
+                font-size: 6rem;
+            }
+            
+            .text-4xl {
+                font-size: 3rem;
+            }
+        }
+        
+        .py-12 {
+            padding-top: 3rem;
+            padding-bottom: 3rem;
+        }
+        
+        .text-xl {
+            font-size: 1.125rem;
+            line-height: 1.75rem;
+        }
+        
+        @media (min-width: 768px) {
+            .text-xl {
+                font-size: 1.25rem;
+                line-height: 1.75rem;
+            }
+        }
+        
+        @media (min-width: 1024px) {
+            .text-xl {
+                font-size: 1.5rem;
+                line-height: 2rem;
+            }
+        }
+        
+        .p-5 {
+            padding: 1.25rem;
+        }
+        
+        .w-12, .h-12 {
+            width: 3rem;
+            height: 3rem;
+        }
+        
+        /* Mac Dock Styles */
+        .dock {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 8px;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            z-index: 1000;
+            max-width: 90%;
+            overflow-x: auto;
+            scrollbar-width: none; /* Firefox */
+        }
+        
+        .dock::-webkit-scrollbar {
+            display: none; /* Chrome, Safari, Edge */
+        }
+        
+        .dock-item {
+            width: 50px;
+            height: 50px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            flex-shrink: 0;
+        }
+        
+        .dock-item:hover {
+            transform: translateY(-15px) scale(1.2);
+            background: rgba(255, 255, 255, 0.3);
+        }
+        
+        .dock-item img {
+            width: 30px;
+            height: 30px;
+        }
+        
+        /* Mac-like UI Elements */
+        .mac-window {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .window-header {
+            background: rgba(255, 255, 255, 0.15);
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .window-button {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+        
+        .close { background: #ff5f56; }
+        .minimize { background: #ffbd2e; }
+        .maximize { background: #27c93f; }
+        
+        .window-content {
+            padding: 20px;
+        }
+        
+        /* Animation for adding to dock */
+        @keyframes addToDock {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+        
+        .add-to-dock-animation {
+            animation: addToDock 0.5s ease;
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            header {
+                padding-top: 2rem;
+                padding-bottom: 2rem;
+            }
+            
+            .mac-container {
+                padding: 1.5rem;
+            }
+            
+            .window-content {
+                padding: 1rem;
+            }
+            
+            .dark-mode-toggle {
+                top: 10px;
+                right: 10px;
+            }
+            
+            .toggle-button {
+                width: 40px;
+                height: 40px;
+            }
+            
+            .toggle-button i {
+                font-size: 16px;
+            }
+            
+            .dock {
+                bottom: 10px;
+                padding: 8px;
+            }
+            
+            .dock-item {
+                width: 40px;
+                height: 40px;
+            }
+            
+            .dock-item img {
+                width: 24px;
+                height: 24px;
+            }
+            
+            footer {
+                padding-top: 2rem;
+                padding-bottom: 2rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .name-title {
+                font-size: 2.5rem;
+            }
+            
+            header p {
+                font-size: 1.125rem;
+            }
+            
+            .window-content h2 {
+                font-size: 1.5rem;
+            }
+            
+            .dock-item {
+                width: 35px;
+                height: 35px;
+            }
+            
+            .dock-item img {
+                width: 20px;
+                height: 20px;
+            }
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+    <!-- Dark Mode Toggle -->
+    <div class="dark-mode-toggle">
+        <div class="toggle-button" id="darkModeToggle">
+            <i class="fas fa-moon"></i>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header class="relative py-12 md:py-20 text-center">
+        <div class="container px-4">
+            <div class="flex justify-center mb-6">
+                <img src="https://i.ibb.co/wFY6Tn2y/7-F.png" alt="Logo" class="h-24 w-24 md:h-32 md:w-32 rounded-full">
+            </div>
+            <h1 class="name-title font-bold text-white mb-4 md:mb-6">
+                 Mac Experience
+            </h1>
+            <p class="text-xl text-white/90 max-w-3xl mx-auto">
+                Add this website to your dock like a Mac application
+            </p>
+            <div class="mt-6 md:mt-8">
+                <a href="index.html" class="inline-flex items-center gap-2 bg-white/20 hover:bg-white/30 backdrop-blur-sm text-white font-bold py-2 px-4 md:py-3 md:px-6 rounded-full transition-all duration-300">
+                    <i data-feather="arrow-left"></i>
+                    Back to Home
+                </a>
+            </div>
+        </div>
+    </header>
+    
+    <!-- Main Content -->
+    <main class="container px-4 pb-12 md:pb-20">
+        <div class="flex justify-center">
+            <div class="mac-container bg-white/20 backdrop-blur-sm rounded-3xl p-5 md:p-8 w-full max-w-4xl">
+                <!-- Mac Window -->
+                <div class="mac-window">
+                    <div class="window-header">
+                        <div class="window-button close"></div>
+                        <div class="window-button minimize"></div>
+                        <div class="window-button maximize"></div>
+                    </div>
+                    <div class="window-content text-center">
+                        <h2 class="text-2xl md:text-3xl font-bold text-white mb-4 md:mb-6">Add to Dock</h2>
+                        <p class="text-lg md:text-xl text-white/90 mb-6 md:mb-8">
+                            To make this website as an app its easy. You can see at upper left corner near apple icon and safari word there is file button when you press to it opens a small window and you can see share, export and add to dock you must click to add to dock choose the name for app and make the link or url like this https://eas30.site/ it was like this https://eas30.site/mac.html just delete the mac.html part and press add you will see that the icon of website will appear at the dock
+                        </p>
+                        <div class="mt-6 md:mt-8">
+                            <img src="http://static.photos/technology/640x360/123" alt="Mac Dock" class="rounded-xl mx-auto shadow-lg w-full max-w-md">
+                        </div>
+                        <p class="text-base md:text-lg text-white/80 mt-4 md:mt-6">
+                            Once added, you can access this website directly from your dock just like any other application.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    <!-- Footer -->
+    <footer class="bg-black/20 py-8 md:py-12 text-center text-white/80">
+        <div class="container px-4">
+            <p class="text-base md:text-lg lg:text-xl">Ⓡ-© 2026.  Something incorrect, lie or you want to add something, etc contact for change +994 50 549 9933 or find Yusif.G 8a Or Farhad.A 8a Made by YUSAI And Farhadik. Logo By Rufiz.A</p>
+        </div>
+    </footer>
+    
+    <script>
+        // Initialize AOS
+        AOS.init({
+            duration: 1000,
+            once: true,
+            easing: 'ease-out-cubic',
+            offset: 100
+        });
+        
+        // Initialize Feather Icons
+        feather.replace();
+        
+        // Add animation to back button
+        document.addEventListener('DOMContentLoaded', function() {
+            const backButton = document.querySelector('a[href="index.html"]');
+            if (backButton) {
+                anime({
+                    targets: backButton,
+                    translateY: [30, 0],
+                    opacity: [0, 1],
+                    duration: 2000,
+                    easing: 'easeOutExpo'
+                });
+            }
+            
+            // Add to dock functionality
+            const addToDockBtn = document.getElementById('addToDockBtn');
+            const successMessage = document.getElementById('successMessage');
+            
+            if (addToDockBtn) {
+                addToDockBtn.addEventListener('click', function() {
+                    // Add animation class
+                    this.classList.add('add-to-dock-animation');
+                    
+                    // Show success message after animation
+                    setTimeout(() => {
+                        successMessage.classList.remove('hidden');
+                        this.textContent = 'Added!';
+                        this.disabled = true;
+                        
+                        // Create dock item
+                        createDockItem();
+                    }, 500);
+                });
+            }
+        });
+        
+        // Create dock item
+        function createDockItem() {
+            // Check if dock already exists
+            let dock = document.getElementById('macDock');
+            if (!dock) {
+                dock = document.createElement('div');
+                dock.id = 'macDock';
+                dock.className = 'dock';
+                document.body.appendChild(dock);
+            }
+            
+            // Create dock item
+            const dockItem = document.createElement('div');
+            dockItem.className = 'dock-item';
+            dockItem.innerHTML = '<img src="https://i.ibb.co/wFY6Tn2y/7-F.png" alt="EAS">';
+            
+            // Add hover effect
+            dockItem.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-15px) scale(1.2)';
+                this.style.background = 'rgba(255, 255, 255, 0.3)';
+            });
+            
+            dockItem.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0) scale(1)';
+                this.style.background = 'rgba(255, 255, 255, 0.2)';
+            });
+            
+            // Add click functionality
+            dockItem.addEventListener('click', function() {
+                alert('Opening EAS Website...');
+                window.location.href = 'index.html';
+            });
+            
+            dock.appendChild(dockItem);
+        }
+        
+        // Dark mode toggle functionality
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const toggleIcon = darkModeToggle.querySelector('i');
+        
+        // Check for saved theme preference or respect OS preference
+        const prefersDarkScheme = window.matchMedia('(prefers-color-scheme: dark)');
+        const currentTheme = localStorage.getItem('theme');
+        
+        if (currentTheme === 'dark') {
+            document.body.classList.add('dark-mode');
+            toggleIcon.classList.remove('fa-moon');
+            toggleIcon.classList.add('fa-sun');
+        }
+        
+        darkModeToggle.addEventListener('click', () => {
+            document.body.classList.toggle('dark-mode');
+            
+            // Update icon
+            if (document.body.classList.contains('dark-mode')) {
+                toggleIcon.classList.remove('fa-moon');
+                toggleIcon.classList.add('fa-sun');
+                localStorage.setItem('theme', 'dark');
+            } else {
+                toggleIcon.classList.remove('fa-sun');
+                toggleIcon.classList.add('fa-moon');
+                localStorage.setItem('theme', 'light');
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Thank You</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Cormorant+Garamond:ital,wght@0,300;1,300&display=swap" rel="stylesheet" />
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --gold: #c9a84c;
+    --gold-light: #e8c97a;
+    --gold-pale: #f5e4b0;
+    --ink: #080808;
+    --white: #faf8f4;
+  }
+
+  html, body {
+    width: 100%; height: 100%;
+    overflow: hidden;
+    background: var(--ink);
+    font-family: 'Fraunces', serif;
+  }
+
+  canvas {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .stage {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 1;
+    gap: 0;
+  }
+
+  .line-wrapper {
+    overflow: hidden;
+    padding: 4px 0;
+  }
+
+  .word-thank {
+    display: block;
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 300;
+    font-style: italic;
+    font-size: clamp(18px, 4vw, 32px);
+    letter-spacing: 0.45em;
+    text-transform: uppercase;
+    color: var(--gold);
+    opacity: 0;
+    transform: translateY(40px);
+  }
+
+  .word-you {
+    display: block;
+    font-family: 'Fraunces', serif;
+    font-weight: 900;
+    font-size: clamp(90px, 22vw, 220px);
+    line-height: 0.85;
+    letter-spacing: -0.02em;
+    color: var(--white);
+    opacity: 0;
+    transform: translateY(80px);
+  }
+
+  .word-for {
+    display: block;
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 300;
+    font-style: italic;
+    font-size: clamp(16px, 3vw, 28px);
+    letter-spacing: 0.55em;
+    text-transform: uppercase;
+    color: var(--gold-light);
+    opacity: 0;
+    transform: translateY(30px);
+    margin-top: 12px;
+  }
+
+  .word-submitting {
+    display: block;
+    font-family: 'Fraunces', serif;
+    font-weight: 700;
+    font-size: clamp(28px, 7vw, 80px);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: transparent;
+    -webkit-text-stroke: 1px var(--gold);
+    opacity: 0;
+    transform: translateY(50px);
+    margin-top: 8px;
+  }
+
+  .divider {
+    width: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    margin: 28px auto;
+    opacity: 0;
+  }
+
+  .tagline {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 300;
+    font-style: italic;
+    font-size: clamp(12px, 2vw, 16px);
+    letter-spacing: 0.3em;
+    color: rgba(201,168,76,0.5);
+    text-transform: uppercase;
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  .corner {
+    position: fixed;
+    width: 60px; height: 60px;
+    opacity: 0;
+  }
+  .corner--tl { top: 32px; left: 32px; border-top: 1px solid var(--gold); border-left: 1px solid var(--gold); }
+  .corner--tr { top: 32px; right: 32px; border-top: 1px solid var(--gold); border-right: 1px solid var(--gold); }
+  .corner--bl { bottom: 32px; left: 32px; border-bottom: 1px solid var(--gold); border-left: 1px solid var(--gold); }
+  .corner--br { bottom: 32px; right: 32px; border-bottom: 1px solid var(--gold); border-right: 1px solid var(--gold); }
+
+  .glow-ring {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0;
+  }
+
+  .char-span {
+    display: inline-block;
+    opacity: 0;
+    transform: translateY(100px) rotateX(-90deg);
+    transform-origin: bottom center;
+  }
+
+  .btn-return {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 48px;
+    padding: 14px 36px;
+    background: transparent;
+    border: 1px solid var(--gold);
+    color: var(--gold);
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 300;
+    font-style: italic;
+    font-size: clamp(13px, 1.8vw, 17px);
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    text-decoration: none;
+    cursor: pointer;
+    opacity: 0;
+    transform: translateY(20px);
+    position: relative;
+    overflow: hidden;
+    transition: color 0.4s ease;
+  }
+
+  .btn-return::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--gold);
+    transform: translateX(-101%);
+    transition: transform 0.45s cubic-bezier(0.77, 0, 0.18, 1);
+    z-index: 0;
+  }
+
+  .btn-return:hover::before { transform: translateX(0); }
+  .btn-return:hover { color: var(--ink); }
+
+  .btn-return span, .btn-return svg {
+    position: relative;
+    z-index: 1;
+  }
+
+  .btn-arrow {
+    width: 16px;
+    height: 16px;
+    transition: transform 0.3s ease;
+    flex-shrink: 0;
+  }
+
+  .btn-return:hover .btn-arrow { transform: translateX(-4px); }
+</style>
+</head>
+<body>
+
+<canvas id="particles"></canvas>
+
+<div class="glow-ring" id="glowRing"></div>
+
+<div class="corner corner--tl" id="c1"></div>
+<div class="corner corner--tr" id="c2"></div>
+<div class="corner corner--bl" id="c3"></div>
+<div class="corner corner--br" id="c4"></div>
+
+<div class="stage">
+  <div class="line-wrapper"><span class="word-thank" id="wThank">Thank</span></div>
+  <div class="line-wrapper"><span class="word-you" id="wYou">You</span></div>
+  <div class="divider" id="divider"></div>
+  <div class="line-wrapper"><span class="word-for" id="wFor">For</span></div>
+  <div class="line-wrapper"><span class="word-submitting" id="wSubmitting">Submitting</span></div>
+  <div style="margin-top:36px;overflow:hidden;">
+    <p class="tagline" id="tagline">We'll be in touch soon</p>
+  </div>
+  <a href="/" class="btn-return" id="btnReturn">
+    <svg class="btn-arrow" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+    <span>Return to Main Page</span>
+  </a>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script>
+const canvas = document.getElementById('particles');
+const ctx = canvas.getContext('2d');
+let W, H, particles = [];
+
+function resize() {
+  W = canvas.width = window.innerWidth;
+  H = canvas.height = window.innerHeight;
+}
+resize();
+window.addEventListener('resize', resize);
+
+class Particle {
+  constructor() { this.reset(true); }
+  reset(init) {
+    this.x = Math.random() * W;
+    this.y = init ? Math.random() * H : H + 10;
+    this.size = Math.random() * 1.8 + 0.3;
+    this.speedY = -(Math.random() * 0.4 + 0.15);
+    this.speedX = (Math.random() - 0.5) * 0.2;
+    this.alpha = 0;
+    this.maxAlpha = Math.random() * 0.5 + 0.15;
+    this.life = 0;
+    this.maxLife = Math.random() * 400 + 200;
+    if (init) { this.life = Math.random() * this.maxLife; this.alpha = this.maxAlpha * (this.life / this.maxLife); }
+  }
+  update() {
+    this.life++;
+    this.y += this.speedY;
+    this.x += this.speedX;
+    const progress = this.life / this.maxLife;
+    if (progress < 0.2) this.alpha = this.maxAlpha * (progress / 0.2);
+    else if (progress > 0.7) this.alpha = this.maxAlpha * (1 - (progress - 0.7) / 0.3);
+    else this.alpha = this.maxAlpha;
+    if (this.life >= this.maxLife) this.reset(false);
+  }
+  draw() {
+    ctx.save();
+    ctx.globalAlpha = this.alpha;
+    ctx.fillStyle = '#c9a84c';
+    ctx.shadowBlur = 4;
+    ctx.shadowColor = '#c9a84c';
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.restore();
+  }
+}
+
+for (let i = 0; i < 120; i++) particles.push(new Particle());
+
+function animateParticles() {
+  ctx.clearRect(0, 0, W, H);
+  particles.forEach(p => { p.update(); p.draw(); });
+  requestAnimationFrame(animateParticles);
+}
+animateParticles();
+
+function splitChars(el) {
+  const text = el.textContent;
+  el.textContent = '';
+  el.style.opacity = 1;
+  el.style.transform = 'none';
+  const spans = [];
+  for (const ch of text) {
+    const s = document.createElement('span');
+    s.className = 'char-span';
+    s.textContent = ch === ' ' ? '\u00a0' : ch;
+    el.appendChild(s);
+    spans.push(s);
+  }
+  return spans;
+}
+
+window.addEventListener('load', () => {
+  const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
+
+  tl.to('#wThank', { opacity: 1, y: 0, duration: 1, ease: 'power2.out' }, 0.3)
+    .to('#wYou', { opacity: 1, y: 0, duration: 1.2, ease: 'expo.out' }, 0.5)
+    .to('#divider', { opacity: 1, width: '180px', duration: 1, ease: 'power2.inOut' }, 1.2)
+    .to('#wFor', { opacity: 1, y: 0, duration: 0.8, ease: 'power2.out' }, 1.5)
+    .to('#wSubmitting', { opacity: 1, y: 0, duration: 1, ease: 'expo.out' }, 1.7)
+    .to('#tagline', { opacity: 1, y: 0, duration: 1, ease: 'power2.out' }, 2.3)
+    .to('#btnReturn', { opacity: 1, y: 0, duration: 0.9, ease: 'power3.out' }, 2.7)
+    .to(['.corner'], { opacity: 1, duration: 0.8, stagger: 0.12, ease: 'power2.out' }, 0.8)
+    .to('#glowRing', { opacity: 1, duration: 2 }, 1.5);
+
+  gsap.to('#wYou', {
+    backgroundImage: 'none',
+    repeat: -1,
+    yoyo: true,
+    duration: 3,
+    ease: 'sine.inOut',
+    color: '#ffffff',
+    onRepeat: function() {},
+  });
+
+  gsap.to('.word-you', {
+    textShadow: '0 0 80px rgba(201,168,76,0.15), 0 0 160px rgba(201,168,76,0.05)',
+    repeat: -1,
+    yoyo: true,
+    duration: 2.5,
+    ease: 'sine.inOut',
+    delay: 2,
+  });
+
+  gsap.to('.word-submitting', {
+    '-webkit-text-stroke': '1px rgba(232,201,122,0.8)',
+    repeat: -1,
+    yoyo: true,
+    duration: 2,
+    ease: 'sine.inOut',
+    delay: 2.5,
+  });
+
+  gsap.to('.corner', {
+    opacity: 0.5,
+    repeat: -1,
+    yoyo: true,
+    duration: 2,
+    ease: 'sine.inOut',
+    stagger: 0.5,
+    delay: 3,
+  });
+
+  gsap.to('#divider', {
+    opacity: 0.4,
+    repeat: -1,
+    yoyo: true,
+    duration: 3,
+    ease: 'sine.inOut',
+    delay: 2,
+  });
+
+  const glow = document.getElementById('glowRing');
+  glow.style.background = 'radial-gradient(ellipse 60% 40% at 50% 50%, rgba(201,168,76,0.04) 0%, transparent 70%)';
+
+  gsap.to('#glowRing', {
+    scale: 1.08,
+    repeat: -1,
+    yoyo: true,
+    duration: 4,
+    ease: 'sine.inOut',
+    delay: 2,
+    transformOrigin: 'center center',
+  });
+
+  gsap.to('.word-for', {
+    letterSpacing: '0.65em',
+    repeat: -1,
+    yoyo: true,
+    duration: 4,
+    ease: 'sine.inOut',
+    delay: 2,
+  });
+
+  gsap.to('.tagline', {
+    opacity: 0.3,
+    repeat: -1,
+    yoyo: true,
+    duration: 3,
+    ease: 'sine.inOut',
+    delay: 3,
+  });
+
+  document.addEventListener('mousemove', (e) => {
+    const cx = e.clientX / window.innerWidth - 0.5;
+    const cy = e.clientY / window.innerHeight - 0.5;
+    gsap.to('.stage', {
+      x: cx * 12,
+      y: cy * 8,
+      duration: 1.5,
+      ease: 'power2.out',
+    });
+    glow.style.background = `radial-gradient(ellipse 60% 40% at ${50 + cx * 30}% ${50 + cy * 30}%, rgba(201,168,76,0.07) 0%, transparent 70%)`;
+  });
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EAS30 - Interactive Modes</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" type="image/png" href="https://i.ibb.co/wFY6Tn2y/7-F.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,500;9..144,600;9..144,700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background: linear-gradient(45deg, #0b1637, #3d2b7d, #7c3aed, #ec4899, #f472b6, #22d3ee, #0ea5e9, #4c1d95);
+            overflow-x: hidden;
+            animation: gradientShift 30s ease infinite;
+            background-size: 400% 400%;
+            transition: all 0.5s ease;
+            min-height: 100vh;
+        }
+        
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        .name-card {
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transform-style: preserve-3d;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .name-card:hover {
+            transform: translateY(-15px) rotateY(5deg);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.3);
+        }
+        
+        .name-title { 
+            font-family: 'Fraunces', serif; 
+        }
+        
+        .floating { 
+            animation: floating 3s ease-in-out infinite; 
+        }
+        
+        @keyframes floating {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-25px); }
+            100% { transform: translateY(0px); }
+        }
+        
+        .gradient-text {
+            background: linear-gradient(45deg, #ec4899, #22d3ee, #7c3aed, #f472b6, #4c1d95, #0ea5e9, #a855f7, #3d2b7d);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            background-size: 400% 400%;
+            animation: textGradientShift 8s ease infinite;
+            font-weight: 800;
+        }
+        
+        @keyframes textGradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        .card-icon {
+            transition: all 0.3s ease;
+        }
+        
+        .name-card:hover .card-icon {
+            transform: scale(1.2) rotate(10deg);
+        }
+        
+        .mode-indicator {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            opacity: 0.7;
+        }
+        
+        .back-button {
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+        }
+        
+        .back-button:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-3px);
+        }
+        
+        .card-gta {
+            background: linear-gradient(135deg, #1a535c, #4ecdc4);
+            border: 3px solid #ff6b35;
+        }
+        
+        .card-disco {
+            background: linear-gradient(135deg, #FF69B4, #DA70D6);
+            border: 3px solid white;
+        }
+        
+        .card-barbie {
+            background: linear-gradient(135deg, #ffb6c1, #ff69b4);
+            border: 3px solid #ff1493;
+        }
+        
+        .card-glitch {
+            background: linear-gradient(135deg, #333, #666);
+            border: 3px solid #ff0000;
+        }
+        
+        .card-matrix {
+            background: linear-gradient(135deg, #003300, #006600);
+            border: 3px solid #00ff00;
+        }
+        
+        .card-content {
+            position: relative;
+            z-index: 2;
+        }
+        
+        .card-pattern {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.1;
+            z-index: 1;
+        }
+        
+        .card-gta .card-pattern {
+            background-image: 
+                radial-gradient(circle at 20% 30%, rgba(255, 107, 53, 0.5) 3px, transparent 4px),
+                radial-gradient(circle at 80% 70%, rgba(255, 107, 53, 0.5) 3px, transparent 4px);
+            background-size: 50px 50px, 70px 70px;
+        }
+        
+        .card-disco .card-pattern {
+            background-image: 
+                radial-gradient(circle at 20% 30%, rgba(255, 255, 255, 0.5) 3px, transparent 4px),
+                radial-gradient(circle at 80% 70%, rgba(255, 255, 255, 0.5) 3px, transparent 4px);
+            background-size: 50px 50px, 70px 70px;
+        }
+        
+        .card-barbie .card-pattern {
+            background-image: 
+                radial-gradient(circle at 20% 30%, rgba(255, 20, 147, 0.5) 3px, transparent 4px),
+                radial-gradient(circle at 80% 70%, rgba(255, 20, 147, 0.5) 3px, transparent 4px);
+            background-size: 50px 50px, 70px 70px;
+        }
+        
+        .card-glitch .card-pattern {
+            background-image: 
+                repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(255, 0, 0, 0.3) 10px, rgba(255, 0, 0, 0.3) 20px);
+        }
+        
+        .card-matrix .card-pattern {
+            background-image: 
+                repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0, 255, 0, 0.3) 2px, rgba(0, 255, 0, 0.3) 4px);
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col">
+    <!-- Header -->
+    <header class="relative py-8 md:py-12 text-center">
+        <div class="container mx-auto px-4">
+            <div class="flex justify-center mb-4 md:mb-6">
+                <img src="https://i.ibb.co/wFY6Tn2y/7-F.png" alt="Logo" class="h-24 w-24 md:h-32 md:w-32 floating rounded-full border-4 border-white/30">
+            </div>
+            <h1 class="name-title font-bold text-white mb-4 md:mb-6 floating text-4xl md:text-6xl">
+                 EAS30 
+            </h1>
+            <p class="text-lg md:text-xl text-white/90 max-w-3xl mx-auto">
+                Explore these interactive modes for a unique experience
+            </p>
+        </div>
+    </header>
+    
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 pb-12 md:pb-16 flex-grow">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
+            <!-- GTA Mode Card -->
+            <div class="name-card card-gta rounded-3xl p-6 text-white shadow-2xl h-full">
+                <div class="card-pattern"></div>
+                <div class="card-content">
+                    <div class="flex justify-center mb-4">
+                        <div class="bg-white/20 p-4 rounded-full">
+                            <i class="fas fa-gamepad text-3xl card-icon"></i>
+                        </div>
+                    </div>
+                    <div class="mode-indicator bg-red-500"></div>
+                    <h2 class="name-title text-2xl md:text-3xl font-bold mb-3 text-center">GTA Mode</h2>
+                    <p class="text-center text-white/90 text-base md:text-lg mb-4">Experience the GTA 5 game atmosphere with interactive elements</p>
+                    <div class="flex justify-center mt-4">
+                        <span class="bg-white/20 px-3 py-1 rounded-full text-sm">Interactive</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Disco Mode Card -->
+            <div class="name-card card-disco rounded-3xl p-6 text-white shadow-2xl h-full">
+                <div class="card-pattern"></div>
+                <div class="card-content">
+                    <div class="flex justify-center mb-4">
+                        <div class="bg-white/20 p-4 rounded-full">
+                            <i class="fas fa-music text-3xl card-icon"></i>
+                        </div>
+                    </div>
+                    <div class="mode-indicator bg-yellow-400"></div>
+                    <h2 class="name-title text-2xl md:text-3xl font-bold mb-3 text-center">Disco Mode</h2>
+                    <p class="text-center text-white/90 text-base md:text-lg mb-4">Dance to the rhythm with colorful lights and music</p>
+                    <div class="flex justify-center mt-4">
+                        <span class="bg-white/20 px-3 py-1 rounded-full text-sm">Music</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Barbie Mode Card -->
+            <div class="name-card card-barbie rounded-3xl p-6 text-white shadow-2xl h-full">
+                <div class="card-pattern"></div>
+                <div class="card-content">
+                    <div class="flex justify-center mb-4">
+                        <div class="bg-white/20 p-4 rounded-full">
+                            <i class="fas fa-heart text-3xl card-icon"></i>
+                        </div>
+                    </div>
+                    <div class="mode-indicator bg-pink-400"></div>
+                    <h2 class="name-title text-2xl md:text-3xl font-bold mb-3 text-center">Barbie Mode</h2>
+                    <p class="text-center text-white/90 text-base md:text-lg mb-4">Immerse yourself in a pink-themed Barbie world</p>
+                    <div class="flex justify-center mt-4">
+                        <span class="bg-white/20 px-3 py-1 rounded-full text-sm">Pink Theme</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Glitch Mode Card -->
+            <div class="name-card card-glitch rounded-3xl p-6 text-white shadow-2xl h-full">
+                <div class="card-pattern"></div>
+                <div class="card-content">
+                    <div class="flex justify-center mb-4">
+                        <div class="bg-white/20 p-4 rounded-full">
+                            <i class="fas fa-bug text-3xl card-icon"></i>
+                        </div>
+                    </div>
+                    <div class="mode-indicator bg-red-600"></div>
+                    <h2 class="name-title text-2xl md:text-3xl font-bold mb-3 text-center">Glitch Mode</h2>
+                    <p class="text-center text-white/90 text-base md:text-lg mb-4">Watch as the website breaks with digital corruption effects</p>
+                    <div class="flex justify-center mt-4">
+                        <span class="bg-white/20 px-3 py-1 rounded-full text-sm">Digital Effects</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Matrix Mode Card -->
+            <div class="name-card card-matrix rounded-3xl p-6 text-white shadow-2xl h-full">
+                <div class="card-pattern"></div>
+                <div class="card-content">
+                    <div class="flex justify-center mb-4">
+                        <div class="bg-white/20 p-4 rounded-full">
+                            <i class="fas fa-terminal text-3xl card-icon"></i>
+                        </div>
+                    </div>
+                    <div class="mode-indicator bg-green-500"></div>
+                    <h2 class="name-title text-2xl md:text-3xl font-bold mb-3 text-center">Matrix Mode</h2>
+                    <p class="text-center text-white/90 text-base md:text-lg mb-4">Enter the hacker world with green terminal aesthetics</p>
+                    <div class="flex justify-center mt-4">
+                        <span class="bg-white/20 px-3 py-1 rounded-full text-sm">Hacker Theme</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Coming Soon Card -->
+            <div class="name-card bg-gradient-to-br from-purple-500 to-indigo-500 rounded-3xl p-6 text-white shadow-2xl h-full flex flex-col justify-center items-center opacity-80">
+                <div class="flex justify-center mb-4">
+                    <div class="bg-white/20 p-4 rounded-full">
+                        <i class="fas fa-plus text-3xl"></i>
+                    </div>
+                </div>
+                <h2 class="name-title text-2xl md:text-3xl font-bold mb-3 text-center">More Modes</h2>
+                <p class="text-center text-white/90 text-base md:text-lg">New interactive experiences coming soon</p>
+            </div>
+        </div>
+    </main>
+    
+    <!-- Back to Home Button -->
+    <div class="container mx-auto px-4 pb-12">
+        <div class="flex justify-center">
+            <a href="https://eas30.site" class="back-button text-white font-bold py-4 px-8 rounded-full transition-all duration-300 inline-flex items-center gap-2 text-lg">
+                <i class="fas fa-home"></i>
+                Back to Home
+            </a>
+        </div>
+    </div>
+    
+    <!-- Footer -->
+    <footer class="bg-black/20 py-6 text-center text-white/80 mt-auto">
+        <div class="container mx-auto px-4">
+            <p class="text-base">Ⓡ-© 2026 EAS30. Interactive Modes Experience</p>
+        </div>
+    </footer>
+    
+    <script>
+        // Add click effects to cards
+        document.querySelectorAll('.name-card').forEach(card => {
+            card.addEventListener('click', function() {
+                // Add a ripple effect
+                const ripple = document.createElement('div');
+                ripple.classList.add('absolute', 'rounded-full', 'bg-white', 'opacity-30');
+                ripple.style.width = '0px';
+                ripple.style.height = '0px';
+                ripple.style.left = '50%';
+                ripple.style.top = '50%';
+                ripple.style.transform = 'translate(-50%, -50%)';
+                
+                this.style.position = 'relative';
+                this.appendChild(ripple);
+                
+                // Animate the ripple
+                setTimeout(() => {
+                    ripple.style.width = '200px';
+                    ripple.style.height = '200px';
+                    ripple.style.opacity = '0';
+                    ripple.style.transition = 'all 0.6s ease-out';
+                }, 10);
+                
+                // Remove ripple after animation
+                setTimeout(() => {
+                    ripple.remove();
+                }, 600);
+            });
+        });
+        
+        // Add floating animation to cards with different delays
+        document.querySelectorAll('.name-card').forEach((card, index) => {
+            card.style.animationDelay = `${index * 0.2}s`;
+            card.classList.add('floating');
+        });
+    </script>
+</body>
+</html>

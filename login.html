@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Login - EAS30</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,500;9..144,600;9..144,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background: linear-gradient(135deg, #1e2b6e, #2a1e5c, #4a2a6b, #a52a6e);
+            background-size: 400% 400%;
+            animation: auroraFlow 18s ease infinite;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        body.dark-mode {
+            background: linear-gradient(135deg, #0a0f1f, #0b1120, #111827, #1e1b2f) !important;
+            animation: none;
+        }
+
+        @keyframes auroraFlow {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .login-card {
+            width: 100%;
+            max-width: 480px;
+            background: rgba(22, 28, 46, 0.7);
+            backdrop-filter: blur(16px);
+            border-radius: 2.5rem;
+            padding: 2rem 1.8rem 2.5rem;
+            box-shadow: 0 30px 50px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            position: relative;
+            z-index: 10;
+        }
+
+        body.dark-mode .login-card {
+            background: rgba(15, 23, 42, 0.85);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .logo-img {
+            width: 85px;
+            height: 85px;
+            border-radius: 50%;
+            background: white;
+            padding: 6px;
+            object-fit: cover;
+            margin-bottom: 12px;
+        }
+
+        .brand {
+            font-family: 'Fraunces', serif;
+            font-size: 2rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #FFF6E5, #FFD966, #FFB347);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        h2 {
+            color: white;
+            font-weight: 600;
+            font-size: 1.8rem;
+            margin: 0.5rem 0 0.3rem;
+        }
+
+        .welcome-text {
+            color: #cdd9ff;
+            font-size: 0.9rem;
+            margin-bottom: 2rem;
+            text-align: left;
+            border-left: 3px solid #f4a261;
+            padding-left: 12px;
+        }
+
+        .google-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            width: 100%;
+            background: white;
+            border: 1px solid #dadce0;
+            border-radius: 40px;
+            padding: 14px 0;
+            font-size: 1rem;
+            font-weight: 500;
+            color: #3c4043;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            margin-bottom: 16px;
+        }
+
+        .google-btn:hover {
+            background: #f8f9fa;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            transform: translateY(-1px);
+        }
+
+        .google-btn i {
+            color: #4285f4;
+            font-size: 1.2rem;
+        }
+
+        .divider {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin: 24px 0 20px;
+            color: rgba(255,255,240,0.5);
+        }
+        .divider-line {
+            flex: 1;
+            height: 1px;
+            background: rgba(255,255,255,0.2);
+        }
+
+        .guest-link {
+            background: none;
+            border: none;
+            color: #ffb347;
+            font-weight: 500;
+            cursor: pointer;
+            font-size: 0.9rem;
+            margin-top: 16px;
+        }
+
+        .guest-link:hover {
+            text-decoration: underline;
+        }
+
+        .dark-mode-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+        .toggle-button {
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            border-radius: 50%;
+            width: 48px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+        .toggle-button i {
+            font-size: 1.3rem;
+            color: white;
+        }
+
+        .error-message {
+            background: #ff4757;
+            color: white;
+            padding: 10px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            font-size: 0.85rem;
+            display: none;
+        }
+
+        /* No loading overlay - removed completely */
+        
+        /* Make sure Google popup is on top and centered */
+        iframe[src*="accounts.google.com"] {
+            z-index: 100000 !important;
+            position: fixed !important;
+            top: 50% !important;
+            left: 50% !important;
+            transform: translate(-50%, -50%) !important;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3) !important;
+            border-radius: 8px !important;
+        }
+        
+        /* Override any Google One Tap positioning */
+        div[data-google-one-tap] {
+            z-index: 100000 !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="dark-mode-toggle">
+        <div class="toggle-button" id="darkModeToggle">
+            <i class="fas fa-moon"></i>
+        </div>
+    </div>
+
+    <div class="login-card">
+        <div class="logo-area">
+            <img src="https://i.ibb.co/wFY6Tn2y/7-F.png" alt="Logo" class="logo-img">
+            <div class="brand">EAS30</div>
+        </div>
+        <h2>Welcome back</h2>
+        <div class="welcome-text">
+            Sign in to access the full gallery, games & community.
+        </div>
+
+        <div id="errorMsg" class="error-message"></div>
+
+        <button id="googleLoginBtn" class="google-btn">
+            <i class="fab fa-google"></i> Continue with Google
+        </button>
+
+        <div class="divider">
+            <div class="divider-line"></div>
+            <span>or</span>
+            <div class="divider-line"></div>
+        </div>
+
+        <button id="guestBtn" class="guest-link">Continue as guest →</button>
+    </div>
+
+    <script>
+        // YOUR GOOGLE CLIENT ID
+        const GOOGLE_CLIENT_ID = "465691426135-kd0eqsehrvnnrgk13ljnqi5vac8242vg.apps.googleusercontent.com";
+        const STORAGE_KEY = "eas_hobbies_user";
+        
+        function showError(message) {
+            const errorDiv = document.getElementById('errorMsg');
+            errorDiv.textContent = message;
+            errorDiv.style.display = 'block';
+            setTimeout(() => {
+                errorDiv.style.display = 'none';
+            }, 5000);
+        }
+        
+        function loginUser(userData) {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(userData));
+            window.location.href = "index.html";
+        }
+        
+        function parseJwt(token) {
+            try {
+                const base64Url = token.split('.')[1];
+                const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+                const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
+                    return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+                }).join(''));
+                return JSON.parse(jsonPayload);
+            } catch(e) {
+                console.error("Failed to parse JWT", e);
+                return null;
+            }
+        }
+        
+        // Initialize Google Sign-In - NO SPINNER, DIRECT POPUP
+        function initGoogleSignIn() {
+            // Load Google script
+            const script = document.createElement('script');
+            script.src = 'https://accounts.google.com/gsi/client';
+            script.onload = () => {
+                console.log("Google Sign-In loaded");
+                
+                // Initialize with popup mode
+                google.accounts.id.initialize({
+                    client_id: GOOGLE_CLIENT_ID,
+                    callback: (response) => {
+                        console.log("Google callback received");
+                        const userData = parseJwt(response.credential);
+                        if (userData) {
+                            loginUser({
+                                name: userData.name,
+                                email: userData.email,
+                                picture: userData.picture,
+                                provider: "google"
+                            });
+                        } else {
+                            showError("Failed to get user information. Please try again.");
+                        }
+                    },
+                    auto_select: false,
+                    cancel_on_tap_outside: true,
+                    ux_mode: 'popup'  // Force popup mode
+                });
+                
+                // Add click handler - IMMEDIATE POPUP, NO SPINNER
+                const googleBtn = document.getElementById('googleLoginBtn');
+                googleBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    console.log("Opening Google Sign-In popup...");
+                    
+                    // Directly show the popup - no loading overlay!
+                    google.accounts.id.prompt((notification) => {
+                        if (notification.isNotDisplayed()) {
+                            const reason = notification.getNotDisplayedReason();
+                            console.log("Popup not displayed:", reason);
+                            if (reason === 'opt_out_or_no_session') {
+                                // Fallback: open popup directly
+                                google.accounts.id.renderButton(googleBtn, {
+                                    type: 'standard',
+                                    theme: 'outline',
+                                    size: 'large',
+                                    text: 'continue_with',
+                                    shape: 'pill'
+                                });
+                                showError("Please click the Google button again to sign in.");
+                            } else if (reason === 'invalid_client') {
+                                showError("Google Sign-In configuration error. Please try again later.");
+                            } else {
+                                showError("Please enable popups for this website and try again.");
+                            }
+                        }
+                    });
+                });
+            };
+            script.onerror = () => {
+                console.error("Failed to load Google Sign-In");
+                showError("Failed to load Google Sign-In. Please refresh the page.");
+            };
+            document.head.appendChild(script);
+        }
+        
+        // Guest login
+        function guestLogin() {
+            const guestName = "Guest_" + Math.floor(Math.random() * 10000);
+            loginUser({
+                name: guestName,
+                email: null,
+                picture: "https://ui-avatars.com/api/?background=6c5ce7&color=fff&name=" + guestName.charAt(0),
+                provider: "guest"
+            });
+        }
+        
+        // Event listeners
+        document.getElementById('guestBtn').addEventListener('click', guestLogin);
+        
+        // Start Google Sign-In
+        initGoogleSignIn();
+        
+        // Dark mode toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const toggleIcon = darkModeToggle.querySelector('i');
+        const body = document.body;
+        
+        if (localStorage.getItem('loginTheme') === 'dark') {
+            body.classList.add('dark-mode');
+            toggleIcon.classList.remove('fa-moon');
+            toggleIcon.classList.add('fa-sun');
+        }
+        
+        darkModeToggle.addEventListener('click', () => {
+            body.classList.toggle('dark-mode');
+            if (body.classList.contains('dark-mode')) {
+                toggleIcon.classList.remove('fa-moon');
+                toggleIcon.classList.add('fa-sun');
+                localStorage.setItem('loginTheme', 'dark');
+            } else {
+                toggleIcon.classList.remove('fa-sun');
+                toggleIcon.classList.add('fa-moon');
+                localStorage.setItem('loginTheme', 'light');
+            }
+        });
+        
+        // If already logged in, redirect to home
+        if (localStorage.getItem(STORAGE_KEY)) {
+            window.location.href = "index.html";
+        }
+    </script>
+</body>
+</html>

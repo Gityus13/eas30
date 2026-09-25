@@ -1,0 +1,890 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script>
+      // Absolute failsafe, placed first so nothing loaded later can delay it:
+      // the loading screen is force-hidden 5 seconds after the page starts,
+      // no matter how slow Tailwind/AOS/fonts/anything else is to arrive.
+      setTimeout(function () {
+        var ls = document.getElementById('loading-screen');
+        if (ls && ls.style.display !== 'none') {
+          ls.style.transition = 'opacity 0.4s ease';
+          ls.style.opacity = '0';
+          setTimeout(function () { ls.style.display = 'none'; }, 400);
+        }
+      }, 5000);
+    </script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EAS30</title>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-JXV858VBM0"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-JXV858VBM0');
+    </script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" type="image/png" href="https://files.catbox.moe/5hiawa.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/animejs/lib/anime.iife.min.js"></script>
+    <style>
+        /* CHRISTMAS BACKGROUND */
+        body {
+            background: linear-gradient(135deg, #b91c1c, #dc2626, #ef4444, #dc2626, #b91c1c) !important;
+            animation: christmasGlow 8s ease infinite !important;
+            background-size: 400% 400%;
+            position: relative;
+            overflow-x: hidden;
+        }
+        
+        @keyframes christmasGlow {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        /* SNOWFLAKES - Minimal */
+        .snowflake {
+            position: fixed;
+            background: white;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9999;
+            opacity: 0.8;
+            animation: fall linear infinite;
+        }
+        
+        @keyframes fall {
+            0% {
+                transform: translateY(-100px) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+        
+        /* CHRISTMAS HAT FOR CARDS - Minimal */
+        .christmas-hat {
+            position: absolute;
+            top: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 50px;
+            height: 40px;
+            background: #dc2626;
+            border-radius: 50% 50% 0 0;
+            z-index: 10;
+        }
+        
+        .christmas-hat::before {
+            content: '';
+            position: absolute;
+            top: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 15px;
+            height: 15px;
+            background: white;
+            border-radius: 50%;
+        }
+        
+        .christmas-hat::after {
+            content: '';
+            position: absolute;
+            bottom: -3px;
+            left: 0;
+            width: 100%;
+            height: 8px;
+            background: white;
+            border-radius: 4px;
+        }
+        
+        /* CHRISTMAS LIGHTS - Minimal */
+        .christmas-light {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            box-shadow: 0 0 8px;
+            z-index: 9998;
+            animation: lightTwinkle 1.5s infinite alternate;
+        }
+        
+        @keyframes lightTwinkle {
+            0% { opacity: 0.3; transform: scale(1); }
+            100% { opacity: 1; transform: scale(1.2); }
+        }
+        
+        /* LOADING SCREEN - Simple Christmas theme */
+        #loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, #b91c1c, #dc2626, #16a34a);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 99999;
+            transition: opacity 0.5s ease;
+        }
+        
+        .loading-logo {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            margin-bottom: 20px;
+            animation: pulse 2s infinite;
+        }
+        
+        .loading-text {
+            color: white;
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+        
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: #dc2626;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* MUSIC TICKER - Christmas theme */
+        .music-ticker {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 30px;
+            background: linear-gradient(90deg, #b91c1c, #dc2626);
+            color: white;
+            display: flex;
+            align-items: center;
+            overflow: hidden;
+            z-index: 10000;
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+            border-bottom: 1px solid #333;
+        }
+        
+        .ticker-label {
+            background: #16a34a;
+            color: white;
+            padding: 0 15px;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            white-space: nowrap;
+        }
+        
+        .ticker-text {
+            white-space: nowrap;
+            padding-left: 20px;
+            animation: ticker-scroll 15s linear infinite;
+            font-size: 14px;
+        }
+        
+        @keyframes ticker-scroll {
+            0% { transform: translateX(100%); }
+            100% { transform: translateX(-100%); }
+        }
+        
+        /* Adjust header to account for the ticker */
+        header {
+            margin-top: 30px;
+        }
+        
+        /* Restore original name card alignment */
+        .name-card {
+            position: relative;
+            text-align: center !important;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        /* Restore original dark mode toggle position */
+        .dark-mode-toggle {
+            position: fixed;
+            top: 40px;
+            right: 20px;
+            z-index: 1000;
+        }
+        
+        .toggle-button {
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .toggle-button:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+        
+        .toggle-button i {
+            font-size: 20px;
+            color: white;
+        }
+        
+        /* Restore original music toggle position */
+        .music-toggle {
+            position: fixed;
+            top: 40px;
+            right: 80px;
+            z-index: 1000;
+        }
+        
+        .music-button {
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .music-button:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+        
+        .music-button i {
+            font-size: 20px;
+            color: white;
+        }
+        
+        /* Original styles preserved */
+        @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,500;9..144,600;9..144,700&display=swap');
+        
+        * {
+            box-sizing: border-box;
+        }
+        
+        /* DARK MODE - Restored exactly as it was */
+        body.dark-mode {
+            background: #0f172a !important;
+            animation: none !important;
+            color: #e2e8f0;
+        }
+        
+        body.dark-mode header {
+            background: rgba(15, 23, 42, 0.8) !important;
+        }
+        
+        body.dark-mode .name-card {
+            background: linear-gradient(135deg, #1e293b, #334155) !important;
+            color: #e2e8f0;
+        }
+        
+        body.dark-mode footer {
+            background: rgba(15, 23, 42, 0.9) !important;
+        }
+        
+        body.dark-mode .button-container a {
+            background: rgba(30, 41, 59, 0.7) !important;
+            color: #e2e8f0;
+        }
+        
+        body.dark-mode .button-container a:hover {
+            background: rgba(30, 41, 59, 0.9) !important;
+        }
+        
+        /* Keep all other original styles exactly the same */
+        .max-w-3xl { max-width: 66rem; }
+        
+        .name-card {
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transform-style: preserve-3d;
+        }
+        
+        .name-card:hover {
+            transform: translateY(-15px) rotateY(5deg);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.3);
+        }
+        
+        .name-title { font-family: 'Fraunces', serif; }
+        
+        header {
+            background: rgba(0, 0, 0, 0.15);
+            backdrop-filter: blur(5px);
+        }
+        
+        .container {
+            max-width: 1400px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+        
+        .floating { animation: floating 3s ease-in-out infinite; }
+        
+        .rounded-3xl { border-radius: 1.5rem; }
+        
+        @keyframes floating {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-25px); }
+            100% { transform: translateY(0px); }
+        }
+        
+        .shadow-2xl { box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); }
+        
+        .p-10 { padding: 2.5rem; }
+        .mb-5 { margin-bottom: 1.25rem; }
+        .text-lg { font-size: 1.125rem; line-height: 1.75rem; }
+        
+        .gradient-text {
+            background: linear-gradient(45deg, #ec4899, #22d3ee, #7c3aed, #f472b6, #4c1d95, #0ea5e9, #a855f7, #3d2b7d);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            background-size: 400% 400%;
+            animation: textGradientShift 8s ease infinite;
+            font-weight: 800;
+        }
+        
+        @keyframes textGradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        .text-4xl { font-size: 2.5rem; line-height: 1.2; }
+        
+        /* Grid layout */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+            width: 100%;
+        }
+        
+        .name-card {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            min-height: 250px;
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 380px) {
+            .name-title { font-size: 2rem; }
+            header p { font-size: 1rem; }
+            .name-card { padding: 1rem; }
+            .p-5 { padding: 0.75rem; }
+            .w-12, .h-12 { width: 2.5rem; height: 2.5rem; }
+            iframe { height: 350px; }
+            .dark-mode-toggle { top: 40px; right: 10px; }
+            .music-toggle { top: 40px; right: 70px; }
+            .toggle-button, .music-button { width: 40px; height: 40px; }
+            .toggle-button i, .music-button i { font-size: 16px; }
+            .grid { grid-template-columns: 1fr; gap: 1rem; }
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+    <!-- LOADING SCREEN -->
+    <div id="loading-screen">
+        <img src="https://files.catbox.moe/5hiawa.png" alt="Loading" class="loading-logo">
+        <div class="loading-text">Loading EAS30...</div>
+        <div class="loading-spinner"></div>
+    </div>
+    
+    <!-- BLACK LINE WITH SCROLLING TEXT -->
+    <div class="music-ticker">
+        <div class="ticker-text">🎄 Merry Christmas!</div>
+    </div>
+    
+    <!-- Minimal Christmas decorations -->
+    <div id="snowflakes-container"></div>
+    <div id="christmas-lights"></div>
+    
+    <!-- Background elements -->
+    <div id="stars-container" class="fixed inset-0 overflow-hidden pointer-events-none"></div>
+
+    <!-- Audio element for music -->
+    <audio id="background-music" loop autoplay>
+        <source src="https://files.catbox.moe/i2idc0.wav" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+
+    <!-- Dark Mode Toggle -->
+    <div class="dark-mode-toggle">
+        <div class="toggle-button" id="darkModeToggle">
+            <i class="fas fa-moon"></i>
+        </div>
+    </div>
+
+    <!-- Music Toggle -->
+    <div class="music-toggle">
+        <div class="music-button" id="musicToggle">
+            <i class="fas fa-volume-up"></i>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header class="relative py-8 md:py-20 text-center">
+        <div class="container mx-auto px-4">
+            <div class="flex justify-center mb-4 md:mb-6">
+                <img src="https://files.catbox.moe/5hiawa.png" alt="Logo" class="h-24 w-24 md:h-32 md:w-32 floating rounded-full">
+            </div>
+            <h1 class="name-title font-bold text-white mb-3 md:mb-4 floating text-5xl md:text-7xl">
+                EAS30
+            </h1>
+            <div class="flex justify-center mb-4 md:mb-6">
+                <span class="inline-flex items-center gap-2 bg-white/20 backdrop-blur-sm text-white/90 text-sm md:text-base font-semibold px-4 py-1.5 rounded-full">🎉 Class 8A · New Year Edition</span>
+            </div>
+            <p class="text-lg md:text-2xl text-white/90 max-w-3xl mx-auto">
+                Every hobby, every face, one page — Class 8A on the road to 2030.
+            </p>
+        </div>
+    </header>
+    
+    <div class="flex justify-center w-full px-4 mb-8 md:mb-10">
+        <iframe 
+      src="https://studio.pickaxe.co/_embed/H3NJRZ7I6R?d=deployment-26ee6cab-1a57-45e9-b082-fe2f93fdf70d" 
+      style="width: 100%; max-width: 807px; box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25); border-radius: 24px;" 
+      frameborder="0" allow="microphone">
+        </iframe>
+    </div>
+    
+     <!-- Names Grid -->
+    <main class="container mx-auto px-4 pb-12 md:pb-20">
+        <div class="grid">
+            <!-- Name cards will be generated by JavaScript -->
+        </div>
+    </main>
+
+    <script src="https://cdn.logwork.com/widget/countdown.js"></script>
+<a href="https://logwork.com/countdown-timer" class="countdown-timer" data-style="columns" data-timezone="Asia/Baku" data-date="2026-01-04 00:00">Countdown Until New Year Finish</a>
+    <!-- ManageBac Section -->
+    <section class="container mx-auto px-4 mb-8 md:mb-10">
+        <div class="button-container flex justify-center gap-4 md:gap-6 flex-wrap">
+            <a href="https://eas.managebac.com/student/home" target="_blank" class="bg-white/20 hover:bg-white/30 backdrop-blur-sm text-white font-bold py-3 px-6 md:py-4 md:px-8 rounded-full transition-all duration-300 inline-flex items-center gap-2">
+                <i data-feather="external-link"></i>
+                Your Managebac
+            </a>
+            <a href="school.html" class="bg-white/20 hover:bg-white/30 backdrop-blur-sm text-white font-bold py-3 px-6 md:py-4 md:px-8 rounded-full transition-all duration-300 inline-flex items-center gap-2">
+                <i data-feather="video"></i>
+                Our School EAS
+            </a>
+            <a href="mac.html" class="bg-white/20 hover:bg-white/30 backdrop-blur-sm text-white font-bold py-3 px-6 md:py-4 md:px-8 rounded-full transition-all duration-300 inline-flex items-center gap-2">
+                <i data-feather="plus-circle"></i>
+                Add to Dock
+            </a>
+            <a href="https://www.instagram.com/eashobies.site/?utm_source=ig_web_button_share_sheet" target="_blank" class="bg-white/20 hover:bg-white/30 backdrop-blur-sm text-white font-bold py-3 px-6 md:py-4 md:px-8 rounded-full transition-all duration-300 inline-flex items-center gap-2">
+                <i data-feather="instagram"></i>
+                Our Instagram
+            </a>
+            <a href="https://admin.eas30.site" class="bg-white/20 hover:bg-white/30 backdrop-blur-sm text-white font-bold py-3 px-6 md:py-4 md:px-8 rounded-full transition-all duration-300 inline-flex items-center gap-2">
+                <i data-feather="settings"></i>
+                Admin Panel (for host only )
+            </a>
+            <a href="games.html" class="bg-white/20 hover:bg-white/30 backdrop-blur-sm text-white font-bold py-3 px-6 md:py-4 md:px-8 rounded-full transition-all duration-300 inline-flex items-center gap-2">
+                <i class="fa-solid fa-gamepad"></i>
+                Fun Games
+            </a>
+            <a href="https://eas30.site/info.html" class="bg-white/20 hover:bg-white/30 backdrop-blur-sm text-white font-bold py-3 px-6 md:py-4 md:px-8 rounded-full transition-all duration-300 inline-flex items-center gap-2">
+                <i class="fa-solid fa-circle-info"></i>
+                Info
+            </a>
+            <!-- REMOVED MODES BUTTON -->
+<!-- NEW BUTTONS ADDED HERE -->
+            <a href="https://eas30.site/flappybird.html" class="bg-white/20 hover:bg-white/30 backdrop-blur-sm text-white font-bold py-3 px-6 md:py-4 md:px-8 rounded-full transition-all duration-300 inline-flex items-center gap-2">
+                <i class="fa-solid fa-dove"></i>
+                Flappy Bird Game
+            </a>
+            <a href="https://eas30.site/circle.html" class="bg-white/20 hover:bg-white/30 backdrop-blur-sm text-white font-bold py-3 px-6 md:py-4 md:px-8 rounded-full transition-all duration-300 inline-flex items-center gap-2">
+                <i class="fa-solid fa-circle"></i>
+                Perfect Circle Game
+            </a>
+            <a href="https://eas30.site/sponsor.html" class="bg-white/20 hover:bg-white/30 backdrop-blur-sm text-white font-bold py-3 px-6 md:py-4 md:px-8 rounded-full transition-all duration-300 inline-flex items-center gap-2">
+                <i class="fa-solid fa-handshake"></i>
+                Our Sponsors
+            </a>
+        </div>
+    </section>
+    
+    <!-- Footer -->
+    <footer class="bg-black/20 py-8 md:py-12 text-center text-white/80">
+        <div class="container mx-auto px-4">
+            <p class="text-base md:text-lg md:text-xl">Ⓡ-© 2026.  Something incorrect, lie or you want to add something, etc contact for change +994 50 549 99 33 or find Yusif.G 8a. Made by YUSAI And Farhadik And Kenanchik. Logo By Rufiz.A</p>
+        </div>
+    </footer>
+    
+    <script>
+        // Initialize AOS
+        AOS.init({
+            duration: 1000,
+            once: true,
+            easing: 'ease-out-cubic',
+            offset: 100
+        });
+        
+        // Initialize Feather Icons
+        feather.replace();
+        
+        // MINIMAL CHRISTMAS DECORATIONS
+        function createSnowflakes() {
+            const container = document.getElementById('snowflakes-container');
+            const snowflakeCount = 50;
+            
+            for (let i = 0; i < snowflakeCount; i++) {
+                const snowflake = document.createElement('div');
+                snowflake.className = 'snowflake';
+                
+                // Random properties
+                const size = Math.random() * 6 + 3;
+                const posX = Math.random() * 100;
+                const duration = 5 + Math.random() * 10;
+                const delay = Math.random() * 10;
+                const opacity = 0.5 + Math.random() * 0.5;
+                
+                snowflake.style.width = `${size}px`;
+                snowflake.style.height = `${size}px`;
+                snowflake.style.left = `${posX}%`;
+                snowflake.style.opacity = opacity;
+                snowflake.style.animationDuration = `${duration}s`;
+                snowflake.style.animationDelay = `${delay}s`;
+                
+                container.appendChild(snowflake);
+            }
+        }
+        
+        function createChristmasLights() {
+            const container = document.getElementById('christmas-lights');
+            const lightCount = 20;
+            
+            const colors = ['#dc2626', '#16a34a', '#fbbf24', '#ffffff'];
+            
+            for (let i = 0; i < lightCount; i++) {
+                const light = document.createElement('div');
+                light.className = 'christmas-light';
+                
+                // Random properties
+                const posX = Math.random() * 100;
+                const posY = Math.random() * 100;
+                const color = colors[Math.floor(Math.random() * colors.length)];
+                const delay = Math.random() * 2;
+                
+                light.style.left = `${posX}%`;
+                light.style.top = `${posY}%`;
+                light.style.backgroundColor = color;
+                light.style.animationDelay = `${delay}s`;
+                light.style.boxShadow = `0 0 8px ${color}`;
+                
+                container.appendChild(light);
+            }
+        }
+        
+        function addChristmasHatsToCards() {
+            const nameCards = document.querySelectorAll('.name-card');
+            nameCards.forEach(card => {
+                const hat = document.createElement('div');
+                hat.className = 'christmas-hat';
+                card.appendChild(hat);
+            });
+        }
+        
+        // Function to play music automatically
+        function playBackgroundMusic() {
+            const backgroundMusic = document.getElementById('background-music');
+            if (backgroundMusic) {
+                // Set music to play automatically
+                backgroundMusic.volume = 0.3;
+                
+                // Modern browsers require user interaction for audio
+                // We'll play it after a user interaction (loading screen click)
+                document.addEventListener('click', function initAudio() {
+                    backgroundMusic.play().then(() => {
+                        console.log("Music started playing automatically");
+                        // Update music button icon
+                        const musicIcon = document.querySelector('#musicToggle i');
+                        if (musicIcon) {
+                            musicIcon.classList.remove('fa-volume-mute');
+                            musicIcon.classList.add('fa-volume-up');
+                        }
+                    }).catch(e => {
+                        console.log("Auto-play prevented, waiting for user interaction");
+                    });
+                    
+                    // Remove the event listener after first click
+                    document.removeEventListener('click', initAudio);
+                }, { once: true });
+            }
+        }
+        
+        // Hide the loading screen once the page is actually ready
+        // (the 5-second hard cap in <head> covers the slow/failure case).
+        let loadingScreenHidden = false;
+        function hideLoadingScreen() {
+            if (loadingScreenHidden) return;
+            loadingScreenHidden = true;
+            const loadingScreen = document.getElementById('loading-screen');
+            if (!loadingScreen) return;
+            loadingScreen.style.opacity = '0';
+            setTimeout(function() {
+                loadingScreen.style.display = 'none';
+                setTimeout(addChristmasHatsToCards, 500);
+            }, 500);
+        }
+
+        window.addEventListener('load', function() {
+            // Create minimal Christmas decorations
+            createSnowflakes();
+            createChristmasLights();
+            
+            // Start playing background music
+            playBackgroundMusic();
+            
+            // Hide loading screen a moment after everything's ready
+            setTimeout(hideLoadingScreen, 400);
+        });
+        
+        // Names array with descriptions
+        const names = [
+            { name: "Ali", description: "<i class=\"fa-solid fa-robot\"></i> Ali is a real powerful AI we call him (AliGpt)" },
+            { name: "Farhad", description: "<i class=\"fa-solid fa-palette\"></i> Judo (The Host)" },
+            { name: "Yusif", description: "<i class=\"fa-solid fa-music\"></i> DJ :) (host of website)" },
+            { name: "Rufiz", description: "<i class=\"fa-solid fa-basketball\"></i> American bad boy that loves sport (Logo Creator)" },
+            { name: "Eldar", description: "<i class=\"fa-solid fa-crosshairs\"></i> He is good for his hunting skills" },
+            { name: "Ismayil", description: "<i class=\"fa-solid fa-gamepad\"></i> Ismayil is best Roblox player (Steal a brainrot)" },
+            { name: "Kenan", description: "<i class=\"fa-solid fa-basketball\"></i> The Best Basketball Player " },
+            { name: "Zahra", description: "<i class=\"fa-solid fa-shield-halved\"></i> She is famous for protecting their bestie with MMA" },
+            { name: "Aliya", description: "<i class=\"fa-solid fa-cart-shopping\"></i> Volleyball bestie" },
+            { name: "Safia", description: "<i class=\"fa-solid fa-volleyball\"></i> Volleyball Player" },
+            { name: "Khadija", description: "<i class=\"fa-solid fa-people-group\"></i> Team bestie MMA" },
+            { name: "Aisha", description: "<i class=\"fa-solid fa-microphone\"></i> Blackpink" },
+            { name: "Fateh", description: "<i class=\"fa-solid fa-face-laugh\"></i> The real meaning of goat" },
+            { name: "Matin", description: "<i class=\"fa-solid fa-calculator\"></i> Our math calculator" },
+            { name: "Vidadi", description: "<i class=\"fa-solid fa-gamepad\"></i> Video games" },
+            { name: "Omar", description: "<i class=\"fa-solid fa-football\"></i> Rugby" },
+            { name: "Ayla", description: "<i class=\"fa-solid fa-heart\"></i> MMA Bestie " },
+            { name: "Farahnaz", description: "<i class=\"fa-solid fa-crown\"></i> Kind and once was class leader" },
+            { name: "Maryam", description: "<i class=\"fa-solid fa-volume-xmark\"></i> Swimming" },
+            { name: "Inji", description: "<i class=\"fa-solid fa-tv\"></i>loves anime" },
+            { name: "Zuleykha", description: "<i class=\"fa-solid fa-music\"></i> She likes Playing Piano" }
+        ];
+        
+        // Colors for cards
+        const cardColors = [
+            "from-pink-500 to-purple-500", "from-blue-500 to-cyan-500", "from-green-500 to-teal-500",
+            "from-yellow-500 to-orange-500", "from-red-500 to-pink-500", "from-indigo-500 to-purple-500",
+            "from-teal-500 to-blue-500", "from-purple-500 to-pink-500", "from-cyan-500 to-blue-500",
+            "from-orange-500 to-red-500", "from-green-500 to-cyan-500", "from-pink-500 to-rose-500",
+            "from-blue-500 to-indigo-500", "from-amber-500 to-yellow-500", "from-emerald-500 to-teal-500",
+            "from-violet-500 to-purple-500", "from-rose-500 to-pink-500", "from-cyan-500 to-sky-500",
+            "from-fuchsia-500 to-pink-500", "from-lime-500 to-green-500", "from-purple-500 to-indigo-500"
+        ];
+        
+        // Icons for cards
+        const icons = [
+            "cpu", "coffee", "music", "gift", "sun", "moon", "cloud", "shield", "bell", "bell", 
+            "camera", "video", "star", "feather", "video-off", "key", "smile", "smile", "paperclip", 
+            "camera", "music"
+        ];
+        
+        // Generate name cards
+        const gridContainer = document.querySelector('.grid');
+        
+        names.forEach((nameObj, index) => {
+            const card = document.createElement('div');
+            const gradientClass = cardColors[index];
+            card.className = `name-card bg-gradient-to-br ${gradientClass} rounded-3xl p-6 md:p-10 text-white shadow-2xl transform transition-all duration-500 hover:shadow-2xl relative overflow-hidden h-full`;
+            card.setAttribute('data-aos', 'fade-up');
+            card.setAttribute('data-aos-delay', `${index * 50}`);
+            
+            card.innerHTML = `
+                <div class="flex justify-center mb-4 md:mb-6">
+                    <div class="bg-white/20 p-4 md:p-5 rounded-full">
+                        <i data-feather="${icons[index]}" class="w-12 h-12 md:w-16 md:h-16"></i>
+                    </div>
+                </div>
+                <h2 class="name-title text-3xl md:text-5xl font-bold mb-3 md:mb-5 text-center gradient-text">${nameObj.name}</h2>
+                <p class="text-center text-white/90 text-lg md:text-xl mb-4 md:mb-5">${nameObj.description}</p>
+            `;
+            
+            gridContainer.appendChild(card);
+        });
+        
+        // Reinitialize Feather Icons after adding elements
+        feather.replace();
+        
+        // Dark mode toggle functionality
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const toggleIcon = darkModeToggle.querySelector('i');
+        
+        // Check for saved theme preference
+        const currentTheme = localStorage.getItem('theme');
+        
+        if (currentTheme === 'dark') {
+            document.body.classList.add('dark-mode');
+            toggleIcon.classList.remove('fa-moon');
+            toggleIcon.classList.add('fa-sun');
+        }
+        
+        darkModeToggle.addEventListener('click', () => {
+            document.body.classList.toggle('dark-mode');
+            
+            // Update icon
+            if (document.body.classList.contains('dark-mode')) {
+                toggleIcon.classList.remove('fa-moon');
+                toggleIcon.classList.add('fa-sun');
+                localStorage.setItem('theme', 'dark');
+            } else {
+                toggleIcon.classList.remove('fa-sun');
+                toggleIcon.classList.add('fa-moon');
+                localStorage.setItem('theme', 'light');
+            }
+        });
+        
+        // Music toggle functionality
+        const musicToggle = document.getElementById('musicToggle');
+        const musicIcon = musicToggle.querySelector('i');
+        const backgroundMusic = document.getElementById('background-music');
+        
+        // Set initial state - music is playing by default
+        musicIcon.classList.remove('fa-volume-mute');
+        musicIcon.classList.add('fa-volume-up');
+        localStorage.setItem('music', 'playing');
+        
+        musicToggle.addEventListener('click', () => {
+            if (backgroundMusic.paused) {
+                backgroundMusic.play().catch(e => {
+                    console.log("Audio play prevented by browser");
+                });
+                musicIcon.classList.remove('fa-volume-mute');
+                musicIcon.classList.add('fa-volume-up');
+                localStorage.setItem('music', 'playing');
+            } else {
+                backgroundMusic.pause();
+                musicIcon.classList.remove('fa-volume-up');
+                musicIcon.classList.add('fa-volume-mute');
+                localStorage.setItem('music', 'paused');
+            }
+        });
+        
+        // Create background stars
+        function createStars() {
+            const container = document.getElementById('stars-container');
+            const starCount = 100;
+            
+            for (let i = 0; i < starCount; i++) {
+                const star = document.createElement('div');
+                star.classList.add('star');
+                
+                // Random properties
+                const size = Math.random() * 3;
+                const posX = Math.random() * 100;
+                const posY = Math.random() * 100;
+                const duration = 2 + Math.random() * 5;
+                const delay = Math.random() * 5;
+                
+                star.style.width = `${size}px`;
+                star.style.height = `${size}px`;
+                star.style.left = `${posX}%`;
+                star.style.top = `${posY}%`;
+                star.style.setProperty('--duration', `${duration}s`);
+                star.style.animationDelay = `${delay}s`;
+                
+                container.appendChild(star);
+            }
+        }
+        
+        // Initialize on load
+        document.addEventListener('DOMContentLoaded', function() {
+            createStars();
+            
+            // Make iframe responsive
+            const iframe = document.querySelector('iframe');
+            if (iframe) {
+                iframe.style.maxWidth = '100%';
+                iframe.style.height = 'auto';
+                iframe.style.aspectRatio = '807 / 500';
+            }
+            
+            // Add hover animations to name cards
+            const nameCards = document.querySelectorAll('.name-card');
+            nameCards.forEach(card => {
+                card.addEventListener('mouseenter', function() {
+                    if (typeof anime !== 'undefined') {
+                        anime({
+                            targets: this,
+                            scale: 1.05,
+                            rotateY: '5deg',
+                            duration: 600,
+                            easing: 'easeOutElastic'
+                        });
+                    }
+                });
+                
+                card.addEventListener('mouseleave', function() {
+                    if (typeof anime !== 'undefined') {
+                        anime({
+                            targets: this,
+                            scale: 1,
+                            rotateY: '0deg',
+                            duration: 600,
+                            easing: 'easeOutElastic'
+                        });
+                    }
+                });
+            });
+            
+            // Animate header text
+            if (typeof anime !== 'undefined') {
+                anime({
+                    targets: '.name-title',
+                    translateY: [-70, 0],
+                    opacity: [0, 1],
+                    duration: 2500,
+                    easing: 'easeOutExpo'
+                });
+            }
+        });
+    </script>
+</body>
+</html>

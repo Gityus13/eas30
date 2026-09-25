@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Draw a Perfect Circle</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            overflow: hidden;
+            background: white;
+        }
+
+        .container {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+        }
+
+        canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            cursor: crosshair;
+            touch-action: none;
+        }
+
+        .controls {
+            position: absolute;
+            top: 1rem;
+            left: 1rem;
+            display: flex;
+            gap: 0.5rem;
+            z-index: 10;
+        }
+
+        button {
+            padding: 0.5rem 1rem;
+            background: white;
+            border: 1px solid #d1d5db;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            font-size: 14px;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+            transition: background-color 0.2s;
+        }
+
+        button:hover {
+            background: #f9fafb;
+        }
+
+        .instructions {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            pointer-events: none;
+            z-index: 5;
+        }
+
+        .instructions.hidden {
+            display: none;
+        }
+
+        .instructions h1 {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+        }
+
+        .instructions p {
+            font-size: 1.125rem;
+            color: #6b7280;
+        }
+
+        .instructions .stats {
+            font-size: 0.875rem;
+            color: #9ca3af;
+            margin-top: 0.5rem;
+        }
+
+        .try-again-container {
+            position: absolute;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 10;
+        }
+
+        .try-again-container.hidden {
+            display: none;
+        }
+
+        .try-again-btn {
+            padding: 0.75rem 1.5rem;
+            background: black;
+            color: white;
+            border: none;
+            border-radius: 0.5rem;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .try-again-btn:hover {
+            background: #374151;
+        }
+
+        @media (max-width: 640px) {
+            .instructions h1 {
+                font-size: 1.5rem;
+            }
+            .instructions p {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <canvas id="canvas"></canvas>
+        
+        <div class="controls">
+            <button id="clearBtn">Clear</button>
+            <button id="gridBtn">Hide grid</button>
+        </div>
+        
+        <div class="instructions" id="instructions">
+            <h1>Draw a perfect circle</h1>
+            <p>Click and drag to draw your circle</p>
+            <p class="stats">Best score: <span id="bestScoreDisplay">0</span> | Attempts: <span id="attemptsDisplay">0</span></p>
+        </div>
+        
+        <div class="try-again-container hidden" id="tryAgainContainer">
+            <button class="try-again-btn" id="tryAgainBtn">Try again</button>
+        </div>
+    </div>
+
+    <script>
+        const TRANSLATIONS = {
+            "en-US": {
+                "drawCompleteCircle": "Draw a complete circle!",
+                "perfectCircle": "Perfect circle! You're a true artist! ✨",
+                "excellent": "Excellent! Almost perfect! 🎯",
+                "greatJob": "Great job! Very circular! 👏",
+                "goodEffort": "Good effort! Keep practicing! 💪",
+                "notBad": "Not bad! Try drawing slower? 🖊️",
+                "anotherShot": "Give it another shot! Practice makes perfect! 🔄",
+                "abstractArt": "Hmm, that looks more like abstract art! 🎨"
+            }
+        };
+
+        const locale = navigator.language || 'en-US';
+        const t = (key) => TRANSLATIONS[locale]?.[key] || TRANSLATIONS['en-US'][key] || key;
+
+        // State
+        let isDrawing = false;
+        let points = [];
+        let result = null;
+        let showGrid = true;
+        let bestScore = 0;
+        let attempts = 0;
+
+        // Elements
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        const clearBtn = document.getElementById('clearBtn');
+        const gridBtn = document.getElementById('gridBtn');
+        const instructions = document.getElementById('instructions');
+        const tryAgainContainer = document.getElementById('tryAgainContainer');
+        const tryAgainBtn = document.getElementById('tryAgainBtn');
+        const bestScoreDisplay = document.getElementById('bestScoreDisplay');
+        const attemptsDisplay = document.getElementById('attemptsDisplay');
+
+        // Initialize canvas
+        function initCanvas() {
+            const scale = window.devicePixelRatio || 1;
+            canvas.width = window.innerWidth * scale;
+            canvas.height = window.innerHeight * scale;
+            canvas.style.width = window.innerWidth + 'px';
+            canvas.style.height = window.innerHeight + 'px';
+            ctx.scale(scale, scale);
+            drawCanvas();
+        }
+
+        // Draw canvas
+        function drawCanvas() {
+            const displayWidth = canvas.width / (window.devicePixelRatio || 1);
+            const displayHeight = canvas.height / (window.devicePixelRatio || 1);
+            
+            // Clear canvas
+            ctx.fillStyle = '#ffffff';
+            ctx.fillRect(0, 0, displayWidth, displayHeight);
+            
+            // Draw grid
+            if (showGrid) {
+                ctx.strokeStyle = '#f0f0f0';
+                ctx.lineWidth = 1;
+                const gridSize = 40;
+                
+                for (let x = 0; x < displayWidth; x += gridSize) {
+                    ctx.beginPath();
+                    ctx.moveTo(x, 0);
+                    ctx.lineTo(x, displayHeight);
+                    ctx.stroke();
+                }
+                
+                for (let y = 0; y < displayHeight; y += gridSize) {
+                    ctx.beginPath();
+                    ctx.moveTo(0, y);
+                    ctx.lineTo(displayWidth, y);
+                    ctx.stroke();
+                }
+            }
+            
+            // Draw the circle
+            if (points.length > 1) {
+                ctx.strokeStyle = '#000000';
+                ctx.lineWidth = 3;
+                ctx.lineJoin = 'round';
+                ctx.lineCap = 'round';
+                
+                ctx.beginPath();
+                ctx.moveTo(points[0].x, points[0].y);
+                
+                for (let i = 1; i < points.length; i++) {
+                    ctx.lineTo(points[i].x, points[i].y);
+                }
+                
+                ctx.stroke();
+            }
+            
+            // Draw result overlay
+            if (result) {
+                ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
+                ctx.fillRect(0, 0, displayWidth, displayHeight);
+                
+                ctx.fillStyle = '#000000';
+                ctx.font = 'bold 72px system-ui, -apple-system, sans-serif';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                
+                const scoreText = `${result.score}/100`;
+                ctx.fillText(scoreText, displayWidth / 2, displayHeight / 2 - 50);
+                
+                ctx.font = '24px system-ui, -apple-system, sans-serif';
+                ctx.fillText(result.message, displayWidth / 2, displayHeight / 2 + 30);
+                
+                ctx.font = '18px system-ui, -apple-system, sans-serif';
+                ctx.fillText(`Best score: ${bestScore} | Attempts: ${attempts}`, displayWidth / 2, displayHeight / 2 + 70);
+            }
+        }
+
+        // Evaluate circle
+        function evaluateCircle(pts) {
+            if (pts.length < 10) {
+                return { score: 0, message: t('drawCompleteCircle') };
+            }
+
+            const center = pts.reduce((acc, point) => ({
+                x: acc.x + point.x,
+                y: acc.y + point.y
+            }), { x: 0, y: 0 });
+            
+            center.x /= pts.length;
+            center.y /= pts.length;
+
+            let avgRadius = 0;
+            for (const point of pts) {
+                const distance = Math.sqrt(
+                    Math.pow(point.x - center.x, 2) + 
+                    Math.pow(point.y - center.y, 2)
+                );
+                avgRadius += distance;
+            }
+            avgRadius /= pts.length;
+
+            let radiusVariance = 0;
+            for (const point of pts) {
+                const distance = Math.sqrt(
+                    Math.pow(point.x - center.x, 2) + 
+                    Math.pow(point.y - center.y, 2)
+                );
+                radiusVariance += Math.pow(distance - avgRadius, 2);
+            }
+            radiusVariance = Math.sqrt(radiusVariance / pts.length);
+
+            const startPoint = pts[0];
+            const endPoint = pts[pts.length - 1];
+            const closureDistance = Math.sqrt(
+                Math.pow(endPoint.x - startPoint.x, 2) + 
+                Math.pow(endPoint.y - startPoint.y, 2)
+            );
+            const maxClosureDistance = avgRadius * 0.2;
+            const isClosed = closureDistance < maxClosureDistance;
+
+            const maxVariance = avgRadius * 0.5;
+            const varianceScore = Math.max(0, 1 - (radiusVariance / maxVariance));
+            const closureScore = isClosed ? 1 : 0.5;
+            
+            let totalScore = Math.round((varianceScore * 0.6 + closureScore * 0.4) * 100);
+            totalScore = Math.max(0, Math.min(100, totalScore));
+
+            let message;
+            if (totalScore >= 95) message = t('perfectCircle');
+            else if (totalScore >= 85) message = t('excellent');
+            else if (totalScore >= 75) message = t('greatJob');
+            else if (totalScore >= 60) message = t('goodEffort');
+            else if (totalScore >= 40) message = t('notBad');
+            else if (totalScore >= 20) message = t('anotherShot');
+            else message = t('abstractArt');
+
+            return { score: totalScore, message, isClosed };
+        }
+
+        // Get position
+        function getPos(e) {
+            const rect = canvas.getBoundingClientRect();
+            const clientX = e.clientX || (e.touches && e.touches[0].clientX);
+            const clientY = e.clientY || (e.touches && e.touches[0].clientY);
+            return {
+                x: clientX - rect.left,
+                y: clientY - rect.top
+            };
+        }
+
+        // Start drawing
+        function startDrawing(e) {
+            e.preventDefault();
+            const pos = getPos(e);
+            isDrawing = true;
+            points = [pos];
+            result = null;
+            instructions.classList.add('hidden');
+            tryAgainContainer.classList.add('hidden');
+            drawCanvas();
+        }
+
+        // Draw
+        function draw(e) {
+            if (!isDrawing || result) return;
+            e.preventDefault();
+            const pos = getPos(e);
+            points.push(pos);
+            drawCanvas();
+        }
+
+        // Stop drawing
+        function stopDrawing(e) {
+            if (!isDrawing || result) return;
+            e.preventDefault();
+            isDrawing = false;
+            
+            const evaluation = evaluateCircle(points);
+            result = evaluation;
+            attempts++;
+            
+            if (evaluation.score > bestScore) {
+                bestScore = evaluation.score;
+            }
+            
+            bestScoreDisplay.textContent = bestScore;
+            attemptsDisplay.textContent = attempts;
+            
+            tryAgainContainer.classList.remove('hidden');
+            drawCanvas();
+        }
+
+        // Clear canvas
+        function clearCanvas() {
+            points = [];
+            result = null;
+            isDrawing = false;
+            instructions.classList.remove('hidden');
+            tryAgainContainer.classList.add('hidden');
+            drawCanvas();
+        }
+
+        // Toggle grid
+        function toggleGrid() {
+            showGrid = !showGrid;
+            gridBtn.textContent = showGrid ? 'Hide grid' : 'Show grid';
+            drawCanvas();
+        }
+
+        // Event listeners
+        canvas.addEventListener('mousedown', startDrawing);
+        canvas.addEventListener('mousemove', draw);
+        canvas.addEventListener('mouseup', stopDrawing);
+        canvas.addEventListener('mouseleave', stopDrawing);
+
+        canvas.addEventListener('touchstart', startDrawing);
+        canvas.addEventListener('touchmove', draw);
+        canvas.addEventListener('touchend', stopDrawing);
+
+        clearBtn.addEventListener('click', clearCanvas);
+        gridBtn.addEventListener('click', toggleGrid);
+        tryAgainBtn.addEventListener('click', clearCanvas);
+
+        window.addEventListener('resize', initCanvas);
+
+        // Initialize
+        initCanvas();
+    </script>
+</body>
+</html>

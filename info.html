@@ -1,0 +1,832 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EAS30 - Submit</title>
+    <!-- add this in <head> (CDN) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-JXV858VBM0"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-JXV858VBM0');
+    </script>
+    <link rel="icon" type="image/png" href="https://i.ibb.co/wFY6Tn2y/7-F.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/animejs/lib/anime.iife.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,500;9..144,600;9..144,700&display=swap');
+        
+        /* Base styles */
+        * {
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background: linear-gradient(45deg, #0b1637, #3d2b7d, #7c3aed, #ec4899, #f472b6, #22d3ee, #0ea5e9, #4c1d95);
+            overflow-x: hidden;
+            animation: gradientShift 30s ease infinite;
+            background-size: 400% 400%;
+        }
+        
+        body.dark-mode {
+            background: linear-gradient(45deg, #0b1421, #172130, #2a3647, #3c4a59, #566477, #8b97a9, #b8c2d1, #d3dce7);
+        }
+        
+        @keyframes gradientShift {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+        
+        .max-w-3xl {
+            max-width: 66rem;
+        }
+        
+        .name-card {
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transform-style: preserve-3d;
+        }
+        
+        .name-card:hover {
+            transform: translateY(-15px) rotateY(5deg);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.3);
+        }
+        
+        .name-title {
+            font-family: 'Fraunces', serif;
+        }
+        
+        header {
+            background: rgba(0, 0, 0, 0.15);
+            backdrop-filter: blur(5px);
+        }
+        
+        body.dark-mode header {
+            background: rgba(0, 0, 0, 0.3);
+        }
+        
+        .container {
+            max-width: 1400px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+        
+        .floating {
+            animation: floating 3s ease-in-out infinite;
+        }
+        
+        .rounded-3xl {
+            border-radius: 1.5rem;
+        }
+        
+        @keyframes floating {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-25px); }
+            100% { transform: translateY(0px); }
+        }
+        
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+        
+        .shadow-2xl {
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        .p-10 {
+            padding: 2.5rem;
+        }
+        
+        .mb-5 {
+            margin-bottom: 1.25rem;
+        }
+        
+        .text-lg {
+            font-size: 1.125rem;
+            line-height: 1.75rem;
+        }
+        
+        .gradient-text {
+            background: linear-gradient(45deg, #ec4899, #22d3ee, #7c3aed, #f472b6, #4c1d95, #0ea5e9, #a855f7, #3d2b7d);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            background-size: 400% 400%;
+            animation: textGradientShift 8s ease infinite;
+            font-weight: 800;
+        }
+        
+        body.dark-mode .gradient-text {
+            background: linear-gradient(45deg, #ff9999, #7dd3d3, #70c1e0, #b8e2d4, #fcd77f, #ffb8e0, #99aef1, #a08bd9);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        @keyframes textGradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        .text-4xl {
+            font-size: 2.5rem;
+            line-height: 1.2;
+        }
+        
+        /* Dark mode toggle styles */
+        .dark-mode-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+        
+        .toggle-button {
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .toggle-button:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+        
+        .toggle-button i {
+            font-size: 20px;
+            color: white;
+        }
+        
+        body.dark-mode .toggle-button {
+            background: rgba(30, 41, 59, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        body.dark-mode .toggle-button:hover {
+            background: rgba(51, 65, 85, 0.9);
+        }
+        
+        body.dark-mode .toggle-button i {
+            color: #f1f5f9;
+        }
+        
+        /* Music toggle styles */
+        .music-toggle {
+            position: fixed;
+            top: 20px;
+            right: 80px;
+            z-index: 1000;
+        }
+        
+        .music-button {
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .music-button:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+        
+        .music-button i {
+            font-size: 20px;
+            color: white;
+        }
+        
+        body.dark-mode .music-button {
+            background: rgba(30, 41, 59, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        body.dark-mode .music-button:hover {
+            background: rgba(51, 65, 85, 0.9);
+        }
+        
+        body.dark-mode .music-button i {
+            color: #f1f5f9;
+        }
+        
+        /* Dark mode adjustments */
+        body.dark-mode .name-card {
+            background: rgba(30, 41, 59, 0.8) !important;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        body.dark-mode .name-card:hover {
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+            background: rgba(51, 65, 85, 0.9) !important;
+        }
+        
+        body.dark-mode .name-title {
+            color: #f1f5f9;
+        }
+        
+        body.dark-mode .name-card {
+            background: rgba(30, 41, 59, 0.8) !important;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        body.dark-mode .name-card:hover {
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+            background: rgba(51, 65, 85, 0.9) !important;
+        }
+        
+        body.dark-mode .name-title {
+            color: #f1f5f9;
+        }
+        
+        body.dark-mode p {
+            color: #cbd5e1 !important;
+        }
+        
+        body.dark-mode .gradient-text {
+            background: linear-gradient(45deg, #94a3b8, #cbd5e1, #e2e8f0, #f1f5f9);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        body.dark-mode footer {
+            background: rgba(15, 23, 42, 0.5);
+            backdrop-filter: blur(10px);
+        }
+        
+        body.dark-mode a[href="https://eas.managebac.com/student/home"] {
+            background: rgba(30, 41, 59, 0.5) !important;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        body.dark-mode a[href="https://eas.managebac.com/student/home"]:hover {
+            background: rgba(51, 65, 85, 0.7) !important;
+        }
+        
+        body.dark-mode .bg-white\/20 {
+            background: rgba(30, 41, 59, 0.5) !important;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        body.dark-mode .bg-white\/20:hover {
+            background: rgba(51, 65, 85, 0.7) !important;
+        }
+        
+        body.dark-mode p {
+            color: #cbd5e1 !important;
+        }
+        
+        body.dark-mode .gradient-text {
+            background: linear-gradient(45deg, #94a3b8, #cbd5e1, #e2e8f0, #f1f5f9);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        body.dark-mode footer {
+            background: rgba(15, 23, 42, 0.5);
+            backdrop-filter: blur(10px);
+        }
+        
+        body.dark-mode a[href="https://eas.managebac.com/student/home"] {
+            background: rgba(30, 41, 59, 0.5) !important;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        body.dark-mode a[href="https://eas.managebac.com/student/home"]:hover {
+            background: rgba(51, 65, 85, 0.7) !important;
+        }
+        
+        body.dark-mode a[href="school.html"] {
+            background: rgba(30, 41, 59, 0.5) !important;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        body.dark-mode a[href="school.html"]:hover {
+            background: rgba(51, 65, 85, 0.7) !important;
+        }
+        
+        body.dark-mode .bg-white\/20 {
+            background: rgba(30, 41, 59, 0.5) !important;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        body.dark-mode .bg-white\/20:hover {
+            background: rgba(51, 65, 85, 0.7) !important;
+        }
+        
+        /* Star animations */
+        .star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle var(--duration) infinite ease-in-out;
+            opacity: 0;
+        }
+        
+        .py-12 {
+            padding-top: 3rem;
+            padding-bottom: 3rem;
+        }
+        
+        .text-xl {
+            font-size: 1.25rem;
+            line-height: 1.75rem;
+        }
+        
+        @keyframes twinkle {
+            0% { opacity: 0; transform: scale(0.5); }
+            50% { opacity: 1; transform: scale(1); }
+            100% { opacity: 0; transform: scale(0.5); }
+        }
+        
+        .gap-10 {
+            gap: 2.5rem;
+        }
+        
+        .p-5 {
+            padding: 1.25rem;
+        }
+        
+        .w-12, .h-12 {
+            width: 3rem;
+            height: 3rem;
+        }
+        
+        /* Form Styles */
+        .form-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        
+        .form-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        }
+        
+        .form-input {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(5px);
+            color: white;
+        }
+        
+        .form-input:focus {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: rgba(255, 255, 255, 0.5);
+            outline: none;
+        }
+        
+        .form-input::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
+        
+        body.dark-mode .form-card {
+            background: rgba(30, 41, 59, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        body.dark-mode .form-input {
+            background: rgba(30, 41, 59, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: #f1f5f9;
+        }
+        
+        body.dark-mode .form-input:focus {
+            background: rgba(51, 65, 85, 0.7);
+            border-color: rgba(255, 255, 255, 0.4);
+        }
+        
+        /* Responsive Design */
+        /* Mobile First Approach */
+        
+        /* Header adjustments for mobile */
+        header {
+            padding: 2rem 1rem;
+        }
+        
+        /* Title size adjustments */
+        .name-title {
+            font-size: 2.5rem;
+        }
+        
+        /* Card adjustments */
+        .name-card {
+            padding: 1.5rem;
+        }
+        
+        /* Button container adjustments */
+        .button-container {
+            flex-direction: column;
+            gap: 1rem;
+        }
+        
+        .button-container a {
+            width: 100%;
+            text-align: center;
+            justify-content: center;
+        }
+        
+        /* Form adjustments */
+        .form-card {
+            padding: 1.5rem;
+        }
+        
+        /* Tablet and larger screens */
+        @media (min-width: 640px) {
+            .name-title {
+                font-size: 3.5rem;
+            }
+            
+            .button-container {
+                flex-direction: row;
+                flex-wrap: wrap;
+            }
+            
+            .button-container a {
+                width: auto;
+            }
+            
+            .form-card {
+                padding: 2.5rem;
+            }
+        }
+        
+        @media (min-width: 768px) {
+            .name-title {
+                font-size: 4.5rem;
+            }
+            
+            .text-4xl {
+                font-size: 2.75rem;
+            }
+            
+            .text-xl {
+                font-size: 1.5rem;
+                line-height: 2rem;
+            }
+            
+            header {
+                padding: 5rem 1rem;
+            }
+            
+            .name-card {
+                padding: 2.5rem;
+            }
+        }
+        
+        @media (min-width: 1024px) {
+            .name-title {
+                font-size: 6rem;
+            }
+            
+            .text-4xl {
+                font-size: 3rem;
+            }
+            
+            .button-container {
+                flex-direction: row;
+                flex-wrap: nowrap;
+            }
+        }
+        
+        @media (min-width: 1280px) {
+            .name-title {
+                font-size: 7rem;
+            }
+        }
+        
+        /* Small mobile devices */
+        @media (max-width: 380px) {
+            .name-title {
+                font-size: 2rem;
+            }
+            
+            header p {
+                font-size: 1rem;
+            }
+            
+            .name-card {
+                padding: 1rem;
+            }
+            
+            .p-5 {
+                padding: 0.75rem;
+            }
+            
+            .w-12, .h-12 {
+                width: 2.5rem;
+                height: 2.5rem;
+            }
+            
+            .dark-mode-toggle {
+                top: 10px;
+                right: 10px;
+            }
+            
+            .music-toggle {
+                top: 10px;
+                right: 70px;
+            }
+            
+            .toggle-button, .music-button {
+                width: 40px;
+                height: 40px;
+            }
+            
+            .toggle-button i, .music-button i {
+                font-size: 16px;
+            }
+        }
+        
+        /* Height adjustments for landscape mode on mobile */
+        @media (max-height: 600px) and (orientation: landscape) {
+            header {
+                padding: 1.5rem 1rem;
+            }
+            
+            .name-title {
+                font-size: 2.5rem;
+            }
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+    <!-- Background stars -->
+    <div id="stars-container" class="fixed inset-0 overflow-hidden pointer-events-none"></div>
+    
+    <!-- Audio element for music -->
+    <audio id="background-music" loop>
+        <source src="https://files.catbox.moe/at5fvy.wav" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+    
+    <!-- Dark Mode Toggle -->
+    <div class="dark-mode-toggle">
+        <div class="toggle-button" id="darkModeToggle">
+            <i class="fas fa-moon"></i>
+        </div>
+    </div>
+
+    <!-- Music Toggle -->
+    <div class="music-toggle">
+        <div class="music-button" id="musicToggle">
+            <i class="fas fa-volume-mute"></i>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header class="relative py-8 md:py-20 text-center">
+        <div class="container mx-auto px-4">
+            <div class="flex justify-center mb-4 md:mb-6">
+                <img src="https://i.ibb.co/wFY6Tn2y/7-F.png" alt="Logo" class="h-24 w-24 md:h-32 md:w-32 floating rounded-full">
+            </div>
+            <h1 class="name-title font-bold text-white mb-4 md:mb-6 floating">
+                 EAS30 
+            </h1>
+            <p class="text-lg md:text-2xl text-white/90 max-w-3xl mx-auto">
+                Get Your Answer As Fast As Possible
+            </p>
+        </div>
+    </header>
+    
+    <!-- Form Section -->
+    <main class="container mx-auto px-4 pb-12 md:pb-20">
+        <div class="max-w-3xl mx-auto">
+            <div class="form-card rounded-3xl p-6 md:p-10 shadow-2xl" data-aos="fade-up">
+                <h2 class="text-3xl md:text-4xl font-bold text-center mb-6 gradient-text">  Info Or Feedback</h2>
+                <p class="text-center text-white/90 mb-8">Tell us about your question and we will answer it as fast as possible</p>
+                
+                <form id="hobbyForm" action="https://formsubmit.co/info@eas30.site" method="POST">
+                    <div>
+                        <label for="name" class="block text-white mb-2">Your Name</label>
+                        <input type="text" id="name" name="name" class="form-input w-full rounded-lg p-3" placeholder="Enter your name" required>
+                    </div>
+                    
+                    <div>
+                        <label for="hobby" class="block text-white mb-2">What Happened?</label>
+                        <input type="text" id="hobby" name="hobby" class="form-input w-full rounded-lg p-3" placeholder="Type here" required>
+                    </div>
+                    
+                    <div>
+                        <label for="description" class="block text-white mb-2">Description</label>
+                        <textarea id="description" name="descriptiaon" rows="5" class="form-input w-full rounded-lg p-3" placeholder="Describe" required></textarea>
+                    </div>
+
+                    <!-- Hidden fields for FormSubmit -->
+                    <input type="hidden" name="_captcha" value="false">
+                    <input type="hidden" name="_next" value="https://eas30.site/thanks.html">
+
+                    <div class="flex justify-center pt-4">
+                        <button type="submit" class="bg-gradient-to-r from-purple-500 to-indigo-500 hover:from-purple-600 hover:to-indigo-600 text-white font-bold py-3 px-8 rounded-full transition-all duration-300 transform hover:scale-105">
+                            <i class="fas fa-paper-plane mr-2"></i> Submit
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </main>
+    
+    <!-- Home Button Section -->
+    <section class="container mx-auto px-4 mb-8 md:mb-10">
+        <div class="flex justify-center">
+            <a href="https://eas30.site" class="bg-white/20 hover:bg-white/30 backdrop-blur-sm text-white font-bold py-3 px-6 md:py-4 md:px-8 rounded-full transition-all duration-300 inline-flex items-center gap-2">
+                <i class="fas fa-home"></i>
+                Back to Home
+            </a>
+        </div>
+    </section>
+    
+    <!-- Footer -->
+    <footer class="bg-black/20 py-8 md:py-12 text-center text-white/80">
+        <div class="container mx-auto px-4">
+            <p class="text-base md:text-lg md:text-xl">Ⓡ-© 2026. Something incorrect, lie or you want to add something, etc contact for change +994 50 549 9933 or find Yusif.G 8a Or Farhad.A 8a Made by YUSAI And Farhadik. Logo By Rufiz.A Kenan the 3rd host</p>
+        </div>
+    </footer>
+    
+    <script>
+        // Initialize AOS
+        AOS.init({
+            duration: 1000,
+            once: true,
+            easing: 'ease-out-cubic',
+            offset: 100
+        });
+        
+        // Initialize Feather Icons
+        feather.replace();
+        
+        // Dark mode toggle functionality
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const toggleIcon = darkModeToggle.querySelector('i');
+        
+        // Check for saved theme preference or respect OS preference
+        const prefersDarkScheme = window.matchMedia('(prefers-color-scheme: dark)');
+        const currentTheme = localStorage.getItem('theme');
+        
+        if (currentTheme === 'dark') {
+            document.body.classList.add('dark-mode');
+            toggleIcon.classList.remove('fa-moon');
+            toggleIcon.classList.add('fa-sun');
+        }
+        
+        darkModeToggle.addEventListener('click', () => {
+            document.body.classList.toggle('dark-mode');
+            
+            // Update icon
+            if (document.body.classList.contains('dark-mode')) {
+                toggleIcon.classList.remove('fa-moon');
+                toggleIcon.classList.add('fa-sun');
+                localStorage.setItem('theme', 'dark');
+            } else {
+                toggleIcon.classList.remove('fa-sun');
+                toggleIcon.classList.add('fa-moon');
+                localStorage.setItem('theme', 'light');
+            }
+        });
+        
+        // Music toggle functionality
+        const musicToggle = document.getElementById('musicToggle');
+        const musicIcon = musicToggle.querySelector('i');
+        const backgroundMusic = document.getElementById('background-music');
+        
+        // Check for saved music preference
+        const musicPreference = localStorage.getItem('music');
+        
+        if (musicPreference === 'playing') {
+            backgroundMusic.play();
+            musicIcon.classList.remove('fa-volume-mute');
+            musicIcon.classList.add('fa-volume-up');
+        } else {
+            backgroundMusic.pause();
+            musicIcon.classList.remove('fa-volume-up');
+            musicIcon.classList.add('fa-volume-mute');
+        }
+        
+        musicToggle.addEventListener('click', () => {
+            if (backgroundMusic.paused) {
+                backgroundMusic.play();
+                musicIcon.classList.remove('fa-volume-mute');
+                musicIcon.classList.add('fa-volume-up');
+                localStorage.setItem('music', 'playing');
+            } else {
+                backgroundMusic.pause();
+                musicIcon.classList.remove('fa-volume-up');
+                musicIcon.classList.add('fa-volume-mute');
+                localStorage.setItem('music', 'paused');
+            }
+        });
+        
+        // Create background stars
+        function createStars() {
+            const container = document.getElementById('stars-container');
+            const starCount = 1000;
+            
+            for (let i = 0; i < starCount; i++) {
+                const star = document.createElement('div');
+                star.classList.add('star');
+                
+                // Random properties
+                const size = Math.random() * 3;
+                const posX = Math.random() * 100;
+                const posY = Math.random() * 100;
+                const duration = 2 + Math.random() * 5;
+                const delay = Math.random() * 5;
+                
+                star.style.width = `${size}px`;
+                star.style.height = `${size}px`;
+                star.style.left = `${posX}%`;
+                star.style.top = `${posY}%`;
+                star.style.setProperty('--duration', `${duration}s`);
+                star.style.animationDelay = `${delay}s`;
+                
+                container.appendChild(star);
+            }
+        }
+        
+        // Animation for form card on hover
+        document.addEventListener('DOMContentLoaded', function() {
+            createStars();
+            
+            // Add hover animations to form card
+            const formCard = document.querySelector('.form-card');
+            formCard.addEventListener('mouseenter', function() {
+                anime({
+                    targets: this,
+                    scale: 1.02,
+                    duration: 600,
+                    easing: 'easeOutElastic'
+                });
+            });
+            
+            formCard.addEventListener('mouseleave', function() {
+                anime({
+                    targets: this,
+                    scale: 1,
+                    duration: 600,
+                    easing: 'easeOutElastic'
+                });
+            });
+            
+            // Animate header text
+            anime({
+                targets: '.name-title',
+                translateY: [-70, 0],
+                opacity: [0, 1],
+                duration: 2500,
+                easing: 'easeOutExpo'
+            });
+        });
+    </script>
+</body>
+</html>
