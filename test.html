@@ -2802,6 +2802,17 @@
         
 // Names array with descriptions
 const names = [
+    {
+        name: "Yusif",
+        description: '<i class="fa-solid fa-music"></i> DJ • Website Host',
+        host: true
+    },
+    {
+        name: "Kenan",
+        description: '<i class="fa-solid fa-basketball"></i> Basketball Player • Website Host',
+        host: true
+    },
+
     { name: "Emil", description: "Description not assigned" },
     { name: "Khadija", description: "Description not assigned" },
     { name: "Maryam", description: "Description not assigned" },
@@ -2816,7 +2827,6 @@ const names = [
     { name: "Kanan", description: "Description not assigned" },
     { name: "Safia", description: "Description not assigned" },
     { name: "Bahruza", description: "Description not assigned" },
-    { name: "Yusif", description: "Description not assigned" },
     { name: "Nijat", description: "Description not assigned" },
     { name: "Yasin", description: "Description not assigned" },
     { name: "Matin", description: "Description not assigned" },
@@ -2825,12 +2835,8 @@ const names = [
     { name: "Madina", description: "Description not assigned" },
     { name: "Vagif", description: "Description not assigned" }
 ];
-
 // Colors for cards
 const cardColors = [
-    "from-yellow-200 via-yellow-400 via-yellow-600 to-amber-800",
-    "from-yellow-200 via-yellow-400 via-yellow-600 to-amber-800",
-    "from-yellow-200 via-yellow-400 via-yellow-600 to-amber-800",
     "from-cyan-500 to-sky-500",
     "from-red-500 to-pink-500",
     "from-indigo-500 to-purple-500",
@@ -2841,19 +2847,17 @@ const cardColors = [
     "from-green-500 to-cyan-500",
     "from-pink-500 to-rose-500",
     "from-blue-500 to-indigo-500",
-    "from-black to-black",
     "from-emerald-500 to-teal-500",
     "from-violet-500 to-purple-500",
     "from-rose-500 to-pink-500",
     "from-cyan-500 to-sky-500",
     "from-fuchsia-500 to-pink-500",
-    "from-lime-500 to-green-500",
-    "from-pink-400 to-pink-600"
+    "from-lime-500 to-green-500"
 ];
 
 // Icons for cards
 const icons = [
-    "music", "gift", "feather", "cpu", "sun", "moon", "cloud", "shield", "bell", "bell", 
+    "music", "gift", "feather", "moon", "sun", "cpu", "cloud", "shield", "bell", "bell", 
     "camera", "video", "star", "feather", "video-off", "key", "smile", "smile", "paperclip", 
     "camera", "tv"
 ];
@@ -2863,7 +2867,9 @@ const icons = [
         
         names.forEach((nameObj, index) => {
             const card = document.createElement('div');
-            const gradientClass = cardColors[index % cardColors.length];
+            const gradientClass = nameObj.host
+    ? "from-yellow-200 via-yellow-400 via-yellow-600 to-amber-800"
+    : cardColors[(index - 2 + cardColors.length) % cardColors.length];
             card.className = `name-card bg-gradient-to-br ${gradientClass} rounded-3xl p-6 md:p-10 text-white shadow-2xl transform transition-all duration-500 hover:shadow-2xl relative overflow-hidden h-full`;
             card.setAttribute('data-aos', 'fade-up');
             card.setAttribute('data-aos-delay', `${index * 50}`);
