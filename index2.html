@@ -2802,26 +2802,28 @@
         
 // Names array with descriptions
 const names = [
-    { name: "Yusif", description: "<i class=\"fa-solid fa-crown\"></i> DJ :) (host of website)" },
-    { name: "Kenan", description: "<i class=\"fa-solid fa-crown\"></i> The Best Basketball Player " },
-    { name: "Farhad", description: "<i class=\"fa-solid fa-crown\"></i> Judo (The Host)" },
-    { name: "Ali", description: "<i class=\"fa-solid fa-robot\"></i> Ali is a real powerful AI we call him (AliGpt)" },
-    { name: "Rufiz", description: "<i class=\"fa-solid fa-basketball\"></i> American bad boy that loves sport (Logo Creator)" },
-    { name: "Eldar", description: "<i class=\"fa-solid fa-crosshairs\"></i> He is good for his hunting skills" },
-    { name: "Ismayil", description: "<i class=\"fa-solid fa-gamepad\"></i> Ismayil is best Roblox player (Steal a brainrot)" },
-    { name: "Zahra", description: "<i class=\"fa-solid fa-shield-halved\"></i> She is famous for protecting their bestie with MMA" },
-    { name: "Aliya", description: "<i class=\"fa-solid fa-cart-shopping\"></i> Volleyball bestie" },
-    { name: "Safia", description: "<i class=\"fa-solid fa-volleyball\"></i> Volleyball Player" },
-    { name: "Khadija", description: "<i class=\"fa-solid fa-people-group\"></i> Team bestie MMA" },
-    { name: "Aisha", description: "<i class=\"fa-solid fa-microphone\"></i> Blackpink" },
-    { name: "Fateh", description: "<i class=\"fa-solid fa-face-laugh\"></i> The real meaning of goat" },
-    { name: "Blocked", description: "<i class=\"fa-solid fa-ban\"></i> Blocked By Admin" },
-    { name: "Vidadi", description: "<i class=\"fa-solid fa-gamepad\"></i> Video games" },
-    { name: "Omar", description: "<i class=\"fa-solid fa-football\"></i> Rugby" },
-    { name: "Ayla", description: "<i class=\"fa-solid fa-heart\"></i> MMA Bestie " },
-    { name: "Farahnaz", description: "<i class=\"fa-solid fa-crown\"></i> Kind and once was class leader" },
-    { name: "Faik", description: "<i class=\"fa-solid fa-volume-xmark\"></i> Piano!" },
-    { name: "Inji", description: "<i class=\"fa-solid fa-tv\"></i>loves anime" }
+    { name: "Emil", description: "Description not assigned" },
+    { name: "Khadija", description: "Description not assigned" },
+    { name: "Maryam", description: "Description not assigned" },
+    { name: "Murad", description: "Description not assigned" },
+    { name: "Tahir", description: "Description not assigned" },
+    { name: "Ulvi", description: "Description not assigned" },
+    { name: "Ummulbanu", description: "Description not assigned" },
+    { name: "Vasilisa", description: "Description not assigned" },
+    { name: "Aliya", description: "Description not assigned" },
+    { name: "Daniya", description: "Description not assigned" },
+    { name: "Tamerlan", description: "Description not assigned" },
+    { name: "Kanan", description: "Description not assigned" },
+    { name: "Safia", description: "Description not assigned" },
+    { name: "Bahruza", description: "Description not assigned" },
+    { name: "Yusif", description: "Description not assigned" },
+    { name: "Nijat", description: "Description not assigned" },
+    { name: "Yasin", description: "Description not assigned" },
+    { name: "Matin", description: "Description not assigned" },
+    { name: "Illia", description: "Description not assigned" },
+    { name: "Safiyya", description: "Description not assigned" },
+    { name: "Madina", description: "Description not assigned" },
+    { name: "Vagif", description: "Description not assigned" }
 ];
 
 // Colors for cards
@@ -2861,7 +2863,7 @@ const icons = [
         
         names.forEach((nameObj, index) => {
             const card = document.createElement('div');
-            const gradientClass = cardColors[index];
+            const gradientClass = cardColors[index % cardColors.length];
             card.className = `name-card bg-gradient-to-br ${gradientClass} rounded-3xl p-6 md:p-10 text-white shadow-2xl transform transition-all duration-500 hover:shadow-2xl relative overflow-hidden h-full`;
             card.setAttribute('data-aos', 'fade-up');
             card.setAttribute('data-aos-delay', `${index * 50}`);
@@ -2869,7 +2871,7 @@ const icons = [
             card.innerHTML = `
                 <div class="flex justify-center mb-4 md:mb-6">
                     <div class="bg-white/20 p-4 md:p-5 rounded-full">
-                        <i data-feather="${icons[index]}" class="w-12 h-12 md:w-16 md:h-16"></i>
+                        <i data-feather="${icons[index % icons.length]}" class="w-12 h-12 md:w-16 md:h-16"></i>
                     </div>
                 </div>
                 <h2 class="name-title text-3xl md:text-5xl font-bold mb-3 md:mb-5 text-center gradient-text">${nameObj.name}</h2>
