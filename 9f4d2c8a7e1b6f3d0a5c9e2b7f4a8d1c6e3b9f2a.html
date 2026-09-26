@@ -1,19 +1,29 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="loading-active">
 <head>
     <meta charset="UTF-8">
     <script>
       // Absolute failsafe, placed first so nothing loaded later can delay it:
       // the loading screen is force-hidden 5 seconds after the page starts,
       // no matter how slow Tailwind/AOS/fonts/anything else is to arrive.
-      setTimeout(function () {
-        var ls = document.getElementById('loading-screen');
-        if (ls && ls.style.display !== 'none') {
-          ls.style.transition = 'opacity 0.4s ease';
-          ls.style.opacity = '0';
-          setTimeout(function () { ls.style.display = 'none'; }, 400);
-        }
-      }, 5000);
+setTimeout(function () {
+    var ls = document.getElementById('loading-screen');
+
+    if (ls && ls.style.display !== 'none') {
+        ls.style.transition = 'opacity 0.4s ease';
+        ls.style.opacity = '0';
+
+        setTimeout(function () {
+            ls.style.display = 'none';
+
+            document.documentElement.classList.remove('loading-active');
+
+            if (document.body) {
+                document.body.classList.remove('loading-active');
+            }
+        }, 400);
+    }
+}, 5000);
     </script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EAS30</title>
@@ -26,7 +36,7 @@
     </script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="icon" type="image/png" href="https://files.catbox.moe/icnd8l.png">
-    <link rel="shortcut icon" href="https://files.catbox.moe/icnd8l.png type="image/png">
+    <link rel="shortcut icon" href="https://files.catbox.moe/icnd8l.png" type="image/png">
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
@@ -1560,9 +1570,59 @@
         .action-button i {
             font-size: 20px;
         }
+    
+    /* ===== BUTTON CLICK FIX ===== */
+
+.gta-hud,
+.gta-radar,
+.gta-wanted,
+.gta-siren,
+.gta-radio,
+.gta-cursor,
+.gta-cursor-trail,
+.gta-star,
+.gta-money,
+.gta-weapon,
+.gta-explosion,
+.glitch-overlay,
+.blue-screen,
+.error-message,
+.terminal-message,
+.access-granted,
+.disco-ball,
+.disco-light,
+.sparkle,
+.bullet-hole,
+.matrix-rain {
+    pointer-events: none !important;
+}
+
+.button-container {
+    position: relative;
+    z-index: 200;
+}
+
+.button-container a {
+    position: relative;
+    z-index: 201;
+    pointer-events: auto !important;
+    cursor: pointer;
+}
+    
+/* Lock scrolling while loading */
+html.loading-active,
+body.loading-active {
+    overflow: hidden !important;
+}
+
+body.loading-active {
+    touch-action: none;
+    overscroll-behavior: none;
+}
+    
     </style>
 </head>
-<body class="min-h-screen">
+<body class="min-h-screen loading-active">
     <!-- LOADING SCREEN -->
     <div id="loading-screen">
         <img src="https://files.catbox.moe/icnd8l.png" alt="Loading" class="loading-logo">
@@ -1796,22 +1856,32 @@
         
 // Hide the loading screen as soon as the page is actually ready
 // (the 5-second hard cap in <head> covers the slow/failure case).
-(function() {
-    let hidden = false;
-    function hideLoadingScreen() {
-        if (hidden) return;
-        hidden = true;
-        const loadingScreen = document.getElementById('loading-screen');
-        if (!loadingScreen) return;
+let hidden = false;
+
+function hideLoadingScreen() {
+    if (hidden) return;
+    hidden = true;
+
+    const loadingScreen = document.getElementById('loading-screen');
+
+    if (loadingScreen) {
         loadingScreen.style.opacity = '0';
-        setTimeout(function() {
+
+        setTimeout(function () {
             loadingScreen.style.display = 'none';
+
+            document.documentElement.classList.remove('loading-active');
+            document.body.classList.remove('loading-active');
         }, 500);
+    } else {
+        document.documentElement.classList.remove('loading-active');
+        document.body.classList.remove('loading-active');
     }
-    window.addEventListener('load', function() {
-        setTimeout(hideLoadingScreen, 400);
-    });
-})();
+}
+
+window.addEventListener('load', function () {
+    setTimeout(hideLoadingScreen, 400);
+});
         
         // Ultimate Disco Mode Functionality
         const secretCodeInput = document.getElementById('secretCodeInput');
@@ -2816,7 +2886,6 @@ const names = [
     { name: "Aliya", description: "Description not assigned" },
     { name: "Daniya", description: "Description not assigned" },
     { name: "Tamerlan", description: "Description not assigned" },
-    { name: "Kanan", description: "Description not assigned" },
     { name: "Safia", description: "Description not assigned" },
     { name: "Bahruza", description: "Description not assigned" },
     { name: "Nijat", description: "Description not assigned" },
@@ -2840,7 +2909,6 @@ const cardColors = [
     "from-pink-500 to-rose-500",
     "from-blue-500 to-indigo-500",
     "from-emerald-500 to-teal-500",
-    "from-violet-500 to-purple-500",
     "from-rose-500 to-pink-500",
     "from-cyan-500 to-sky-500",
     "from-fuchsia-500 to-pink-500",
@@ -2850,7 +2918,7 @@ const cardColors = [
 // Icons for cards
 const icons = [
     "music", "gift", "feather", "moon", "sun", "cpu", "cloud", "shield", "bell", "bell", 
-    "camera", "video", "star", "feather", "video-off", "key", "smile", "smile", "paperclip", 
+    "camera", "video", "star", "video-off", "key", "smile", "smile", "paperclip", 
     "camera", "tv"
 ];
         
@@ -2978,13 +3046,14 @@ const icons = [
         document.addEventListener('DOMContentLoaded', function() {
             createStars();
             
-            // Make iframe responsive
-            const iframe = document.querySelector('iframe');
-            if (iframe) {
-                iframe.style.maxWidth = '100%';
-                iframe.style.height = 'auto';
-                iframe.style.aspectRatio = '807 / 500';
-            }
+            // Countdown iframe fix
+const iframe = document.querySelector('iframe');
+
+if (iframe) {
+    iframe.style.width = '100%';
+    iframe.style.height = '320px';
+    iframe.style.maxWidth = '100%';
+}
             
             // Add hover animations to name cards
             const nameCards = document.querySelectorAll('.name-card');
