@@ -1180,15 +1180,92 @@ setTimeout(function () {
         
         .max-w-3xl { max-width: 66rem; }
         
-        .name-card {
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            transform-style: preserve-3d;
-        }
-        
-        .name-card:hover {
-            transform: translateY(-15px) rotateY(5deg);
-            box-shadow: 0 25px 50px rgba(0,0,0,0.3);
-        }
+/* ========================================
+   PREMIUM CARD MOTION
+======================================== */
+
+.name-card {
+    --rx: 0deg;
+    --ry: 0deg;
+    --shine-x: 50%;
+    --shine-y: 50%;
+    --card-lift: 0px;
+
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+
+    transform-style: preserve-3d;
+    will-change: transform;
+
+    transition:
+        transform 0.18s ease-out,
+        box-shadow 0.35s ease,
+        filter 0.35s ease;
+}
+
+/* Only takes control after AOS reveal finishes */
+.name-card.aos-animate {
+    transform:
+        perspective(1000px)
+        translate3d(0, var(--card-lift), 0)
+        rotateX(var(--rx))
+        rotateY(var(--ry));
+}
+
+.name-card:hover {
+    --card-lift: -8px;
+
+    box-shadow:
+        0 30px 70px rgba(0, 0, 0, 0.28),
+        0 10px 30px rgba(0, 0, 0, 0.18);
+
+    filter: brightness(1.04);
+}
+
+/* Cursor-following glass reflection */
+.name-card::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+
+    background:
+        radial-gradient(
+            420px circle at var(--shine-x) var(--shine-y),
+            rgba(255,255,255,0.22),
+            rgba(255,255,255,0.07) 25%,
+            transparent 55%
+        );
+
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+    z-index: 2;
+}
+
+.name-card:hover::before {
+    opacity: 1;
+}
+
+/* Very subtle glass border */
+.name-card::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+
+    border: 1px solid rgba(255,255,255,0.18);
+
+    pointer-events: none;
+    z-index: 3;
+}
+
+/* Makes card content feel physically above card */
+.name-card > * {
+    position: relative;
+    z-index: 4;
+    transform: translateZ(25px);
+}
         
         .name-title { font-family: 'Fraunces', serif; }
         
@@ -1620,6 +1697,989 @@ body.loading-active {
     overscroll-behavior: none;
 }
     
+    /* ========================================
+   EAS30 PREMIUM MOTION SYSTEM
+======================================== */
+
+/* Smooth ambient cursor light */
+.pro-cursor-light {
+    position: fixed;
+    width: 520px;
+    height: 520px;
+    left: 0;
+    top: 0;
+
+    border-radius: 50%;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(255,255,255,0.10) 0%,
+            rgba(56,189,248,0.055) 30%,
+            transparent 68%
+        );
+
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+
+    z-index: 0;
+
+    opacity: 0;
+    transition: opacity 0.5s ease;
+
+    filter: blur(10px);
+
+    will-change: transform;
+}
+
+body:hover .pro-cursor-light {
+    opacity: 1;
+}
+
+
+/* ===============================
+   PRECISION CURSOR
+================================ */
+
+.pro-cursor-dot {
+    position: fixed;
+
+    width: 5px;
+    height: 5px;
+
+    border-radius: 50%;
+    background: rgba(255,255,255,0.95);
+
+    pointer-events: none;
+    z-index: 99990;
+
+    transform: translate(-50%, -50%);
+
+    mix-blend-mode: difference;
+}
+
+.pro-cursor-ring {
+    position: fixed;
+
+    width: 34px;
+    height: 34px;
+
+    border-radius: 50%;
+    border: 1px solid rgba(255,255,255,0.55);
+
+    pointer-events: none;
+    z-index: 99989;
+
+    transform: translate(-50%, -50%);
+
+    transition:
+        width 0.25s ease,
+        height 0.25s ease,
+        border-color 0.25s ease,
+        background 0.25s ease;
+
+    backdrop-filter: blur(2px);
+}
+
+.pro-cursor-ring.active {
+    width: 52px;
+    height: 52px;
+
+    border-color: rgba(255,255,255,0.75);
+
+    background: rgba(255,255,255,0.045);
+}
+
+
+/* ===============================
+   EAS30 TITLE
+================================ */
+
+#heroTitle {
+    perspective: 800px;
+}
+
+.hero-letter {
+    display: inline-block;
+
+    will-change: transform;
+
+    transition:
+        transform 0.16s cubic-bezier(.2,.8,.2,1),
+        filter 0.2s ease,
+        text-shadow 0.2s ease;
+}
+
+
+/* ===============================
+   HEADER LIGHT SWEEP
+================================ */
+
+header {
+    position: relative;
+    overflow: hidden;
+}
+
+header::after {
+    content: "";
+
+    position: absolute;
+
+    bottom: 0;
+    left: -40%;
+
+    width: 35%;
+    height: 1px;
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            rgba(255,255,255,0.9),
+            transparent
+        );
+
+    animation: premiumHeaderSweep 7s ease-in-out infinite;
+
+    pointer-events: none;
+}
+
+@keyframes premiumHeaderSweep {
+    0% {
+        left: -40%;
+        opacity: 0;
+    }
+
+    15% {
+        opacity: 1;
+    }
+
+    50% {
+        left: 105%;
+        opacity: 1;
+    }
+
+    65%,
+    100% {
+        left: 105%;
+        opacity: 0;
+    }
+}
+
+
+/* ===============================
+   MAGNETIC BUTTONS
+================================ */
+
+.magnetic {
+    --mag-x: 0px;
+    --mag-y: 0px;
+
+    transform:
+        translate3d(
+            var(--mag-x),
+            var(--mag-y),
+            0
+        );
+
+    will-change: transform;
+
+    transition:
+        transform 0.18s cubic-bezier(.2,.8,.2,1),
+        background 0.3s ease,
+        box-shadow 0.3s ease;
+}
+
+
+/* Accessibility */
+@media (prefers-reduced-motion: reduce) {
+
+    .name-card,
+    .hero-letter,
+    .magnetic,
+    .pro-cursor-ring,
+    .pro-cursor-light {
+        transition: none !important;
+        animation: none !important;
+        transform: none !important;
+    }
+
+    .pro-cursor-dot,
+    .pro-cursor-ring,
+    .pro-cursor-light {
+        display: none !important;
+    }
+}
+
+
+/* No custom cursor on phones/tablets */
+@media (pointer: coarse) {
+
+    .pro-cursor-dot,
+    .pro-cursor-ring,
+    .pro-cursor-light {
+        display: none;
+    }
+}
+    
+    /* =========================================================
+   EAS30 PREMIUM MOTION PACK 2
+   ========================================================= */
+
+
+/* ================================
+   1. ULTRA THIN SCROLL PROGRESS
+================================ */
+
+#premium-scroll-progress {
+    position: fixed;
+
+    /* Your black ticker is 30px tall */
+    top: 30px;
+    left: 0;
+
+    width: 100%;
+    height: 2px;
+
+    z-index: 10050;
+    pointer-events: none;
+
+    background: rgba(255,255,255,0.04);
+}
+
+#premium-scroll-progress span {
+    display: block;
+
+    width: 100%;
+    height: 100%;
+
+    transform: scaleX(0);
+    transform-origin: left center;
+
+    background: linear-gradient(
+        90deg,
+        rgba(255,255,255,0.35),
+        rgba(255,255,255,0.95),
+        rgba(34,211,238,0.9)
+    );
+
+    box-shadow:
+        0 0 10px rgba(255,255,255,0.35),
+        0 0 20px rgba(34,211,238,0.18);
+
+    will-change: transform;
+}
+
+
+/* ================================
+   2. CINEMATIC HERO REVEAL
+================================ */
+
+.premium-hero-reveal {
+    opacity: 0;
+
+    filter:
+        blur(9px)
+        brightness(0.85);
+
+    clip-path: inset(0 0 100% 0);
+
+    transition:
+        opacity 1s cubic-bezier(.16,1,.3,1),
+        filter 1.2s cubic-bezier(.16,1,.3,1),
+        clip-path 1.1s cubic-bezier(.16,1,.3,1);
+
+    transition-delay: var(--hero-delay, 0ms);
+}
+
+body.premium-ready .premium-hero-reveal {
+    opacity: 1;
+
+    filter:
+        blur(0)
+        brightness(1);
+
+    clip-path: inset(0 0 0% 0);
+}
+
+
+/* ================================
+   3. SECTION REVEALS
+================================ */
+
+.premium-section-reveal {
+    opacity: 0;
+
+    transform:
+        translateY(45px)
+        scale(0.985);
+
+    filter: blur(7px);
+
+    transition:
+        opacity 1s cubic-bezier(.16,1,.3,1),
+        transform 1.15s cubic-bezier(.16,1,.3,1),
+        filter 1s cubic-bezier(.16,1,.3,1);
+}
+
+.premium-section-reveal.visible {
+    opacity: 1;
+
+    transform:
+        translateY(0)
+        scale(1);
+
+    filter: blur(0);
+}
+
+
+/* ================================
+   4. PREMIUM BUTTON SHEEN
+================================ */
+
+.premium-sheen {
+    position: relative !important;
+    overflow: hidden !important;
+    isolation: isolate;
+}
+
+.premium-sheen::before {
+    content: "";
+
+    position: absolute;
+
+    top: -40%;
+    bottom: -40%;
+
+    left: -70%;
+
+    width: 35%;
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            rgba(255,255,255,0.08),
+            rgba(255,255,255,0.32),
+            rgba(255,255,255,0.08),
+            transparent
+        );
+
+    transform:
+        translateX(-150%)
+        skewX(-18deg);
+
+    transition:
+        transform 0.75s cubic-bezier(.16,1,.3,1);
+
+    pointer-events: none;
+
+    z-index: 1;
+}
+
+.premium-sheen:hover::before {
+    transform:
+        translateX(650%)
+        skewX(-18deg);
+}
+
+.premium-sheen > * {
+    position: relative;
+    z-index: 2;
+}
+
+
+/* ================================
+   5. CARD INNER DEPTH
+================================ */
+
+.name-card h2,
+.name-card p,
+.name-card > div:first-child {
+    will-change: translate;
+    transition: translate 0.22s cubic-bezier(.2,.8,.2,1);
+}
+
+
+/* ================================
+   6. HERO LOGO DEPTH
+================================ */
+
+
+
+
+/* ================================
+   7. PREMIUM FOCUS EFFECT
+================================ */
+
+.name-card {
+    transition:
+        transform 0.18s ease-out,
+        filter 0.35s ease,
+        opacity 0.35s ease,
+        box-shadow 0.35s ease;
+}
+
+/*
+When one card is hovered, the other cards
+become VERY slightly quieter.
+*/
+
+.grid:has(.name-card:hover)
+.name-card:not(:hover) {
+    filter:
+        brightness(0.88)
+        saturate(0.82);
+
+    opacity: 0.82;
+}
+
+
+/* ================================
+   ACCESSIBILITY
+================================ */
+
+@media (prefers-reduced-motion: reduce) {
+
+    .premium-hero-reveal,
+    .premium-section-reveal,
+    .premium-sheen::before,
+    .name-card h2,
+    .name-card p,
+    .name-card > div:first-child,
+    .logo-swap,
+    .logo-swap img {
+
+        transition: none !important;
+        animation: none !important;
+        transform: none !important;
+        translate: none !important;
+    }
+}
+
+
+/* Disable deeper mouse effects on touch */
+@media (pointer: coarse) {
+
+    .grid:has(.name-card:hover)
+    .name-card:not(:hover) {
+        filter: none;
+        opacity: 1;
+    }
+}
+    
+    /* ========================================
+   PREMIUM MOTION COMPATIBILITY FIXES
+======================================== */
+
+/* Hide normal cursor when premium cursor is active */
+@media (pointer: fine) and (prefers-reduced-motion: no-preference) {
+
+    body:not(.gta-mode):not(.barbie-mode),
+    body:not(.gta-mode):not(.barbie-mode) * {
+        cursor: none !important;
+    }
+
+    /* GTA + Barbie use their own custom cursor */
+    body.gta-mode .pro-cursor-dot,
+    body.gta-mode .pro-cursor-ring,
+    body.gta-mode .pro-cursor-light,
+
+    body.barbie-mode .pro-cursor-dot,
+    body.barbie-mode .pro-cursor-ring,
+    body.barbie-mode .pro-cursor-light {
+        display: none !important;
+    }
+}
+
+
+/* Fix Halloween / Christmas / Birthday emoji conflict */
+
+body.halloween-mode .name-card::after {
+    inset: auto 5px 5px auto;
+    border: none;
+    width: auto;
+    height: auto;
+}
+
+body.christmas-mode .name-card::after {
+    inset: auto 5px 5px auto;
+    border: none;
+    width: auto;
+    height: auto;
+}
+
+body.birthday-mode .name-card::after {
+    inset: auto 5px 5px auto;
+    border: none;
+    width: auto;
+    height: auto;
+}
+
+
+/* Preserve GTA / Barbie card shine */
+
+body.gta-mode .name-card::before,
+body.barbie-mode .name-card::before {
+    opacity: 1;
+    transition: none;
+}
+
+
+/* Preserve GTA header effect */
+
+body.gta-mode header::after {
+    width: auto;
+    height: auto;
+}
+    
+    /* ========================================
+   CLASS OF 2030 COUNTDOWN
+======================================== */
+
+.countdown2030-wrapper {
+    width: 100%;
+    max-width: 1050px;
+    margin: 40px auto 70px;
+    padding: 0 20px;
+}
+
+.countdown2030-card {
+    position: relative;
+
+    padding: 36px 30px;
+
+    border-radius: 28px;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(255,255,255,0.10),
+            rgba(255,255,255,0.035)
+        );
+
+    border: 1px solid rgba(255,255,255,0.14);
+
+    backdrop-filter: blur(22px);
+    -webkit-backdrop-filter: blur(22px);
+
+    box-shadow:
+        0 30px 80px rgba(0,0,0,0.22),
+        inset 0 1px 0 rgba(255,255,255,0.12);
+
+    overflow: hidden;
+
+    text-align: center;
+
+    transition:
+        transform 0.4s cubic-bezier(.16,1,.3,1),
+        border-color 0.4s ease,
+        box-shadow 0.4s ease;
+}
+
+.countdown2030-card:hover {
+    border-color: rgba(255,255,255,0.25);
+
+    box-shadow:
+        0 40px 100px rgba(0,0,0,0.30),
+        inset 0 1px 0 rgba(255,255,255,0.17);
+}
+
+
+/* subtle moving reflection */
+
+.countdown2030-card::before {
+    content: "";
+
+    position: absolute;
+    inset: -100%;
+
+    background:
+        linear-gradient(
+            115deg,
+            transparent 42%,
+            rgba(255,255,255,0.06) 48%,
+            rgba(255,255,255,0.18) 50%,
+            rgba(255,255,255,0.06) 52%,
+            transparent 58%
+        );
+
+    transform: translateX(-35%);
+    animation: countdown2030Shine 9s ease-in-out infinite;
+
+    pointer-events: none;
+}
+
+@keyframes countdown2030Shine {
+
+    0%,
+    35% {
+        transform: translateX(-35%);
+    }
+
+    65%,
+    100% {
+        transform: translateX(35%);
+    }
+}
+
+
+/* small status text */
+
+.countdown2030-top {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 9px;
+
+    margin-bottom: 10px;
+
+    color: rgba(255,255,255,0.65);
+
+    font-size: 11px;
+    font-weight: 700;
+
+    letter-spacing: 3px;
+}
+
+.countdown2030-dot {
+    width: 7px;
+    height: 7px;
+
+    border-radius: 50%;
+
+    background: #22d3ee;
+
+    box-shadow:
+        0 0 8px #22d3ee,
+        0 0 18px rgba(34,211,238,0.7);
+}
+
+
+/* title */
+
+.countdown2030-card h2 {
+    color: white;
+
+    font-family: 'Fraunces', serif;
+
+    font-size: clamp(28px, 5vw, 48px);
+
+    margin-bottom: 28px;
+
+    letter-spacing: -1px;
+}
+
+
+/* timer */
+
+.countdown2030-grid {
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    gap: clamp(8px, 2vw, 22px);
+}
+
+.countdown2030-unit {
+    min-width: 90px;
+}
+
+.countdown2030-unit span {
+    display: block;
+
+    color: white;
+
+    font-size: clamp(28px, 6vw, 58px);
+
+    font-weight: 700;
+
+    font-variant-numeric: tabular-nums;
+
+    letter-spacing: -2px;
+
+    text-shadow:
+        0 10px 35px rgba(0,0,0,0.25);
+
+    transition:
+        transform 0.25s ease,
+        filter 0.25s ease;
+}
+
+.countdown2030-unit small {
+    display: block;
+
+    margin-top: 7px;
+
+    color: rgba(255,255,255,0.48);
+
+    font-size: 10px;
+
+    letter-spacing: 2px;
+}
+
+.countdown2030-separator {
+    color: rgba(255,255,255,0.25);
+
+    font-size: clamp(26px, 5vw, 48px);
+
+    transform: translateY(-9px);
+}
+
+.countdown2030-message {
+    margin-top: 28px;
+
+    color: rgba(255,255,255,0.48);
+
+    font-size: 13px;
+
+    letter-spacing: 0.5px;
+}
+
+
+/* phone */
+
+@media (max-width: 650px) {
+
+    .countdown2030-card {
+        padding: 30px 15px;
+    }
+
+    .countdown2030-grid {
+        gap: 5px;
+    }
+
+    .countdown2030-unit {
+        min-width: 55px;
+    }
+
+    .countdown2030-separator {
+        font-size: 25px;
+    }
+
+}
+    
+    /* OLD LOGO HOVER EFFECT */
+
+.logo-swap {
+    position: relative;
+
+    width: 96px;
+    height: 96px;
+
+    border-radius: 50%;
+
+    cursor: pointer;
+
+    transform-style: preserve-3d;
+}
+
+@media (min-width: 768px) {
+    .logo-swap {
+        width: 128px;
+        height: 128px;
+    }
+}
+
+.logo-swap img {
+    position: absolute;
+
+    inset: 0;
+
+    width: 100%;
+    height: 100%;
+
+    object-fit: cover;
+
+    border-radius: 50%;
+
+    transition:
+        opacity 0.5s ease,
+        transform 0.6s cubic-bezier(.16,1,.3,1),
+        filter 0.5s ease;
+}
+
+
+/* normal logo */
+
+.logo-current {
+    opacity: 1;
+    transform: scale(1);
+    filter: blur(0);
+}
+
+
+/* old logo hidden normally */
+
+.logo-old {
+    opacity: 0;
+    transform: scale(0.85);
+    filter: blur(7px);
+}
+
+
+/* mouse over logo */
+
+.logo-swap:hover .logo-current {
+    opacity: 0;
+    transform: scale(0.9);
+    filter: blur(7px);
+}
+
+.logo-swap:hover .logo-old {
+    opacity: 1;
+    transform: scale(1);
+    filter: blur(0);
+}
+    
+    /* 2030 PROGRESS */
+
+.progress2030 {
+    width: 90%;
+    max-width: 700px;
+
+    margin: 35px auto 0;
+}
+
+.progress2030-info {
+    display: flex;
+
+    justify-content: space-between;
+    align-items: center;
+
+    margin-bottom: 10px;
+
+    color: rgba(255,255,255,0.7);
+
+    font-size: 12px;
+
+    text-transform: uppercase;
+
+    letter-spacing: 1px;
+}
+
+.progress2030-info strong {
+    color: white;
+
+    font-size: 15px;
+
+    font-variant-numeric: tabular-nums;
+}
+
+.progress2030-track {
+    width: 100%;
+    height: 8px;
+
+    background: rgba(255,255,255,0.1);
+
+    border-radius: 100px;
+
+    overflow: hidden;
+}
+
+.progress2030-bar {
+    width: 0%;
+    height: 100%;
+
+    background:
+        linear-gradient(
+            90deg,
+            #38bdf8,
+            #22d3ee,
+            #a78bfa
+        );
+
+    border-radius: 100px;
+
+    transition:
+        width 1s cubic-bezier(.16,1,.3,1);
+
+    box-shadow:
+        0 0 15px rgba(34,211,238,0.6);
+}
+
+.progress2030-dates {
+    display: flex;
+
+    justify-content: space-between;
+
+    margin-top: 8px;
+
+    color: rgba(255,255,255,0.35);
+
+    font-size: 10px;
+
+    letter-spacing: 2px;
+}
+    
+    /* ========================================
+   EAS30 BACKGROUND STARS
+======================================== */
+
+#stars-container {
+    position: fixed;
+    inset: 0;
+
+    width: 100%;
+    height: 100%;
+
+    pointer-events: none;
+    overflow: hidden;
+
+    z-index: 0;
+}
+
+
+/* Keep website content above the stars */
+
+header,
+main,
+section,
+footer {
+    position: relative;
+    z-index: 1;
+}
+
+
+/* Individual stars */
+
+.star {
+    position: absolute;
+
+    background: white;
+
+    border-radius: 50%;
+
+    opacity: 0.35;
+
+    box-shadow:
+        0 0 4px rgba(255,255,255,0.7);
+
+    animation:
+        starTwinkle var(--duration, 4s)
+        ease-in-out infinite;
+
+    pointer-events: none;
+}
+
+
+@keyframes starTwinkle {
+
+    0%,
+    100% {
+        opacity: 0.15;
+        transform: scale(0.8);
+    }
+
+    50% {
+        opacity: 0.75;
+        transform: scale(1.35);
+    }
+
+}
+    
     </style>
 </head>
 <body class="min-h-screen loading-active">
@@ -1699,7 +2759,7 @@ body.loading-active {
     
     <!-- Audio element for music -->
     <audio id="background-music" loop>
-        <source src="https://files.catbox.moe/3xoqez.wav" type="audio/mpeg">
+        <source src="https://files.catbox.moe/468not.wav" type="audio/mpeg">
         Your browser does not support the audio element.
     </audio>
     
@@ -1736,12 +2796,29 @@ body.loading-active {
     <!-- Header -->
     <header class="relative py-8 md:py-20 text-center">
         <div class="container mx-auto px-4">
-            <div class="flex justify-center mb-4 md:mb-6">
-                <img src="https://files.catbox.moe/icnd8l.png" alt="Logo" class="h-24 w-24 md:h-32 md:w-32 floating rounded-full">
-            </div>
-            <h1 class="name-title font-bold text-white mb-3 md:mb-4 floating text-5xl md:text-7xl">
-                EAS30
-            </h1>
+<div class="flex justify-center mb-4 md:mb-6">
+    <div class="logo-swap floating" id="logoSwap">
+
+        <img
+            class="logo-current"
+            src="https://files.catbox.moe/icnd8l.png"
+            alt="Current EAS30 Logo"
+        >
+
+        <img
+            class="logo-old"
+            src="https://i.ibb.co/wFY6Tn2y/7-F.png"
+            alt="Old EAS30 Logo"
+        >
+
+    </div>
+</div>
+<h1
+    id="heroTitle"
+    class="name-title font-bold text-white mb-3 md:mb-4 floating text-5xl md:text-7xl"
+>
+    EAS30
+</h1>
             <div class="flex justify-center mb-4 md:mb-6">
                 <span class="inline-flex items-center gap-2 bg-white/20 backdrop-blur-sm text-white/90 text-sm md:text-base font-semibold px-4 py-1.5 rounded-full">Class 8A · European Azerbaijan School</span>
             </div>
@@ -1758,12 +2835,84 @@ body.loading-active {
         </div>
     </main>
 
+    <!-- CLASS OF 2030 COUNTDOWN -->
+<section class="countdown2030-wrapper">
+    <div class="countdown2030-card">
+
+        <div class="countdown2030-top">
+            <span class="countdown2030-dot"></span>
+            CLASS OF 2030
+        </div>
+
+        <h2>Countdown to 2030</h2>
+
+        <div class="countdown2030-grid">
+
+            <div class="countdown2030-unit">
+                <span id="count2030Days">0000</span>
+                <small>DAYS</small>
+            </div>
+
+            <div class="countdown2030-separator">:</div>
+
+            <div class="countdown2030-unit">
+                <span id="count2030Hours">00</span>
+                <small>HOURS</small>
+            </div>
+
+            <div class="countdown2030-separator">:</div>
+
+            <div class="countdown2030-unit">
+                <span id="count2030Minutes">00</span>
+                <small>MIN</small>
+            </div>
+
+            <div class="countdown2030-separator">:</div>
+
+            <div class="countdown2030-unit">
+                <span id="count2030Seconds">00</span>
+                <small>SEC</small>
+            </div>
+
+        </div>
+
+        <p class="countdown2030-message">
+            Every second is part of the story.
+        </p>
+
+<div class="progress2030">
+
+    <div class="progress2030-info">
+        <span>Journey to 2030</span>
+        <strong id="progress2030Percent">0.00%</strong>
+    </div>
+
+    <div class="progress2030-track">
+
+        <div
+            id="progress2030Bar"
+            class="progress2030-bar">
+        </div>
+
+    </div>
+
+    <div class="progress2030-dates">
+        <span>2026</span>
+        <span>2030</span>
+    </div>
+
+</div>
+
+    </div>
+</section>
+    
     <iframe
   src="countdown.html"
   style="border:none;width:100%;height:320px;background:transparent;"
   scrolling="no">
   </iframe>
-    <!-- ManageBac Section -->
+  
+  <!-- ManageBac Section -->
     <section class="container mx-auto px-4 mb-8 md:mb-10">
         <div class="button-container flex justify-center gap-4 md:gap-6 flex-wrap">
             <a href="https://eas.managebac.com/student/home" target="_blank" class="bg-white/20 hover:bg-white/30 backdrop-blur-sm text-white font-bold py-3 px-6 md:py-4 md:px-8 rounded-full transition-all duration-300 inline-flex items-center gap-2">
@@ -2862,64 +4011,141 @@ window.addEventListener('load', function () {
             }
         }
         
-// Names array with descriptions
+// Names, hobbies, icons and card colors
 const names = [
     {
         name: "Yusif",
-        description: '<i class="fa-solid fa-music"></i> DJ • Website Host',
+        description: "DJ • Website Host",
+        icon: "fa-solid fa-headphones",
         host: true
     },
     {
         name: "Kenan",
-        description: '<i class="fa-solid fa-basketball"></i> Basketball Player • Website Host',
+        description: "Basketball Player • Website Host",
+        icon: "fa-solid fa-basketball",
         host: true
     },
 
-    { name: "Emil", description: "Playing Games" },
-    { name: "Khadija", description: "Violin" },
-    { name: "Maryam", description: "Tennis" },
-    { name: "Murad", description: "Playing Video Games" },
-    { name: "Tahir", description: "Archery" },
-    { name: "Ulvi", description: "Hanging Out With Friends" },
-    { name: "Ummulbanu", description: "Ski" },
-    { name: "Vasilisa", description: "Playing Drums & Guitar" },
-    { name: "Aliya", description: "Piano" },
-    { name: "Daniya", description: "Creating Skins And etc For Games" },
-    { name: "Tamerlan", description: "HandBall" },
-    { name: "Safia", description: "Volleyball" },
-    { name: "Bahruza", description: "Badminton" },
-    { name: "Nijat", description: "Chess" },
-    { name: "Yasin", description: "Interested In Cars" },
-    { name: "Matin", description: "Paddle" },
-    { name: "Illia", description: "Bicycle" },
-    { name: "Safiyya", description: "Drawing" },
-    { name: "Madina", description: "Reading & Dancing" },
-    { name: "Vagif", description: "Swimming" }
-];
-// Colors for cards
-const cardColors = [
-    "from-cyan-500 to-sky-500",
-    "from-red-500 to-pink-500",
-    "from-indigo-500 to-purple-500",
-    "from-teal-500 to-blue-500",
-    "from-purple-500 to-pink-500",
-    "from-cyan-500 to-blue-500",
-    "from-orange-500 to-red-500",
-    "from-green-500 to-cyan-500",
-    "from-pink-500 to-rose-500",
-    "from-blue-500 to-indigo-500",
-    "from-emerald-500 to-teal-500",
-    "from-rose-500 to-pink-500",
-    "from-cyan-500 to-sky-500",
-    "from-fuchsia-500 to-pink-500",
-    "from-lime-500 to-green-500"
-];
-
-// Icons for cards
-const icons = [
-    "music", "gift", "feather", "moon", "sun", "cpu", "cloud", "shield", "bell", "bell", 
-    "camera", "video", "star", "video-off", "key", "smile", "smile", "paperclip", 
-    "camera", "tv"
+    {
+        name: "Emil",
+        description: "Playing Games",
+        icon: "fa-solid fa-gamepad",
+        gradient: "from-blue-500 to-indigo-700"
+    },
+    {
+        name: "Khadija",
+        description: "Violin",
+        icon: "fa-solid fa-music",
+        gradient: "from-violet-500 to-purple-700"
+    },
+    {
+        name: "Maryam",
+        description: "Tennis",
+        icon: "fa-solid fa-medal",
+        gradient: "from-lime-500 to-emerald-600"
+    },
+    {
+        name: "Murad",
+        description: "Playing Video Games",
+        icon: "fa-solid fa-gamepad",
+        gradient: "from-indigo-500 to-blue-700"
+    },
+    {
+        name: "Tahir",
+        description: "Archery",
+        icon: "fa-solid fa-bullseye",
+        gradient: "from-orange-500 to-red-700"
+    },
+    {
+        name: "Ulvi",
+        description: "Hanging Out With Friends",
+        icon: "fa-solid fa-users",
+        gradient: "from-teal-500 to-cyan-700"
+    },
+    {
+        name: "Ummulbanu",
+        description: "Ski",
+        icon: "fa-solid fa-person-skiing",
+        gradient: "from-sky-400 to-blue-600"
+    },
+    {
+        name: "Vasilisa",
+        description: "Playing Drums & Guitar",
+        icon: "fa-solid fa-drum",
+        gradient: "from-rose-500 to-purple-700"
+    },
+    {
+        name: "Aliya",
+        description: "Piano",
+        icon: "fa-solid fa-music",
+        gradient: "from-fuchsia-500 to-purple-700"
+    },
+    {
+        name: "Daniya",
+        description: "Creating Skins for Games",
+        icon: "fa-solid fa-palette",
+        gradient: "from-purple-500 to-indigo-700"
+    },
+    {
+        name: "Tamerlan",
+        description: "Handball",
+        icon: "fa-solid fa-hand",
+        gradient: "from-red-500 to-orange-700"
+    },
+    {
+        name: "Safia",
+        description: "Volleyball",
+        icon: "fa-solid fa-volleyball",
+        gradient: "from-amber-400 to-orange-600"
+    },
+    {
+        name: "Bahruza",
+        description: "Badminton",
+        icon: "fa-solid fa-feather",
+        gradient: "from-emerald-500 to-teal-700"
+    },
+    {
+        name: "Nijat",
+        description: "Chess",
+        icon: "fa-solid fa-chess",
+        gradient: "from-slate-600 to-indigo-800"
+    },
+    {
+        name: "Yasin",
+        description: "Interested In Cars",
+        icon: "fa-solid fa-car",
+        gradient: "from-zinc-600 to-slate-800"
+    },
+    {
+        name: "Matin",
+        description: "Padel",
+        icon: "fa-solid fa-table-tennis-paddle-ball",
+        gradient: "from-blue-500 to-cyan-700"
+    },
+    {
+        name: "Illia",
+        description: "Bicycle",
+        icon: "fa-solid fa-bicycle",
+        gradient: "from-green-500 to-emerald-700"
+    },
+    {
+        name: "Safiyya",
+        description: "Drawing",
+        icon: "fa-solid fa-palette",
+        gradient: "from-pink-500 to-purple-600"
+    },
+    {
+        name: "Madina",
+        description: "Reading & Dancing",
+        icon: "fa-solid fa-book-open",
+        gradient: "from-rose-500 to-fuchsia-700"
+    },
+    {
+        name: "Vagif",
+        description: "Swimming",
+        icon: "fa-solid fa-person-swimming",
+        gradient: "from-cyan-500 to-blue-700"
+    }
 ];
         
         // Generate name cards
@@ -2928,8 +4154,8 @@ const icons = [
         names.forEach((nameObj, index) => {
             const card = document.createElement('div');
             const gradientClass = nameObj.host
-    ? "from-yellow-200 via-yellow-400 via-yellow-600 to-amber-800"
-    : cardColors[(index - 2 + cardColors.length) % cardColors.length];
+    ? "from-yellow-300 via-yellow-500 to-amber-700"
+    : nameObj.gradient;
             card.className = `name-card bg-gradient-to-br ${gradientClass} rounded-3xl p-6 md:p-10 text-white shadow-2xl transform transition-all duration-500 hover:shadow-2xl relative overflow-hidden h-full`;
             card.setAttribute('data-aos', 'fade-up');
             card.setAttribute('data-aos-delay', `${index * 50}`);
@@ -2937,7 +4163,7 @@ const icons = [
             card.innerHTML = `
                 <div class="flex justify-center mb-4 md:mb-6">
                     <div class="bg-white/20 p-4 md:p-5 rounded-full">
-                        <i data-feather="${icons[index % icons.length]}" class="w-12 h-12 md:w-16 md:h-16"></i>
+                        <i class="${nameObj.icon} text-5xl md:text-6xl"></i>
                     </div>
                 </div>
                 <h2 class="name-title text-3xl md:text-5xl font-bold mb-3 md:mb-5 text-center gradient-text">${nameObj.name}</h2>
@@ -3190,6 +4416,959 @@ if (iframe) {
                 closePopup();
             }
         });
-    </script>
+    
+    /* ========================================
+   EAS30 PREMIUM MOTION
+======================================== */
+
+const finePointer = window.matchMedia("(pointer: fine)").matches;
+const reducedMotion = window.matchMedia(
+    "(prefers-reduced-motion: reduce)"
+).matches;
+
+if (finePointer && !reducedMotion) {
+
+    /* ----------------------------------------
+       CREATE PREMIUM CURSOR
+    ---------------------------------------- */
+
+    const cursorDot = document.createElement("div");
+    cursorDot.className = "pro-cursor-dot";
+
+    const cursorRing = document.createElement("div");
+    cursorRing.className = "pro-cursor-ring";
+
+    const cursorLight = document.createElement("div");
+    cursorLight.className = "pro-cursor-light";
+
+    document.body.appendChild(cursorLight);
+    document.body.appendChild(cursorRing);
+    document.body.appendChild(cursorDot);
+
+
+    let mouseX = window.innerWidth / 2;
+    let mouseY = window.innerHeight / 2;
+
+    let ringX = mouseX;
+    let ringY = mouseY;
+
+    let lightX = mouseX;
+    let lightY = mouseY;
+
+
+    document.addEventListener("pointermove", (e) => {
+
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+
+        cursorDot.style.left = `${mouseX}px`;
+        cursorDot.style.top = `${mouseY}px`;
+
+    });
+
+
+    function animatePremiumCursor() {
+
+        // Ring follows slightly behind
+        ringX += (mouseX - ringX) * 0.16;
+        ringY += (mouseY - ringY) * 0.16;
+
+        cursorRing.style.left = `${ringX}px`;
+        cursorRing.style.top = `${ringY}px`;
+
+
+        // Ambient light follows even slower
+        lightX += (mouseX - lightX) * 0.07;
+        lightY += (mouseY - lightY) * 0.07;
+
+        cursorLight.style.left = `${lightX}px`;
+        cursorLight.style.top = `${lightY}px`;
+
+        requestAnimationFrame(animatePremiumCursor);
+    }
+
+    animatePremiumCursor();
+
+
+    /* ----------------------------------------
+       CARD 3D TILT + LIGHT
+    ---------------------------------------- */
+
+    document.querySelectorAll(".name-card").forEach(card => {
+
+        card.addEventListener("pointermove", (e) => {
+
+            const rect = card.getBoundingClientRect();
+
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+
+            const px = x / rect.width;
+            const py = y / rect.height;
+
+            // Keep rotation subtle = premium
+            const rotateY = (px - 0.5) * 8;
+            const rotateX = (0.5 - py) * 6;
+
+            card.style.setProperty(
+                "--rx",
+                `${rotateX.toFixed(2)}deg`
+            );
+
+            card.style.setProperty(
+                "--ry",
+                `${rotateY.toFixed(2)}deg`
+            );
+
+            card.style.setProperty(
+                "--shine-x",
+                `${(px * 100).toFixed(1)}%`
+            );
+
+            card.style.setProperty(
+                "--shine-y",
+                `${(py * 100).toFixed(1)}%`
+            );
+        });
+
+
+        card.addEventListener("pointerleave", () => {
+
+            card.style.setProperty("--rx", "0deg");
+            card.style.setProperty("--ry", "0deg");
+
+            card.style.setProperty("--shine-x", "50%");
+            card.style.setProperty("--shine-y", "50%");
+        });
+
+    });
+
+
+    /* ----------------------------------------
+       MAGNETIC BUTTONS
+    ---------------------------------------- */
+
+    const magneticElements = document.querySelectorAll(
+        ".button-container a, .action-button"
+    );
+
+    magneticElements.forEach(button => {
+
+        button.classList.add("magnetic");
+
+        button.addEventListener("pointermove", (e) => {
+
+            const rect = button.getBoundingClientRect();
+
+            const x =
+                e.clientX -
+                rect.left -
+                rect.width / 2;
+
+            const y =
+                e.clientY -
+                rect.top -
+                rect.height / 2;
+
+            button.style.setProperty(
+                "--mag-x",
+                `${x * 0.10}px`
+            );
+
+            button.style.setProperty(
+                "--mag-y",
+                `${y * 0.16}px`
+            );
+
+            cursorRing.classList.add("active");
+        });
+
+
+        button.addEventListener("pointerleave", () => {
+
+            button.style.setProperty("--mag-x", "0px");
+            button.style.setProperty("--mag-y", "0px");
+
+            cursorRing.classList.remove("active");
+        });
+
+    });
+
+
+    /* ----------------------------------------
+       EAS30 CURSOR-PROXIMITY LETTER EFFECT
+    ---------------------------------------- */
+
+    const heroTitle = document.getElementById("heroTitle");
+
+    if (heroTitle) {
+
+        const text = heroTitle.textContent.trim();
+
+        heroTitle.innerHTML = "";
+
+        [...text].forEach(character => {
+
+            const span = document.createElement("span");
+
+            span.className = "hero-letter";
+
+            span.textContent =
+                character === " "
+                    ? "\u00A0"
+                    : character;
+
+            heroTitle.appendChild(span);
+
+        });
+
+
+        const letters =
+            heroTitle.querySelectorAll(".hero-letter");
+
+
+        document.addEventListener("pointermove", (e) => {
+
+            letters.forEach(letter => {
+
+                const rect =
+                    letter.getBoundingClientRect();
+
+                const centerX =
+                    rect.left + rect.width / 2;
+
+                const centerY =
+                    rect.top + rect.height / 2;
+
+                const dx =
+                    e.clientX - centerX;
+
+                const dy =
+                    e.clientY - centerY;
+
+                const distance =
+                    Math.sqrt(dx * dx + dy * dy);
+
+                const radius = 150;
+
+                if (distance < radius) {
+
+                    const force =
+                        1 - distance / radius;
+
+                    const lift =
+                        -11 * force;
+
+                    const horizontal =
+                        -(dx / radius) * 3 * force;
+
+                    const scale =
+                        1 + force * 0.045;
+
+                    letter.style.transform =
+                        `translate3d(
+                            ${horizontal}px,
+                            ${lift}px,
+                            0
+                        )
+                        scale(${scale})`;
+
+                    letter.style.filter =
+                        `brightness(${1 + force * 0.35})`;
+
+                    letter.style.textShadow =
+                        `0 8px 28px rgba(
+                            255,
+                            255,
+                            255,
+                            ${force * 0.20}
+                        )`;
+
+                } else {
+
+                    letter.style.transform = "";
+                    letter.style.filter = "";
+                    letter.style.textShadow = "";
+
+                }
+
+            });
+
+        });
+
+    }
+
+
+    /* ----------------------------------------
+       CURSOR RESPONSE ON CARDS
+    ---------------------------------------- */
+
+    document
+        .querySelectorAll(".name-card, a, button")
+        .forEach(element => {
+
+            element.addEventListener(
+                "pointerenter",
+                () => cursorRing.classList.add("active")
+            );
+
+            element.addEventListener(
+                "pointerleave",
+                () => cursorRing.classList.remove("active")
+            );
+
+        });
+
+}
+    
+/* =========================================================
+   EAS30 PREMIUM MOTION PACK 2
+   ========================================================= */
+
+(function () {
+
+    const finePointer =
+        window.matchMedia("(pointer: fine)").matches;
+
+    const reducedMotion =
+        window.matchMedia(
+            "(prefers-reduced-motion: reduce)"
+        ).matches;
+
+
+
+    /* =====================================================
+       1. SCROLL PROGRESS
+    ===================================================== */
+
+    const progressContainer =
+        document.createElement("div");
+
+    progressContainer.id =
+        "premium-scroll-progress";
+
+    progressContainer.innerHTML =
+        "<span></span>";
+
+    document.body.appendChild(
+        progressContainer
+    );
+
+    const progressBar =
+        progressContainer.querySelector("span");
+
+
+    function updateScrollProgress() {
+
+        const scrollTop =
+            window.scrollY ||
+            document.documentElement.scrollTop;
+
+        const documentHeight =
+            document.documentElement.scrollHeight -
+            window.innerHeight;
+
+        const progress =
+            documentHeight > 0
+                ? scrollTop / documentHeight
+                : 0;
+
+        progressBar.style.transform =
+            `scaleX(${progress})`;
+
+    }
+
+    window.addEventListener(
+        "scroll",
+        updateScrollProgress,
+        { passive: true }
+    );
+
+    updateScrollProgress();
+
+
+
+    /* =====================================================
+       2. CINEMATIC HERO INTRO
+    ===================================================== */
+
+    const heroChildren =
+        document.querySelectorAll(
+            "header .container > *"
+        );
+
+    heroChildren.forEach(
+        (element, index) => {
+
+            element.classList.add(
+                "premium-hero-reveal"
+            );
+
+            element.style.setProperty(
+                "--hero-delay",
+                `${index * 110}ms`
+            );
+
+        }
+    );
+
+
+    function activatePremiumHero() {
+
+        document.body.classList.add(
+            "premium-ready"
+        );
+
+    }
+
+
+    /*
+       Reveal once your loading screen disappears.
+       Fallback ensures it still works if something
+       unusual happens with the loader.
+    */
+
+    function waitForLoader() {
+
+        const loader =
+            document.getElementById(
+                "loading-screen"
+            );
+
+        if (!loader) {
+
+            activatePremiumHero();
+
+            return;
+        }
+
+
+        const hidden =
+            getComputedStyle(loader).display ===
+            "none";
+
+        if (hidden) {
+
+            activatePremiumHero();
+
+        } else {
+
+            requestAnimationFrame(
+                waitForLoader
+            );
+
+        }
+
+    }
+
+
+    window.addEventListener(
+        "load",
+        waitForLoader
+    );
+
+
+    setTimeout(
+        activatePremiumHero,
+        5500
+    );
+
+
+
+    /* =====================================================
+       3. CINEMATIC SECTION REVEALS
+    ===================================================== */
+
+    if (!reducedMotion) {
+
+        const revealSections =
+            document.querySelectorAll(
+                "section, footer"
+            );
+
+        revealSections.forEach(
+            element => {
+
+                element.classList.add(
+                    "premium-section-reveal"
+                );
+
+            }
+        );
+
+
+        const revealObserver =
+            new IntersectionObserver(
+
+                entries => {
+
+                    entries.forEach(
+                        entry => {
+
+                            if (
+                                entry.isIntersecting
+                            ) {
+
+                                entry.target
+                                    .classList
+                                    .add("visible");
+
+                                revealObserver
+                                    .unobserve(
+                                        entry.target
+                                    );
+
+                            }
+
+                        }
+                    );
+
+                },
+
+                {
+                    threshold: 0.12,
+                    rootMargin:
+                        "0px 0px -50px 0px"
+                }
+
+            );
+
+
+        revealSections.forEach(
+            section => {
+
+                revealObserver.observe(
+                    section
+                );
+
+            }
+        );
+
+    }
+
+
+
+    /* =====================================================
+       4. BUTTON LIGHT SWEEP
+    ===================================================== */
+
+    document
+        .querySelectorAll(
+            ".button-container a, .action-button"
+        )
+        .forEach(button => {
+
+            button.classList.add(
+                "premium-sheen"
+            );
+
+        });
+
+
+
+    /* =====================================================
+       5. CARD INNER PARALLAX
+    ===================================================== */
+
+    if (
+        finePointer &&
+        !reducedMotion
+    ) {
+
+        document
+            .querySelectorAll(".name-card")
+            .forEach(card => {
+
+                const icon =
+                    card.querySelector(
+                        ":scope > div:first-child"
+                    );
+
+                const title =
+                    card.querySelector("h2");
+
+                const description =
+                    card.querySelector("p");
+
+
+                card.addEventListener(
+                    "pointermove",
+                    e => {
+
+                        const rect =
+                            card.getBoundingClientRect();
+
+                        const x =
+                            (
+                                e.clientX -
+                                rect.left
+                            ) /
+                            rect.width -
+                            0.5;
+
+                        const y =
+                            (
+                                e.clientY -
+                                rect.top
+                            ) /
+                            rect.height -
+                            0.5;
+
+
+                        /*
+                           Different layers move
+                           different amounts.
+                        */
+
+                        if (icon) {
+
+                            icon.style.translate =
+                                `${x * 10}px ${y * 8}px`;
+
+                        }
+
+
+                        if (title) {
+
+                            title.style.translate =
+                                `${x * 6}px ${y * 4}px`;
+
+                        }
+
+
+                        if (description) {
+
+                            description.style.translate =
+                                `${x * 3}px ${y * 2}px`;
+
+                        }
+
+                    }
+                );
+
+
+                card.addEventListener(
+                    "pointerleave",
+                    () => {
+
+                        if (icon)
+                            icon.style.translate =
+                                "0px 0px";
+
+                        if (title)
+                            title.style.translate =
+                                "0px 0px";
+
+                        if (description)
+                            description.style.translate =
+                                "0px 0px";
+
+                    }
+                );
+
+            });
+
+    }
+
+
+
+    /* =====================================================
+       6. LOGO PARALLAX
+    ===================================================== */
+
+const logo =
+    document.querySelector(
+        ".logo-swap"
+    );
+
+
+    if (
+        logo &&
+        finePointer &&
+        !reducedMotion
+    ) {
+
+        document.addEventListener(
+            "pointermove",
+            e => {
+
+                const centerX =
+                    window.innerWidth / 2;
+
+                const centerY =
+                    window.innerHeight / 2;
+
+
+                const normalizedX =
+                    (
+                        e.clientX -
+                        centerX
+                    ) /
+                    centerX;
+
+                const normalizedY =
+                    (
+                        e.clientY -
+                        centerY
+                    ) /
+                    centerY;
+
+
+                logo.style.translate =
+                    `${normalizedX * 7}px ${normalizedY * 5}px`;
+
+                logo.style.rotate =
+                    `${normalizedX * 1.5}deg`;
+
+            }
+        );
+
+    }
+
+
+
+    /* =====================================================
+       7. HERO SCROLL DEPTH
+    ===================================================== */
+
+    const headerContent =
+        document.querySelector(
+            "header .container"
+        );
+
+
+    if (
+        headerContent &&
+        !reducedMotion
+    ) {
+
+        let ticking = false;
+
+
+        function updateHeroScroll() {
+
+            const scroll =
+                window.scrollY;
+
+            const movement =
+                Math.min(
+                    scroll * 0.07,
+                    35
+                );
+
+            const opacity =
+                Math.max(
+                    0.72,
+                    1 -
+                    scroll / 1500
+                );
+
+
+            /*
+              CSS translate is separate from
+              transform, so your floating
+              animations still work.
+            */
+
+            headerContent.style.translate =
+                `0 -${movement}px`;
+
+            headerContent.style.opacity =
+                opacity;
+
+            ticking = false;
+
+        }
+
+
+        window.addEventListener(
+            "scroll",
+            () => {
+
+                if (!ticking) {
+
+                    requestAnimationFrame(
+                        updateHeroScroll
+                    );
+
+                    ticking = true;
+
+                }
+
+            },
+            { passive: true }
+        );
+
+    }
+
+})();
+
+    /* ========================================
+   CLASS OF 2030 COUNTDOWN
+======================================== */
+
+const countdown2030Date =
+    new Date("2030-01-01T00:00:00").getTime();
+
+const progress2030Start =
+    new Date("2026-09-01T00:00:00").getTime();
+    
+function update2030Countdown() {
+
+    const now = Date.now();
+
+    const distance =
+        countdown2030Date - now;
+
+
+    if (distance <= 0) {
+
+        document.getElementById(
+            "count2030Days"
+        ).textContent = "0000";
+
+        document.getElementById(
+            "count2030Hours"
+        ).textContent = "00";
+
+        document.getElementById(
+            "count2030Minutes"
+        ).textContent = "00";
+
+        document.getElementById(
+            "count2030Seconds"
+        ).textContent = "00";
+
+        return;
+    }
+
+
+    const days =
+        Math.floor(
+            distance /
+            (1000 * 60 * 60 * 24)
+        );
+
+
+    const hours =
+        Math.floor(
+            (
+                distance %
+                (1000 * 60 * 60 * 24)
+            ) /
+            (1000 * 60 * 60)
+        );
+
+
+    const minutes =
+        Math.floor(
+            (
+                distance %
+                (1000 * 60 * 60)
+            ) /
+            (1000 * 60)
+        );
+
+
+    const seconds =
+        Math.floor(
+            (
+                distance %
+                (1000 * 60)
+            ) /
+            1000
+        );
+
+
+    document.getElementById(
+        "count2030Days"
+    ).textContent =
+        String(days).padStart(4, "0");
+
+
+    document.getElementById(
+        "count2030Hours"
+    ).textContent =
+        String(hours).padStart(2, "0");
+
+
+    document.getElementById(
+        "count2030Minutes"
+    ).textContent =
+        String(minutes).padStart(2, "0");
+
+
+    document.getElementById(
+        "count2030Seconds"
+    ).textContent =
+        String(seconds).padStart(2, "0");
+
+}
+
+
+update2030Countdown();
+update2030Progress();
+
+setInterval(
+    update2030Countdown,
+    1000
+);
+
+setInterval(
+    update2030Progress,
+    60000
+);
+    
+   function update2030Progress() {
+
+    const now = Date.now();
+
+    const total =
+        countdown2030Date -
+        progress2030Start;
+
+    const passed =
+        now -
+        progress2030Start;
+
+    let percent =
+        (passed / total) * 100;
+
+
+    percent =
+        Math.max(
+            0,
+            Math.min(100, percent)
+        );
+
+
+    document.getElementById(
+        "progress2030Percent"
+    ).textContent =
+        percent.toFixed(2) + "%";
+
+
+document.getElementById(
+    "progress2030Bar"
+).style.width =
+    `${percent}%`;
+
+}
+   
+      </script>
+
+<script
+    data-name="BMC-Widget"
+    data-cfasync="false"
+    src="https://cdnjs.buymeacoffee.com/1.0.0/widget.prod.min.js"
+    data-id="Yusai"
+    data-description="Support me on Buy me a coffee!"
+    data-message="Thanks For Visiting Can I Get A Coffee"
+    data-color="#5F7FFF"
+    data-position="Right"
+    data-x_margin="18"
+    data-y_margin="18">
+</script>
+
 </body>
 </html>
