@@ -171,6 +171,516 @@
             background-image: 
                 repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0, 255, 0, 0.3) 2px, rgba(0, 255, 0, 0.3) 4px);
         }
+    
+    /* =========================
+   NEW MODE CARDS
+========================= */
+
+.name-card {
+    cursor: pointer;
+}
+
+.card-halloween {
+    background: linear-gradient(135deg, #09040f, #33104f, #7c2d12);
+    border: 3px solid #f97316;
+}
+
+.card-christmas {
+    background: linear-gradient(135deg, #064e3b, #15803d, #991b1b);
+    border: 3px solid #f8fafc;
+}
+
+.card-birthday {
+    background: linear-gradient(135deg, #7c3aed, #db2777, #f59e0b);
+    border: 3px solid #fde68a;
+}
+
+
+/* =========================
+   ACTIVE MODES
+========================= */
+
+body.mode-disco {
+    animation: discoBackground 1.5s linear infinite !important;
+}
+
+@keyframes discoBackground {
+    0%   { background: #ff0080; }
+    20%  { background: #7928ca; }
+    40%  { background: #007cf0; }
+    60%  { background: #00dfd8; }
+    80%  { background: #ff4d00; }
+    100% { background: #ff0080; }
+}
+
+body.mode-disco .name-card {
+    animation: discoCard 1s ease-in-out infinite alternate !important;
+}
+
+@keyframes discoCard {
+    from {
+        transform: translateY(0) rotate(-1deg);
+        filter: hue-rotate(0deg);
+    }
+
+    to {
+        transform: translateY(-12px) rotate(1deg);
+        filter: hue-rotate(180deg);
+    }
+}
+
+
+/* MATRIX */
+
+body.mode-matrix {
+    background: #000 !important;
+}
+
+.matrix-canvas {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    pointer-events: none;
+    opacity: 0.55;
+}
+
+.matrix-terminal {
+    position: fixed;
+    left: 25px;
+    bottom: 25px;
+    z-index: 50;
+
+    width: min(500px, calc(100vw - 50px));
+    padding: 18px;
+
+    background: rgba(0, 10, 0, 0.88);
+    color: #00ff41;
+
+    font-family: monospace;
+    font-size: 14px;
+
+    border: 1px solid #00ff41;
+    border-radius: 12px;
+
+    box-shadow:
+        0 0 20px rgba(0, 255, 65, .25),
+        inset 0 0 20px rgba(0, 255, 65, .05);
+
+    backdrop-filter: blur(10px);
+}
+
+
+/* GTA */
+
+body.mode-gta {
+    cursor: crosshair;
+    background:
+        radial-gradient(circle at 30% 20%, #38546b, transparent 35%),
+        linear-gradient(135deg, #13222e, #111827) !important;
+}
+
+.gta-hud {
+    position: fixed;
+    bottom: 24px;
+    left: 24px;
+    z-index: 100;
+
+    display: flex;
+    align-items: center;
+    gap: 18px;
+
+    padding: 14px 18px;
+
+    background: rgba(0, 0, 0, 0.75);
+    border-radius: 15px;
+    backdrop-filter: blur(15px);
+
+    color: white;
+    font-family: monospace;
+}
+
+.gta-health-container {
+    width: 180px;
+    height: 11px;
+    background: rgba(255,255,255,.15);
+    overflow: hidden;
+    border-radius: 20px;
+}
+
+.gta-health {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, #16a34a, #4ade80);
+}
+
+.gta-radar {
+    width: 70px;
+    height: 70px;
+
+    border-radius: 50%;
+    border: 2px solid rgba(255,255,255,.7);
+
+    background:
+        linear-gradient(90deg, transparent 49%, rgba(255,255,255,.2) 50%, transparent 51%),
+        linear-gradient(0deg, transparent 49%, rgba(255,255,255,.2) 50%, transparent 51%),
+        radial-gradient(circle, #163629, #081811);
+
+    position: relative;
+    overflow: hidden;
+}
+
+.gta-radar::after {
+    content: "";
+    position: absolute;
+    inset: 50% 50% auto auto;
+
+    width: 50%;
+    height: 2px;
+
+    transform-origin: left center;
+
+    background: #22c55e;
+    box-shadow: 0 0 10px #22c55e;
+
+    animation: radarSpin 2s linear infinite;
+}
+
+@keyframes radarSpin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.gta-hit {
+    position: fixed;
+    z-index: 9999;
+
+    width: 16px;
+    height: 16px;
+
+    border: 2px solid white;
+    border-radius: 50%;
+
+    transform: translate(-50%, -50%);
+    animation: gtaHit .35s ease-out forwards;
+}
+
+@keyframes gtaHit {
+    from {
+        width: 8px;
+        height: 8px;
+        opacity: 1;
+    }
+
+    to {
+        width: 55px;
+        height: 55px;
+        opacity: 0;
+    }
+}
+
+.gta-pickup {
+    position: fixed;
+    z-index: 25;
+
+    font-size: 28px;
+
+    animation:
+        pickupFloat 2s ease-in-out infinite,
+        pickupSpin 5s linear infinite;
+}
+
+@keyframes pickupFloat {
+    50% {
+        transform: translateY(-20px);
+    }
+}
+
+@keyframes pickupSpin {
+    to {
+        rotate: 360deg;
+    }
+}
+
+
+/* BARBIE */
+
+body.mode-barbie {
+    background:
+        radial-gradient(circle at 20% 30%, #fff0f7, transparent 30%),
+        linear-gradient(135deg, #ff9ad5, #ff48ae, #c026d3) !important;
+}
+
+body.mode-barbie .name-card {
+    box-shadow:
+        0 20px 50px rgba(255, 20, 147, .3),
+        0 0 25px rgba(255,255,255,.15);
+}
+
+.barbie-sparkle {
+    position: fixed;
+    z-index: 9999;
+    pointer-events: none;
+
+    animation: sparkleFade .8s ease-out forwards;
+}
+
+@keyframes sparkleFade {
+    0% {
+        opacity: 1;
+        transform: scale(.5) rotate(0deg);
+    }
+
+    100% {
+        opacity: 0;
+        transform: translateY(-35px) scale(1.7) rotate(180deg);
+    }
+}
+
+
+/* GLITCH */
+
+body.mode-glitch::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+
+    pointer-events: none;
+    z-index: 9000;
+
+    background:
+        repeating-linear-gradient(
+            0deg,
+            rgba(0,0,0,.18),
+            rgba(0,0,0,.18) 1px,
+            transparent 1px,
+            transparent 3px
+        );
+
+    animation: scanlines .15s linear infinite;
+}
+
+@keyframes scanlines {
+    to {
+        transform: translateY(3px);
+    }
+}
+
+body.mode-glitch .name-card {
+    animation: glitchCard .15s steps(2) infinite !important;
+}
+
+@keyframes glitchCard {
+    0% {
+        transform: translate(0);
+        filter: none;
+    }
+
+    25% {
+        transform: translate(-3px, 1px);
+        filter: hue-rotate(90deg);
+    }
+
+    50% {
+        transform: translate(4px, -1px);
+    }
+
+    75% {
+        transform: translate(-2px, 2px);
+        filter: contrast(1.7);
+    }
+
+    100% {
+        transform: translate(0);
+    }
+}
+
+.glitch-error {
+    position: fixed;
+    z-index: 9999;
+
+    padding: 12px 18px;
+
+    background: #090909;
+    color: #ff3030;
+
+    border: 1px solid red;
+    font-family: monospace;
+
+    box-shadow:
+        5px 0 #00ffff,
+        -5px 0 #ff0055;
+
+    animation: errorAppear .25s steps(2);
+}
+
+@keyframes errorAppear {
+    from {
+        transform: scale(.8) translateX(-8px);
+        opacity: 0;
+    }
+
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+
+/* HALLOWEEN */
+
+body.mode-halloween {
+    background:
+        radial-gradient(circle at 80% 15%, #7c2d12 0%, transparent 30%),
+        radial-gradient(circle at 20% 80%, #581c87 0%, transparent 30%),
+        linear-gradient(135deg, #030006, #13051c, #261006) !important;
+}
+
+body.mode-halloween .name-card {
+    box-shadow:
+        0 0 30px rgba(249, 115, 22, .13),
+        0 20px 50px rgba(0,0,0,.6);
+}
+
+
+/* CHRISTMAS */
+
+body.mode-christmas {
+    background:
+        radial-gradient(circle at top, rgba(255,255,255,.12), transparent 35%),
+        linear-gradient(135deg, #052e16, #166534, #7f1d1d) !important;
+}
+
+.snowflake {
+    position: fixed;
+    top: -40px;
+
+    z-index: 500;
+    pointer-events: none;
+
+    color: white;
+
+    animation: snowFall linear forwards;
+}
+
+@keyframes snowFall {
+    to {
+        transform: translateY(110vh) rotate(540deg);
+    }
+}
+
+
+/* BIRTHDAY */
+
+body.mode-birthday {
+    background:
+        radial-gradient(circle at 20% 20%, #ec4899, transparent 30%),
+        radial-gradient(circle at 80% 60%, #7c3aed, transparent 35%),
+        linear-gradient(135deg, #311047, #7c2d7a) !important;
+}
+
+.birthday-banner {
+    position: fixed;
+    top: 25px;
+    left: 50%;
+
+    transform: translateX(-50%);
+
+    z-index: 9999;
+
+    padding: 15px 28px;
+
+    color: white;
+
+    background: rgba(15, 10, 30, .82);
+    backdrop-filter: blur(20px);
+
+    border: 1px solid rgba(255,255,255,.25);
+    border-radius: 100px;
+
+    font-weight: 700;
+    font-size: clamp(16px, 2vw, 25px);
+
+    box-shadow: 0 15px 40px rgba(0,0,0,.3);
+}
+
+.confetti {
+    position: fixed;
+    top: -20px;
+
+    z-index: 1000;
+
+    width: 10px;
+    height: 18px;
+
+    animation: confettiFall linear forwards;
+}
+
+@keyframes confettiFall {
+    to {
+        transform:
+            translateY(110vh)
+            rotate(720deg);
+    }
+}
+
+
+/* EXIT MODE BUTTON */
+
+#modeExit {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+
+    z-index: 10000;
+
+    padding: 11px 18px;
+
+    border-radius: 100px;
+    border: 1px solid rgba(255,255,255,.25);
+
+    background: rgba(0,0,0,.65);
+    color: white;
+
+    backdrop-filter: blur(15px);
+
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition: .25s ease;
+}
+
+#modeExit:hover {
+    transform: translateY(-2px);
+    background: rgba(0,0,0,.82);
+}
+    
+   .card-christmas {
+    background: linear-gradient(135deg, #064e3b, #16a34a, #991b1b);
+    border: 3px solid #facc15;
+}
+
+.card-birthday {
+    background: linear-gradient(135deg, #7c3aed, #ec4899, #f59e0b);
+    border: 3px solid #ffffff;
+}
+
+.card-christmas .card-pattern {
+    background-image:
+        radial-gradient(circle, rgba(255,255,255,0.7) 2px, transparent 3px);
+    background-size: 30px 30px;
+}
+
+.card-birthday .card-pattern {
+    background-image:
+        radial-gradient(circle at 20% 30%, rgba(255,255,255,0.5) 3px, transparent 4px),
+        radial-gradient(circle at 80% 70%, rgba(255,255,0,0.4) 3px, transparent 4px);
+    background-size: 45px 45px, 60px 60px;
+} 
+    
     </style>
 </head>
 <body class="min-h-screen flex flex-col">
@@ -282,7 +792,69 @@
                 </div>
             </div>
             
-            <!-- Coming Soon Card -->
+            <!-- Christmas Mode Card -->
+<div onclick="activateMode('christmas')" 
+     class="name-card card-christmas rounded-3xl p-6 text-white shadow-2xl h-full cursor-pointer">
+
+    <div class="card-pattern"></div>
+
+    <div class="card-content">
+        <div class="flex justify-center mb-4">
+            <div class="bg-white/20 p-4 rounded-full">
+                <i class="fas fa-tree text-3xl card-icon"></i>
+            </div>
+        </div>
+
+        <div class="mode-indicator bg-green-400"></div>
+
+        <h2 class="name-title text-2xl md:text-3xl font-bold mb-3 text-center">
+            Christmas Mode
+        </h2>
+
+        <p class="text-center text-white/90 text-base md:text-lg mb-4">
+            Festive red and green theme with falling snow
+        </p>
+
+        <div class="flex justify-center mt-4">
+            <span class="bg-white/20 px-3 py-1 rounded-full text-sm">
+                Festive
+            </span>
+        </div>
+    </div>
+</div>
+            
+            <!-- Birthday Mode Card -->
+<div onclick="activateMode('birthday')" 
+     class="name-card card-birthday rounded-3xl p-6 text-white shadow-2xl h-full cursor-pointer">
+
+    <div class="card-pattern"></div>
+
+    <div class="card-content">
+        <div class="flex justify-center mb-4">
+            <div class="bg-white/20 p-4 rounded-full">
+                <i class="fas fa-cake-candles text-3xl card-icon"></i>
+            </div>
+        </div>
+
+        <div class="mode-indicator bg-yellow-300"></div>
+
+        <h2 class="name-title text-2xl md:text-3xl font-bold mb-3 text-center">
+            Birthday Mode
+        </h2>
+
+        <p class="text-center text-white/90 text-base md:text-lg mb-4">
+            Celebrate a student's birthday with confetti
+        </p>
+
+        <div class="flex justify-center mt-4">
+            <span class="bg-white/20 px-3 py-1 rounded-full text-sm">
+                Celebration
+            </span>
+        </div>
+    </div>
+</div>
+
+<!-- Coming Soon Card -->
             <div class="name-card bg-gradient-to-br from-purple-500 to-indigo-500 rounded-3xl p-6 text-white shadow-2xl h-full flex flex-col justify-center items-center opacity-80">
                 <div class="flex justify-center mb-4">
                     <div class="bg-white/20 p-4 rounded-full">
@@ -353,6 +925,135 @@
             card.style.animationDelay = `${index * 0.2}s`;
             card.classList.add('floating');
         });
+    
+    function clearModeEffects() {
+    document.querySelectorAll('.mode-effect').forEach(el => el.remove());
+}
+
+function activateMode(mode) {
+
+    clearModeEffects();
+
+    // CHRISTMAS MODE
+    if (mode === 'christmas') {
+
+        document.body.style.background =
+            'linear-gradient(135deg, #052e16, #166534, #7f1d1d, #14532d)';
+
+        for (let i = 0; i < 70; i++) {
+
+            const snow = document.createElement('div');
+
+            snow.className = 'mode-effect';
+            snow.innerHTML = '❄';
+
+            snow.style.position = 'fixed';
+            snow.style.top = '-30px';
+            snow.style.left = Math.random() * 100 + 'vw';
+            snow.style.fontSize = (Math.random() * 15 + 10) + 'px';
+            snow.style.color = 'white';
+            snow.style.zIndex = '9999';
+            snow.style.pointerEvents = 'none';
+
+            document.body.appendChild(snow);
+
+            snow.animate(
+                [
+                    {
+                        transform: 'translateY(0)',
+                        opacity: 1
+                    },
+                    {
+                        transform: 'translateY(110vh)',
+                        opacity: 0.7
+                    }
+                ],
+                {
+                    duration: Math.random() * 5000 + 5000,
+                    iterations: Infinity
+                }
+            );
+        }
+    }
+
+
+    // BIRTHDAY MODE
+    if (mode === 'birthday') {
+
+        const name = prompt("Whose birthday is it? 🎂") || "Birthday Star";
+
+        document.body.style.background =
+            'linear-gradient(135deg, #7c3aed, #ec4899, #f59e0b)';
+
+
+        // Birthday banner
+        const banner = document.createElement('div');
+
+        banner.className = 'mode-effect';
+
+        banner.innerHTML = `🎉 Happy Birthday ${name}! 🎂`;
+
+        banner.style.position = 'fixed';
+        banner.style.top = '25px';
+        banner.style.left = '50%';
+        banner.style.transform = 'translateX(-50%)';
+        banner.style.background = 'rgba(0,0,0,0.65)';
+        banner.style.backdropFilter = 'blur(15px)';
+        banner.style.color = 'white';
+        banner.style.padding = '18px 32px';
+        banner.style.borderRadius = '20px';
+        banner.style.fontSize = '24px';
+        banner.style.fontWeight = 'bold';
+        banner.style.zIndex = '10000';
+        banner.style.boxShadow = '0 20px 50px rgba(0,0,0,.4)';
+
+        document.body.appendChild(banner);
+
+
+        // Confetti
+        for (let i = 0; i < 120; i++) {
+
+            const confetti = document.createElement('div');
+
+            confetti.className = 'mode-effect';
+
+            confetti.style.position = 'fixed';
+            confetti.style.width = '8px';
+            confetti.style.height = '14px';
+
+            confetti.style.left = Math.random() * 100 + 'vw';
+            confetti.style.top = '-20px';
+
+            confetti.style.background =
+                `hsl(${Math.random() * 360}, 90%, 60%)`;
+
+            confetti.style.zIndex = '9999';
+            confetti.style.pointerEvents = 'none';
+
+            document.body.appendChild(confetti);
+
+            confetti.animate(
+                [
+                    {
+                        transform:
+                            `translateY(0) rotate(0deg)`
+                    },
+
+                    {
+                        transform:
+                            `translateY(110vh) rotate(${Math.random() * 1000}deg)`
+                    }
+                ],
+                {
+                    duration: Math.random() * 3000 + 3000,
+                    iterations: Infinity,
+                    delay: Math.random() * 2000
+                }
+            );
+        }
+    }
+}
+    
     </script>
 </body>
 </html>
