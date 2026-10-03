@@ -2680,6 +2680,178 @@ footer {
 
 }
     
+    /* ACCOUNT BUTTON */
+#accountArea {
+    position: fixed;
+    top: 40px;
+    right: 140px;
+    z-index: 10001;
+}
+
+#loginButton {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    padding: 12px 18px;
+    border-radius: 25px;
+
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+
+    color: white;
+    font-weight: 600;
+    text-decoration: none;
+
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    transition: 0.3s ease;
+}
+
+#loginButton:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: translateY(-2px);
+}
+    
+    /* LOGGED-IN ACCOUNT BUTTON */
+#userAccount {
+    position: relative;
+}
+
+#accountButton {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+
+    padding: 6px 12px 6px 6px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 30px;
+
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(12px);
+
+    color: white;
+    font-family: inherit;
+    font-weight: 600;
+
+    cursor: pointer;
+    transition: 0.25s ease;
+}
+
+#accountButton:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+#accountPicture {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+#accountButton .fa-chevron-down {
+    font-size: 11px;
+    transition: transform 0.25s ease;
+}
+
+/* DROPDOWN */
+#accountDropdown {
+    display: none;
+
+    position: absolute;
+    top: 58px;
+    right: 0;
+
+    width: 260px;
+    padding: 10px;
+
+    background: rgba(15, 23, 42, 0.94);
+    backdrop-filter: blur(18px);
+
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 18px;
+
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
+
+    color: white;
+    text-align: left;
+}
+
+#accountDropdown.show {
+    display: block;
+}
+
+.account-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px;
+}
+
+#dropdownPicture {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.account-info div {
+    min-width: 0;
+}
+
+#dropdownName {
+    display: block;
+    font-size: 14px;
+}
+
+#dropdownEmail {
+    display: block;
+    margin-top: 2px;
+
+    font-size: 11px;
+    color: rgba(255, 255, 255, 0.6);
+
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.account-divider {
+    height: 1px;
+    margin: 6px 0;
+    background: rgba(255, 255, 255, 0.12);
+}
+
+#googleSignInOption,
+#logoutButton {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    padding: 10px 12px;
+
+    border: none;
+    border-radius: 10px;
+    background: transparent;
+
+    color: white;
+    font-family: inherit;
+    font-size: 13px;
+    text-decoration: none;
+
+    cursor: pointer;
+}
+
+#googleSignInOption:hover,
+#logoutButton:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+#logoutButton {
+    color: #ff8a8a;
+}
+    
     </style>
 </head>
 <body class="min-h-screen loading-active">
@@ -2792,6 +2964,48 @@ footer {
             <div id="popupInner"></div>
         </div>
     </div>
+
+<!-- ACCOUNT AREA -->
+<div id="accountArea">
+
+    <!-- Shows when NOT logged in -->
+    <a href="login.html" id="loginButton">
+        <i class="fas fa-user"></i>
+        <span>Sign in</span>
+    </a>
+
+    <!-- Shows when logged in -->
+    <div id="userAccount" style="display: none;">
+
+        <button id="accountButton">
+            <img id="accountPicture" src="" alt="Profile">
+            <span id="accountName">User</span>
+            <i class="fas fa-chevron-down"></i>
+        </button>
+
+        <!-- Dropdown -->
+        <div id="accountDropdown">
+
+            <div class="account-info">
+                <img id="dropdownPicture" src="" alt="Profile">
+
+                <div>
+                    <strong id="dropdownName">User</strong>
+                    <span id="dropdownEmail">Guest account</span>
+                </div>
+            </div>
+
+            <div class="account-divider"></div>
+
+            <button id="logoutButton">
+                <i class="fas fa-right-from-bracket"></i>
+                Log out
+            </button>
+
+        </div>
+    </div>
+
+</div>
 
     <!-- Header -->
     <header class="relative py-8 md:py-20 text-center">
@@ -5372,6 +5586,81 @@ document.getElementById(
     data-position="Right"
     data-x_margin="18"
     data-y_margin="18">
+</script>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    const STORAGE_KEY = "eas_hobbies_user";
+
+    const loginButton = document.getElementById("loginButton");
+    const userAccount = document.getElementById("userAccount");
+    const accountButton = document.getElementById("accountButton");
+    const accountDropdown = document.getElementById("accountDropdown");
+
+    const accountPicture = document.getElementById("accountPicture");
+    const accountName = document.getElementById("accountName");
+
+    const dropdownPicture = document.getElementById("dropdownPicture");
+    const dropdownName = document.getElementById("dropdownName");
+    const dropdownEmail = document.getElementById("dropdownEmail");
+
+    const logoutButton = document.getElementById("logoutButton");
+
+    // Check if someone is logged in
+    const savedUser = localStorage.getItem(STORAGE_KEY);
+
+    if (savedUser) {
+        try {
+            const user = JSON.parse(savedUser);
+
+            // Hide Sign in
+            loginButton.style.display = "none";
+
+            // Show account
+            userAccount.style.display = "block";
+
+            // Name
+            accountName.textContent = user.name || "User";
+            dropdownName.textContent = user.name || "User";
+
+            // Profile picture
+            if (user.picture) {
+                accountPicture.src = user.picture;
+                dropdownPicture.src = user.picture;
+            }
+
+            // Google or Guest
+            if (user.provider === "guest") {
+                dropdownEmail.textContent = "Guest account";
+            } else {
+                dropdownEmail.textContent = user.email || "Google account";
+            }
+
+        } catch (error) {
+            console.error("Could not read account:", error);
+            localStorage.removeItem(STORAGE_KEY);
+        }
+    }
+
+    // Open/close dropdown
+    accountButton.addEventListener("click", function (event) {
+        event.stopPropagation();
+        accountDropdown.classList.toggle("show");
+    });
+
+    // Close dropdown when clicking somewhere else
+    document.addEventListener("click", function () {
+        accountDropdown.classList.remove("show");
+    });
+
+    // LOG OUT
+    logoutButton.addEventListener("click", function () {
+        localStorage.removeItem(STORAGE_KEY);
+        window.location.reload();
+    });
+
+});
 </script>
 
 </body>
