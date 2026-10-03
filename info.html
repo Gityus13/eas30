@@ -20,7 +20,7 @@
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/animejs/lib/anime.iife.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.2/anime.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
@@ -607,7 +607,7 @@
     
     <!-- Audio element for music -->
     <audio id="background-music" loop>
-        <source src="https://files.catbox.moe/at5fvy.wav" type="audio/mpeg">
+        <source src="https://files.catbox.moe/468not.wav" type="audio/mpeg">
         Your browser does not support the audio element.
     </audio>
     
@@ -647,7 +647,7 @@
                 <h2 class="text-3xl md:text-4xl font-bold text-center mb-6 gradient-text">  Info Or Feedback</h2>
                 <p class="text-center text-white/90 mb-8">Tell us about your question and we will answer it as fast as possible</p>
                 
-                <form id="hobbyForm" action="https://formsubmit.co/info@eas30.site" method="POST">
+                <form id="hobbyForm" action="https://formsubmit.co/yusif.kurba@gmail.com" method="POST">
                     <div>
                         <label for="name" class="block text-white mb-2">Your Name</label>
                         <input type="text" id="name" name="name" class="form-input w-full rounded-lg p-3" placeholder="Enter your name" required>
@@ -745,16 +745,17 @@
         const backgroundMusic = document.getElementById('background-music');
         
         // Check for saved music preference
-        const musicPreference = localStorage.getItem('music');
-        
-        if (musicPreference === 'playing') {
-            backgroundMusic.play();
-            musicIcon.classList.remove('fa-volume-mute');
-            musicIcon.classList.add('fa-volume-up');
-        } else {
-            backgroundMusic.pause();
-            musicIcon.classList.remove('fa-volume-up');
-            musicIcon.classList.add('fa-volume-mute');
+const musicPreference = localStorage.getItem('music');
+
+backgroundMusic.pause();
+
+if (musicPreference === 'playing') {
+    musicIcon.classList.remove('fa-volume-mute');
+    musicIcon.classList.add('fa-volume-up');
+} else {
+    musicIcon.classList.remove('fa-volume-up');
+    musicIcon.classList.add('fa-volume-mute');
+}  musicIcon.classList.add('fa-volume-mute');
         }
         
         musicToggle.addEventListener('click', () => {
