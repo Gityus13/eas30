@@ -218,9 +218,7 @@
 
         <div id="errorMsg" class="error-message"></div>
 
-        <button id="googleLoginBtn" class="google-btn">
-            <i class="fab fa-google"></i> Continue with Google
-        </button>
+<div id="googleLoginBtn"></div>
 
         <div class="divider">
             <div class="divider-line"></div>
@@ -294,35 +292,25 @@
                     ux_mode: 'popup'  // Force popup mode
                 });
                 
-                // Add click handler - IMMEDIATE POPUP, NO SPINNER
-                const googleBtn = document.getElementById('googleLoginBtn');
-                googleBtn.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    console.log("Opening Google Sign-In popup...");
-                    
-                    // Directly show the popup - no loading overlay!
-                    google.accounts.id.prompt((notification) => {
-                        if (notification.isNotDisplayed()) {
-                            const reason = notification.getNotDisplayedReason();
-                            console.log("Popup not displayed:", reason);
-                            if (reason === 'opt_out_or_no_session') {
-                                // Fallback: open popup directly
-                                google.accounts.id.renderButton(googleBtn, {
-                                    type: 'standard',
-                                    theme: 'outline',
-                                    size: 'large',
-                                    text: 'continue_with',
-                                    shape: 'pill'
-                                });
-                                showError("Please click the Google button again to sign in.");
-                            } else if (reason === 'invalid_client') {
-                                showError("Google Sign-In configuration error. Please try again later.");
-                            } else {
-                                showError("Please enable popups for this website and try again.");
-                            }
-                        }
-                    });
-                });
+        // Render the official Google Sign-In button
+const googleBtn = document.getElementById('googleLoginBtn');
+
+// Remove our old custom button contents
+googleBtn.innerHTML = "";
+
+// Let Google create the real working button
+google.accounts.id.renderButton(
+    googleBtn,
+    {
+        type: "standard",
+        theme: "outline",
+        size: "large",
+        text: "continue_with",
+        shape: "pill",
+        width: 420
+    }
+);
+
             };
             script.onerror = () => {
                 console.error("Failed to load Google Sign-In");
