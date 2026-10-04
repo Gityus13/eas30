@@ -1,4 +1,4 @@
-export async function onRequestPost(context) {
+export async function onRequestGet(context) {
     return new Response(
         JSON.stringify({ success: true }),
         {
