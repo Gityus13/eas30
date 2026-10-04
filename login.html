@@ -226,8 +226,24 @@
             }, 5000);
         }
         
-        function loginUser(userData) {
+        async function loginUser(userData) {
             localStorage.setItem(STORAGE_KEY, JSON.stringify(userData));
+            if (userData.provider === "google" && userData.email) {
+    try {
+        await fetch("/api/login-email", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                email: userData.email,
+                name: userData.name
+            })
+        });
+    } catch (error) {
+        console.error("Welcome email failed:", error);
+    }
+}
             window.location.href = "index.html";
         }
         
@@ -270,7 +286,6 @@
                             showError("Failed to get user information. Please try again.");
                         }
                     },
-                    button_auto_select: false,
                     cancel_on_tap_outside: true
                 });
                 
