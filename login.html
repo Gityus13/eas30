@@ -179,24 +179,7 @@
             font-size: 0.85rem;
             display: none;
         }
-
-        /* No loading overlay - removed completely */
         
-        /* Make sure Google popup is on top and centered */
-        iframe[src*="accounts.google.com"] {
-            z-index: 100000 !important;
-            position: fixed !important;
-            top: 50% !important;
-            left: 50% !important;
-            transform: translate(-50%, -50%) !important;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3) !important;
-            border-radius: 8px !important;
-        }
-        
-        /* Override any Google One Tap positioning */
-        div[data-google-one-tap] {
-            z-index: 100000 !important;
-        }
     </style>
 </head>
 <body>
@@ -287,7 +270,7 @@
                             showError("Failed to get user information. Please try again.");
                         }
                     },
-                    auto_select: false,
+                    button_auto_select: false,
                     cancel_on_tap_outside: true
                 });
                 
