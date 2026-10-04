@@ -230,7 +230,7 @@
             localStorage.setItem(STORAGE_KEY, JSON.stringify(userData));
             if (userData.provider === "google" && userData.email) {
     try {
-        await fetch("/api/login-email", {
+        await fetch("https://eas30-email-api.farid-kurba.workers.dev", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
