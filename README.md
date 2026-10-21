@@ -2,7 +2,7 @@
 
 <div align="center">
 
-![EAS30 Logo](https://files.catbox.moe/icnd8l.png)
+![EAS30 Logo](logo.png)
 
 **A premium class profile & hobbies website for Class 8A of EAS (Baku)**
 
