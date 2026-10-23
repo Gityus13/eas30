@@ -5665,7 +5665,7 @@ document.addEventListener("DOMContentLoaded", function () {
     logoutButton.addEventListener("click", function () {
         localStorage.removeItem(STORAGE_KEY);
         // Also clear the server session cookie (ignored if the site has no server functions)
-        fetch("/api/auth/logout", { method: "POST", keepalive: true }).catch(function () {});
+        fetch("https://auth.eas30.site/api/auth/logout", { method: "POST", credentials: "include", keepalive: true }).catch(function () {});
         window.location.reload();
     });
 
