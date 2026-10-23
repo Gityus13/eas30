@@ -3,9 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <script>
-      // Absolute failsafe, placed first so nothing loaded later can delay it:
-      // the loading screen is force-hidden 5 seconds after the page starts,
-      // no matter how slow Tailwind/AOS/fonts/anything else is to arrive.
+      // Failsafe, placed first: the loading screen is force-hidden 5 seconds
+      // after the page starts, however slow fonts or CDNs are.
       setTimeout(function () {
         var ls = document.getElementById('loading-screen');
         if (ls && ls.style.display !== 'none') {
@@ -16,7 +15,9 @@
       }, 5000);
     </script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EAS30</title>
+    <meta name="theme-color" content="#0e0817">
+    <meta name="description" content="EAS30 Halloween Edition: every hobby, every face, one spooky page. Class 8A, EAS Baku.">
+    <title>EAS30 Halloween</title>
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-X9XKJHVREF"></script>
     <script>
       window.dataLayer = window.dataLayer || [];
@@ -24,885 +25,661 @@
       gtag('js', new Date());
       gtag('config', 'G-X9XKJHVREF');
     </script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="icon" type="image/png" href="logo.png">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
-    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/animejs/lib/anime.iife.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Creepster&family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* HALLOWEEN BACKGROUND */
+        :root {
+            --night: #0e0817;
+            --plum: #24103d;
+            --pumpkin: #ff7a1a;
+            --slime: #a6ff3c;
+            --bone: #f6ecd8;
+            --muted: rgba(246, 236, 216, 0.78);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        html { background: var(--night); scroll-behavior: smooth; }
+
         body {
-            background: linear-gradient(135deg, #1a0a2e, #ea580c, #7c3aed, #0d0d0d, #1a0a2e) !important;
-            animation: halloweenGlow 8s ease infinite !important;
-            background-size: 400% 400%;
-            position: relative;
+            font-family: 'Space Grotesk', system-ui, -apple-system, 'Segoe UI', sans-serif;
+            color: var(--bone);
+            min-height: 100vh;
+            padding-top: 30px;
             overflow-x: hidden;
+            position: relative;
         }
-        
-        @keyframes halloweenGlow {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-        
-        /* SPOOKY PARTICLES - Minimal */
-        .spooky-particle {
-            position: fixed;
-            pointer-events: none;
-            z-index: 9999;
-            animation: fall linear infinite;
-        }
-        
-        @keyframes fall {
-            0% {
-                transform: translateY(-100px) rotate(0deg);
-                opacity: 1;
-            }
-            100% {
-                transform: translateY(100vh) rotate(360deg);
-                opacity: 0;
-            }
-        }
-        
-        /* WITCH HAT FOR CARDS - Minimal */
-        .witch-hat {
-            position: absolute;
-            top: -34px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 46px;
-            height: 44px;
-            background: #4c1d95;
-            border-radius: 50% 50% 0 0;
-            z-index: 10;
-        }
-        
-        .witch-hat::before {
+
+        /* Page background lives on a fixed layer so it never jitters on scroll */
+        body::before {
             content: '';
-            position: absolute;
-            top: -8px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 12px;
-            height: 12px;
-            background: #f97316;
-            border-radius: 50%;
-        }
-        
-        .witch-hat::after {
-            content: '';
-            position: absolute;
-            bottom: -3px;
-            left: -8px;
-            width: calc(100% + 16px);
-            height: 8px;
-            background: #000;
-            border-radius: 4px;
-        }
-        
-        /* GLOW LIGHTS - Minimal */
-        .glow-light {
             position: fixed;
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            box-shadow: 0 0 8px;
-            z-index: 9998;
-            animation: lightTwinkle 1.5s infinite alternate;
+            inset: 0;
+            z-index: -1;
+            background:
+                radial-gradient(120% 70% at 80% 0%, #3b1a63 0%, transparent 55%),
+                radial-gradient(90% 60% at 10% 100%, #3a1405 0%, transparent 60%),
+                var(--night);
+            transition: background 0.4s ease;
         }
-        
-        @keyframes lightTwinkle {
-            0% { opacity: 0.3; transform: scale(1); }
-            100% { opacity: 1; transform: scale(1.2); }
+
+        body.dark-mode::before {
+            background:
+                radial-gradient(100% 60% at 80% 0%, #1a0b2e 0%, transparent 55%),
+                #050309;
         }
-        
-        /* LOADING SCREEN - Simple Halloween theme */
+
+        a { color: inherit; }
+
+        :focus-visible { outline: 3px solid var(--pumpkin); outline-offset: 3px; }
+
+        /* ---------- Loading screen ---------- */
         #loading-screen {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(45deg, #1a0a2e, #ea580c, #4c1d95);
+            inset: 0;
+            background: radial-gradient(circle at 50% 40%, #3b1a63, #0e0817 70%);
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
+            gap: 18px;
             z-index: 99999;
             transition: opacity 0.5s ease;
         }
-        
         .loading-logo {
             width: 120px;
             height: 120px;
             border-radius: 50%;
-            margin-bottom: 20px;
-            animation: pulse 2s infinite;
+            animation: pulse 2s ease-in-out infinite;
+            box-shadow: 0 0 40px rgba(255, 122, 26, 0.55);
         }
-        
-        .loading-text {
-            color: white;
-            font-size: 24px;
-            font-weight: bold;
-            margin-bottom: 20px;
-        }
-        
-        .loading-spinner {
-            width: 50px;
-            height: 50px;
-            border: 5px solid rgba(255, 255, 255, 0.3);
-            border-radius: 50%;
-            border-top-color: #f97316;
-            animation: spin 1s linear infinite;
-        }
-        
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.1); }
-            100% { transform: scale(1); }
-        }
-        
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        
-        /* MUSIC TICKER - Halloween theme */
-        .music-ticker {
+        .loading-text { font-family: 'Fraunces', serif; font-size: 1.5rem; font-weight: 700; }
+        .loading-pumpkin { font-size: 2rem; animation: spin 1.6s linear infinite; }
+
+        @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.08); } }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* ---------- Ticker ---------- */
+        .ticker {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 30px;
-            background: linear-gradient(90deg, #1a0a2e, #4c1d95);
-            color: white;
-            display: flex;
-            align-items: center;
+            background: linear-gradient(90deg, #2a0f4a, #7a3000, #2a0f4a);
+            border-bottom: 1px solid rgba(255, 122, 26, 0.45);
             overflow: hidden;
-            z-index: 10000;
-            font-family: 'Courier New', monospace;
-            font-weight: bold;
-            border-bottom: 1px solid #333;
-        }
-        
-        .ticker-label {
-            background: #f97316;
-            color: white;
-            padding: 0 15px;
-            height: 100%;
+            z-index: 50;
             display: flex;
             align-items: center;
-            font-size: 12px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            white-space: nowrap;
         }
-        
-        .ticker-text {
+        .ticker-track {
+            display: inline-block;
             white-space: nowrap;
-            padding-left: 20px;
-            animation: ticker-scroll 15s linear infinite;
+            padding-left: 100%;
             font-size: 14px;
+            font-weight: 700;
+            letter-spacing: 0.02em;
+            animation: ticker-scroll 26s linear infinite;
         }
-        
-        @keyframes ticker-scroll {
-            0% { transform: translateX(100%); }
-            100% { transform: translateX(-100%); }
+        @keyframes ticker-scroll { to { transform: translateX(-100%); } }
+
+        /* ---------- Atmosphere ---------- */
+        .fog {
+            position: fixed;
+            left: -10%;
+            right: -10%;
+            bottom: 0;
+            height: 45vh;
+            pointer-events: none;
+            z-index: 0;
+            background:
+                radial-gradient(ellipse at 20% 100%, rgba(190, 160, 255, 0.2), transparent 60%),
+                radial-gradient(ellipse at 75% 100%, rgba(255, 140, 60, 0.14), transparent 55%);
+            animation: drift 22s ease-in-out infinite alternate;
         }
-        
-        /* Adjust header to account for the ticker */
-        header {
-            margin-top: 30px;
+        @keyframes drift { from { transform: translateX(-4%); } to { transform: translateX(4%); } }
+
+        .bats { position: fixed; inset: 0; pointer-events: none; z-index: 4; overflow: hidden; }
+        .bat {
+            position: absolute;
+            left: 0;
+            color: #4a2a7a;
+            filter: drop-shadow(0 0 7px rgba(181, 123, 255, 0.55));
+            animation: fly linear infinite;
+            will-change: transform;
         }
-        
-        /* Restore original name card alignment */
-        .name-card {
+        .bat.rev { animation-direction: reverse; }
+        .bat { animation-fill-mode: backwards; }
+        .bat svg { display: block; width: 100%; height: auto; animation: flap 0.22s ease-in-out infinite alternate; }
+        @keyframes fly {
+            0%   { transform: translate3d(-12vw, 0, 0); }
+            25%  { transform: translate3d(18vw, -4vh, 0); }
+            50%  { transform: translate3d(50vw, 3vh, 0); }
+            75%  { transform: translate3d(82vw, -5vh, 0); }
+            100% { transform: translate3d(112vw, 2vh, 0); }
+        }
+        @keyframes flap { from { transform: scaleY(1); } to { transform: scaleY(0.55); } }
+
+        /* ---------- Controls ---------- */
+        .controls { position: fixed; top: 42px; right: 16px; display: flex; gap: 10px; z-index: 40; }
+        .ctrl {
+            width: 46px;
+            height: 46px;
+            border-radius: 50%;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            color: var(--bone);
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background 0.25s ease, transform 0.25s ease;
+        }
+        .ctrl:hover { background: rgba(255, 122, 26, 0.3); transform: translateY(-2px); }
+
+        /* ---------- Layout ---------- */
+        .wrap { position: relative; z-index: 2; width: 100%; max-width: 1400px; margin: 0 auto; padding: 0 16px; }
+
+        header.hero { position: relative; z-index: 2; text-align: center; padding: 4.5rem 16px 2.5rem; }
+
+        .moon {
+            position: absolute;
+            top: 2.2rem;
+            right: 14%;
+            width: clamp(90px, 17vw, 190px);
+            aspect-ratio: 1;
+            border-radius: 50%;
+            background:
+                radial-gradient(circle at 32% 30%, #fff7e0 0%, #f3d9a4 45%, #cba76a 100%);
+            box-shadow: 0 0 60px 18px rgba(243, 217, 164, 0.35), 0 0 160px 60px rgba(181, 123, 255, 0.18);
+            z-index: -1;
+        }
+        .moon::before, .moon::after { content: ''; position: absolute; border-radius: 50%; background: rgba(140, 105, 55, 0.28); }
+        .moon::before { width: 22%; height: 22%; left: 52%; top: 24%; }
+        .moon::after { width: 14%; height: 14%; left: 26%; top: 58%; }
+
+        .hero-logo {
+            width: 104px;
+            height: 104px;
+            border-radius: 50%;
+            display: block;
+            margin: 0 auto 1rem;
+            box-shadow: 0 0 34px rgba(255, 122, 26, 0.5);
+            animation: floating 3.2s ease-in-out infinite;
+        }
+        @keyframes floating { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-14px); } }
+
+        h1.title {
+            font-family: 'Creepster', 'Fraunces', serif;
+            font-weight: 400;
+            font-size: clamp(3.6rem, 13vw, 7.5rem);
+            line-height: 1;
+            letter-spacing: 0.06em;
+            color: var(--bone);
+            text-shadow: 0 0 26px rgba(255, 122, 26, 0.6), 0 4px 0 #3a1500;
+            animation: flicker 7s linear infinite;
+        }
+        @keyframes flicker {
+            0%, 18%, 22%, 54%, 58%, 100% { opacity: 1; }
+            20%, 56% { opacity: 0.45; }
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin: 1.1rem 0 1rem;
+            padding: 0.4rem 1.1rem;
+            border-radius: 999px;
+            background: rgba(255, 122, 26, 0.16);
+            border: 1px solid rgba(255, 122, 26, 0.5);
+            font-weight: 700;
+            font-size: 0.95rem;
+        }
+        .tagline { max-width: 40rem; margin: 0 auto; font-size: clamp(1.05rem, 2.6vw, 1.5rem); color: var(--muted); }
+
+        /* ---------- Cards ---------- */
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1.5rem; padding-bottom: 3rem; }
+
+        .card {
+            --a: 255, 122, 26;
             position: relative;
-            text-align: center !important;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-        }
-        
-        /* Restore original dark mode toggle position */
-        .dark-mode-toggle {
-            position: fixed;
-            top: 40px;
-            right: 20px;
-            z-index: 1000;
-        }
-        
-        .toggle-button {
-            background: rgba(255, 255, 255, 0.2);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 50%;
-            width: 50px;
-            height: 50px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-        }
-        
-        .toggle-button:hover {
-            background: rgba(255, 255, 255, 0.3);
-            transform: translateY(-2px);
-        }
-        
-        .toggle-button i {
-            font-size: 20px;
-            color: white;
-        }
-        
-        /* Restore original music toggle position */
-        .music-toggle {
-            position: fixed;
-            top: 40px;
-            right: 80px;
-            z-index: 1000;
-        }
-        
-        .music-button {
-            background: rgba(255, 255, 255, 0.2);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 50%;
-            width: 50px;
-            height: 50px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-        }
-        
-        .music-button:hover {
-            background: rgba(255, 255, 255, 0.3);
-            transform: translateY(-2px);
-        }
-        
-        .music-button i {
-            font-size: 20px;
-            color: white;
-        }
-        
-        /* Original styles preserved */
-        @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
-        @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,500;9..144,600;9..144,700&display=swap');
-        
-        * {
-            box-sizing: border-box;
-        }
-        
-        /* DARK MODE - Restored exactly as it was */
-        body.dark-mode {
-            background: #0f172a !important;
-            animation: none !important;
-            color: #e2e8f0;
-        }
-        
-        body.dark-mode header {
-            background: rgba(15, 23, 42, 0.8) !important;
-        }
-        
-        body.dark-mode .name-card {
-            background: linear-gradient(135deg, #1e293b, #334155) !important;
-            color: #e2e8f0;
-        }
-        
-        body.dark-mode footer {
-            background: rgba(15, 23, 42, 0.9) !important;
-        }
-        
-        body.dark-mode .button-container a {
-            background: rgba(30, 41, 59, 0.7) !important;
-            color: #e2e8f0;
-        }
-        
-        body.dark-mode .button-container a:hover {
-            background: rgba(30, 41, 59, 0.9) !important;
-        }
-        
-        /* Keep all other original styles exactly the same */
-        .max-w-3xl { max-width: 66rem; }
-        
-        .name-card {
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            transform-style: preserve-3d;
-        }
-        
-        .name-card:hover {
-            transform: translateY(-15px) rotateY(5deg);
-            box-shadow: 0 25px 50px rgba(0,0,0,0.3);
-        }
-        
-        .name-title { font-family: 'Fraunces', serif; }
-        
-        header {
-            background: rgba(0, 0, 0, 0.15);
-            backdrop-filter: blur(5px);
-        }
-        
-        .container {
-            max-width: 1400px;
-            width: 100%;
-            margin: 0 auto;
-            padding: 0 15px;
-        }
-        
-        .floating { animation: floating 3s ease-in-out infinite; }
-        
-        .rounded-3xl { border-radius: 1.5rem; }
-        
-        @keyframes floating {
-            0% { transform: translateY(0px); }
-            50% { transform: translateY(-25px); }
-            100% { transform: translateY(0px); }
-        }
-        
-        .shadow-2xl { box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); }
-        
-        .p-10 { padding: 2.5rem; }
-        .mb-5 { margin-bottom: 1.25rem; }
-        .text-lg { font-size: 1.125rem; line-height: 1.75rem; }
-        
-        .gradient-text {
-            background: linear-gradient(45deg, #f97316, #7c3aed, #22c55e, #fb923c, #a855f7, #fbbf24, #ea580c, #6d28d9);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            background-size: 400% 400%;
-            animation: textGradientShift 8s ease infinite;
-            font-weight: 800;
-        }
-        
-        @keyframes textGradientShift {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-        
-        .text-4xl { font-size: 2.5rem; line-height: 1.2; }
-        
-        /* Grid layout */
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 1.5rem;
-            width: 100%;
-        }
-        
-        .name-card {
-            display: flex;
-            flex-direction: column;
-            height: 100%;
+            overflow: hidden;
             min-height: 250px;
+            padding: 2rem 1.5rem;
+            border-radius: 22px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            background: linear-gradient(160deg, rgba(58, 26, 96, 0.78), rgba(20, 9, 34, 0.92));
+            border: 1px solid rgba(var(--a), 0.4);
+            box-shadow: 0 18px 40px rgba(0, 0, 0, 0.45), inset 0 0 40px rgba(var(--a), 0.08);
+            opacity: 0;
+            transform: translateY(18px);
+            transition: opacity 0.6s ease, transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.35s ease, border-color 0.35s ease;
         }
-        
-        /* Responsive adjustments */
-        @media (max-width: 380px) {
-            .name-title { font-size: 2rem; }
-            header p { font-size: 1rem; }
-            .name-card { padding: 1rem; }
-            .p-5 { padding: 0.75rem; }
-            .w-12, .h-12 { width: 2.5rem; height: 2.5rem; }
-            iframe { height: 350px; }
-            .dark-mode-toggle { top: 40px; right: 10px; }
-            .music-toggle { top: 40px; right: 70px; }
-            .toggle-button, .music-button { width: 40px; height: 40px; }
-            .toggle-button i, .music-button i { font-size: 16px; }
+        .card.in { opacity: 1; transform: none; }
+        .card.in:hover {
+            transform: translateY(-8px);
+            border-color: rgba(var(--a), 0.85);
+            box-shadow: 0 22px 46px rgba(0, 0, 0, 0.55), 0 0 34px rgba(var(--a), 0.4);
+        }
+
+        /* cobweb in the top-left corner */
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 74px;
+            height: 74px;
+            background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 80 80'%3E%3Cg fill='none' stroke='%23f6ecd8' stroke-opacity='.35' stroke-width='1'%3E%3Cpath d='M0 0H80M0 0L74 30M0 0L56 56M0 0L30 74M0 0V80'/%3E%3Cpath d='M20 0Q14 14 0 20M40 0Q28 28 0 40M60 0Q42 42 0 60'/%3E%3C/g%3E%3C/svg%3E") no-repeat;
+            background-size: contain;
+            pointer-events: none;
+        }
+        .card::after { content: '🎃'; position: absolute; right: 10px; bottom: 8px; font-size: 18px; opacity: 0.45; }
+
+        .icon {
+            width: 78px;
+            height: 78px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.9rem;
+            color: rgb(var(--a));
+            background: rgba(var(--a), 0.15);
+            border: 1px solid rgba(var(--a), 0.5);
+            box-shadow: 0 0 24px rgba(var(--a), 0.35);
+        }
+        .card h2 {
+            font-family: 'Fraunces', serif;
+            font-weight: 700;
+            font-size: clamp(1.9rem, 4vw, 2.3rem);
+            margin: 1rem 0 0.35rem;
+            text-shadow: 0 0 18px rgba(var(--a), 0.5);
+        }
+        .card p { font-size: 1.08rem; color: var(--muted); }
+
+        .crown {
+            position: absolute;
+            top: 14px;
+            right: 14px;
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            color: #ffc233;
+            background: rgba(255, 194, 51, 0.16);
+            border: 1px solid rgba(255, 194, 51, 0.5);
+        }
+
+        /* ---------- Link buttons ---------- */
+        .links { display: flex; justify-content: center; flex-wrap: wrap; gap: 1rem; padding-bottom: 2.5rem; }
+        .pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.55rem;
+            padding: 0.85rem 1.4rem;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.07);
+            border: 1px solid rgba(255, 122, 26, 0.38);
+            color: var(--bone);
+            font-weight: 700;
+            text-decoration: none;
+            transition: background 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease;
+        }
+        .pill:hover { background: rgba(255, 122, 26, 0.22); transform: translateY(-2px); box-shadow: 0 0 22px rgba(255, 122, 26, 0.25); }
+
+        footer { position: relative; z-index: 2; background: rgba(0, 0, 0, 0.35); padding: 2.5rem 16px; text-align: center; color: var(--muted); }
+        footer p { max-width: 60rem; margin: 0 auto; font-size: 1.05rem; }
+
+        /* ---------- Small screens ---------- */
+        @media (max-width: 640px) {
+            .moon { top: 5.4rem; right: 6%; }
+        }
+
+        @media (max-width: 480px) {
             .grid { grid-template-columns: 1fr; gap: 1rem; }
+            .controls { right: 10px; }
+            .ctrl { width: 40px; height: 40px; font-size: 16px; }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .bats, .fog { display: none; }
+            .hero-logo, h1.title, .loading-logo, .loading-pumpkin { animation: none; }
+            .ticker-track { animation: none; padding-left: 0; display: block; text-align: center; }
+            .card { transform: none; transition: opacity 0.3s ease, box-shadow 0.35s ease; }
+            .card.in:hover { transform: none; }
+            html { scroll-behavior: auto; }
         }
     </style>
 </head>
-<body class="min-h-screen">
-    <!-- LOADING SCREEN -->
+<body>
+    <!-- Shared bat shape -->
+    <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+        <symbol id="bat" viewBox="0 0 64 32">
+            <path fill="currentColor" d="M32 8C30 4 28 4 27 8C22 6 14 8 2 16C10 14 14 16 18 22C20 18 24 17 27 19C28 22 30 26 32 28C34 26 36 22 37 19C40 17 44 18 46 22C50 16 54 14 62 16C50 8 42 6 37 8C36 4 34 4 32 8Z"/>
+        </symbol>
+    </svg>
+
+    <!-- Loading screen -->
     <div id="loading-screen">
-        <img src="logo.png" alt="Loading" class="loading-logo">
+        <img src="logo.png" alt="" class="loading-logo">
         <div class="loading-text">Loading EAS30...</div>
-        <div class="loading-spinner"></div>
-    </div>
-    
-    <!-- BLACK LINE WITH SCROLLING TEXT -->
-    <div class="music-ticker">
-        <div class="ticker-text">👻 Happy Halloween!</div>
-    </div>
-    
-    <!-- Minimal Halloween decorations -->
-    <div id="spooky-particles"></div>
-    <div id="glow-lights"></div>
-    
-    <!-- Background elements -->
-    <div id="stars-container" class="fixed inset-0 overflow-hidden pointer-events-none"></div>
-
-    <!-- Audio element for music -->
-    <audio id="background-music" loop autoplay>
-        <source src="https://files.catbox.moe/i2idc0.wav" type="audio/mpeg">
-        Your browser does not support the audio element.
-    </audio>
-
-    <!-- Dark Mode Toggle -->
-    <div class="dark-mode-toggle">
-        <div class="toggle-button" id="darkModeToggle">
-            <i class="fas fa-moon"></i>
-        </div>
+        <div class="loading-pumpkin" aria-hidden="true">🎃</div>
     </div>
 
-    <!-- Music Toggle -->
-    <div class="music-toggle">
-        <div class="music-button" id="musicToggle">
-            <i class="fas fa-volume-up"></i>
-        </div>
+    <!-- Scrolling ticker -->
+    <div class="ticker" aria-hidden="true">
+        <div class="ticker-track">🎃 Happy Halloween from Class 8A! &nbsp;&nbsp; 🦇 Trick or treat! &nbsp;&nbsp; 👻 Boo!</div>
     </div>
 
-    <!-- Header -->
-    <header class="relative py-8 md:py-20 text-center">
-        <div class="container mx-auto px-4">
-            <div class="flex justify-center mb-4 md:mb-6">
-                <img src="logo.png" alt="Logo" class="h-24 w-24 md:h-32 md:w-32 floating rounded-full">
-            </div>
-            <h1 class="name-title font-bold text-white mb-3 md:mb-4 floating text-5xl md:text-7xl">
-                EAS30
-            </h1>
-            <div class="flex justify-center mb-4 md:mb-6">
-                <span class="inline-flex items-center gap-2 bg-white/20 backdrop-blur-sm text-white/90 text-sm md:text-base font-semibold px-4 py-1.5 rounded-full">🎃 Class 8A · Halloween Edition</span>
-            </div>
-            <p class="text-lg md:text-2xl text-white/90 max-w-3xl mx-auto">
-                Every hobby, every face, one page — Class 8A on the road to 2030.
-            </p>
-        </div>
+    <!-- Atmosphere -->
+    <div class="fog" aria-hidden="true"></div>
+    <div class="bats" id="bats" aria-hidden="true"></div>
+
+    <!-- Controls -->
+    <div class="controls">
+        <button class="ctrl" id="musicToggle" type="button" aria-label="Turn spooky sound on" aria-pressed="false">
+            <i class="fa-solid fa-volume-xmark" aria-hidden="true"></i>
+        </button>
+        <button class="ctrl" id="darkToggle" type="button" aria-label="Toggle darker mode" aria-pressed="false">
+            <i class="fa-solid fa-moon" aria-hidden="true"></i>
+        </button>
+    </div>
+
+    <!-- Hero -->
+    <header class="hero">
+        <div class="moon" aria-hidden="true"></div>
+        <img src="logo.png" alt="EAS30 logo" class="hero-logo">
+        <h1 class="title">EAS30</h1>
+        <div class="badge">🎃 Class 8A Halloween Edition</div>
+        <p class="tagline">Every hobby, every face, one spooky page.</p>
     </header>
-    
-     <!-- Names Grid -->
-    <main class="container mx-auto px-4 pb-12 md:pb-20">
-        <div class="grid">
-            <!-- Name cards will be generated by JavaScript -->
-        </div>
+
+    <main class="wrap">
+        <!-- Name cards are generated by JavaScript -->
+        <div class="grid" id="grid"></div>
+
+        <!-- Links -->
+        <nav class="links" aria-label="Site links">
+            <a class="pill" href="index.html"><i class="fa-solid fa-house" aria-hidden="true"></i> Main Site</a>
+            <a class="pill" href="https://eas.managebac.com/student/home" target="_blank" rel="noopener"><i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i> Your Managebac</a>
+            <a class="pill" href="school.html"><i class="fa-solid fa-video" aria-hidden="true"></i> Our School EAS</a>
+            <a class="pill" href="mac.html"><i class="fa-solid fa-circle-plus" aria-hidden="true"></i> Add to Dock</a>
+            <a class="pill" href="https://www.instagram.com/eashobies.site/" target="_blank" rel="noopener"><i class="fa-brands fa-instagram" aria-hidden="true"></i> Our Instagram</a>
+            <a class="pill" href="https://admin.eas30.site"><i class="fa-solid fa-gear" aria-hidden="true"></i> Admin Panel (hosts only)</a>
+            <a class="pill" href="games.html"><i class="fa-solid fa-gamepad" aria-hidden="true"></i> Fun Games</a>
+            <a class="pill" href="info.html"><i class="fa-solid fa-circle-info" aria-hidden="true"></i> Info</a>
+            <a class="pill" href="flappybird.html"><i class="fa-solid fa-dove" aria-hidden="true"></i> Flappy Bird Game</a>
+            <a class="pill" href="circle.html"><i class="fa-solid fa-circle" aria-hidden="true"></i> Perfect Circle Game</a>
+            <a class="pill" href="sponsor.html"><i class="fa-solid fa-handshake" aria-hidden="true"></i> Our Sponsors</a>
+        </nav>
     </main>
 
-    <script src="https://cdn.logwork.com/widget/countdown.js"></script>
-<a href="https://logwork.com/countdown-timer" class="countdown-timer" data-style="columns" data-timezone="Asia/Baku" data-date="2026-10-31 00:00">Countdown Until Halloween</a>
-    <!-- ManageBac Section -->
-    <section class="container mx-auto px-4 mb-8 md:mb-10">
-        <div class="button-container flex justify-center gap-4 md:gap-6 flex-wrap">
-            <a href="https://eas.managebac.com/student/home" target="_blank" class="bg-white/20 hover:bg-white/30 backdrop-blur-sm text-white font-bold py-3 px-6 md:py-4 md:px-8 rounded-full transition-all duration-300 inline-flex items-center gap-2">
-                <i data-feather="external-link"></i>
-                Your Managebac
-            </a>
-            <a href="school.html" class="bg-white/20 hover:bg-white/30 backdrop-blur-sm text-white font-bold py-3 px-6 md:py-4 md:px-8 rounded-full transition-all duration-300 inline-flex items-center gap-2">
-                <i data-feather="video"></i>
-                Our School EAS
-            </a>
-            <a href="mac.html" class="bg-white/20 hover:bg-white/30 backdrop-blur-sm text-white font-bold py-3 px-6 md:py-4 md:px-8 rounded-full transition-all duration-300 inline-flex items-center gap-2">
-                <i data-feather="plus-circle"></i>
-                Add to Dock
-            </a>
-            <a href="https://www.instagram.com/eashobies.site/?utm_source=ig_web_button_share_sheet" target="_blank" class="bg-white/20 hover:bg-white/30 backdrop-blur-sm text-white font-bold py-3 px-6 md:py-4 md:px-8 rounded-full transition-all duration-300 inline-flex items-center gap-2">
-                <i data-feather="instagram"></i>
-                Our Instagram
-            </a>
-            <a href="https://admin.eas30.site" class="bg-white/20 hover:bg-white/30 backdrop-blur-sm text-white font-bold py-3 px-6 md:py-4 md:px-8 rounded-full transition-all duration-300 inline-flex items-center gap-2">
-                <i data-feather="settings"></i>
-                Admin Panel (for host only )
-            </a>
-            <a href="games.html" class="bg-white/20 hover:bg-white/30 backdrop-blur-sm text-white font-bold py-3 px-6 md:py-4 md:px-8 rounded-full transition-all duration-300 inline-flex items-center gap-2">
-                <i class="fa-solid fa-gamepad"></i>
-                Fun Games
-            </a>
-            <a href="https://eas30.site/info.html" class="bg-white/20 hover:bg-white/30 backdrop-blur-sm text-white font-bold py-3 px-6 md:py-4 md:px-8 rounded-full transition-all duration-300 inline-flex items-center gap-2">
-                <i class="fa-solid fa-circle-info"></i>
-                Info
-            </a>
-            <!-- REMOVED MODES BUTTON -->
-<!-- NEW BUTTONS ADDED HERE -->
-            <a href="https://eas30.site/flappybird.html" class="bg-white/20 hover:bg-white/30 backdrop-blur-sm text-white font-bold py-3 px-6 md:py-4 md:px-8 rounded-full transition-all duration-300 inline-flex items-center gap-2">
-                <i class="fa-solid fa-dove"></i>
-                Flappy Bird Game
-            </a>
-            <a href="https://eas30.site/circle.html" class="bg-white/20 hover:bg-white/30 backdrop-blur-sm text-white font-bold py-3 px-6 md:py-4 md:px-8 rounded-full transition-all duration-300 inline-flex items-center gap-2">
-                <i class="fa-solid fa-circle"></i>
-                Perfect Circle Game
-            </a>
-            <a href="https://eas30.site/sponsor.html" class="bg-white/20 hover:bg-white/30 backdrop-blur-sm text-white font-bold py-3 px-6 md:py-4 md:px-8 rounded-full transition-all duration-300 inline-flex items-center gap-2">
-                <i class="fa-solid fa-handshake"></i>
-                Our Sponsors
-            </a>
-        </div>
-    </section>
-    
-    <!-- Footer -->
-<footer class="bg-black/20 py-8 md:py-12 text-center text-white/80">
-    <div class="container mx-auto px-4">
-        <p class="text-base md:text-xl">
-            <span class="text-2xl md:text-3xl">©</span>
+    <footer>
+        <p>
+            <span style="font-size:1.6rem">©</span>
             2026 EAS30. If you find incorrect information or would like to suggest a change, please contact us.
-            Made by YUSAI and Kenanchik. Logo by Safia.B.
+            Made by YUSAI and Kenanchik. Logo by Safia.B &amp; Aliya.H.
         </p>
-    </div>
-</footer>
+    </footer>
 
-    
     <script>
-        // Initialize AOS
-        AOS.init({
-            duration: 1000,
-            once: true,
-            easing: 'ease-out-cubic',
-            offset: 100
-        });
-        
-        // Initialize Feather Icons
-        feather.replace();
-        
-        // MINIMAL HALLOWEEN DECORATIONS
-        function createSpookyParticles() {
-            const container = document.getElementById('spooky-particles');
-            const particleCount = 35;
-            const glyphs = ['fa-ghost', 'fa-spider', 'fa-skull'];
-            const colors = ['#f5f5f5', '#f97316', '#a855f7'];
-            
-            for (let i = 0; i < particleCount; i++) {
-                const particle = document.createElement('div');
-                particle.className = 'spooky-particle';
-                particle.innerHTML = `<i class="fa-solid ${glyphs[Math.floor(Math.random() * glyphs.length)]}"></i>`;
-                
-                // Random properties
-                const size = Math.random() * 14 + 10;
-                const posX = Math.random() * 100;
-                const duration = 6 + Math.random() * 10;
-                const delay = Math.random() * 10;
-                const opacity = 0.4 + Math.random() * 0.4;
-                
-                particle.style.fontSize = `${size}px`;
-                particle.style.color = colors[Math.floor(Math.random() * colors.length)];
-                particle.style.left = `${posX}%`;
-                particle.style.opacity = opacity;
-                particle.style.animationDuration = `${duration}s`;
-                particle.style.animationDelay = `${delay}s`;
-                
-                container.appendChild(particle);
-            }
-        }
-        
-        function createGlowLights() {
-            const container = document.getElementById('glow-lights');
-            const lightCount = 20;
-            
-            const colors = ['#f97316', '#7c3aed', '#22c55e', '#facc15'];
-            
-            for (let i = 0; i < lightCount; i++) {
-                const light = document.createElement('div');
-                light.className = 'glow-light';
-                
-                // Random properties
-                const posX = Math.random() * 100;
-                const posY = Math.random() * 100;
-                const color = colors[Math.floor(Math.random() * colors.length)];
-                const delay = Math.random() * 2;
-                
-                light.style.left = `${posX}%`;
-                light.style.top = `${posY}%`;
-                light.style.backgroundColor = color;
-                light.style.animationDelay = `${delay}s`;
-                light.style.boxShadow = `0 0 8px ${color}`;
-                
-                container.appendChild(light);
-            }
-        }
-        
-        function addWitchHatsToCards() {
-            const nameCards = document.querySelectorAll('.name-card');
-            nameCards.forEach(card => {
-                const hat = document.createElement('div');
-                hat.className = 'witch-hat';
-                card.appendChild(hat);
-            });
-        }
-        
-        // Function to play music automatically
-        function playBackgroundMusic() {
-            const backgroundMusic = document.getElementById('background-music');
-            if (backgroundMusic) {
-                // Set music to play automatically
-                backgroundMusic.volume = 0.3;
-                
-                // Modern browsers require user interaction for audio
-                // We'll play it after a user interaction (loading screen click)
-                document.addEventListener('click', function initAudio() {
-                    backgroundMusic.play().then(() => {
-                        console.log("Music started playing automatically");
-                        // Update music button icon
-                        const musicIcon = document.querySelector('#musicToggle i');
-                        if (musicIcon) {
-                            musicIcon.classList.remove('fa-volume-mute');
-                            musicIcon.classList.add('fa-volume-up');
-                        }
-                    }).catch(e => {
-                        console.log("Auto-play prevented, waiting for user interaction");
-                    });
-                    
-                    // Remove the event listener after first click
-                    document.removeEventListener('click', initAudio);
-                }, { once: true });
-            }
-        }
-        
-        // Hide the loading screen once the page is actually ready
-        // (the 5-second hard cap in <head> covers the slow/failure case).
-        let loadingScreenHidden = false;
-        function hideLoadingScreen() {
-            if (loadingScreenHidden) return;
-            loadingScreenHidden = true;
-            const loadingScreen = document.getElementById('loading-screen');
-            if (!loadingScreen) return;
-            loadingScreen.style.opacity = '0';
-            setTimeout(function() {
-                loadingScreen.style.display = 'none';
-                setTimeout(addWitchHatsToCards, 500);
-            }, 500);
-        }
+    (function () {
+        'use strict';
 
-        window.addEventListener('load', function() {
-            // Create minimal Halloween decorations
-            createSpookyParticles();
-            createGlowLights();
-            
-            // Start playing background music
-            playBackgroundMusic();
-            
-            // Hide loading screen a moment after everything's ready
-            setTimeout(hideLoadingScreen, 400);
-        });
-        
-        // Names array with descriptions
-        const names = [
-            {
-                name: "Yusif",
-                description: '<i class="fa-solid fa-music"></i> DJ • Website Host',
-                host: true
-            },
-            {
-                name: "Kenan",
-                description: '<i class="fa-solid fa-basketball"></i> Basketball Player • Website Host',
-                host: true
-            },
+        var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-            { name: "Emil", description: "Description not assigned" },
-            { name: "Khadija", description: "Description not assigned" },
-            { name: "Maryam", description: "Description not assigned" },
-            { name: "Murad", description: "Description not assigned" },
-            { name: "Tahir", description: "Description not assigned" },
-            { name: "Ulvi", description: "Description not assigned" },
-            { name: "Ummulbanu", description: "Description not assigned" },
-            { name: "Vasilisa", description: "Description not assigned" },
-            { name: "Aliya", description: "Description not assigned" },
-            { name: "Daniya", description: "Description not assigned" },
-            { name: "Tamerlan", description: "Description not assigned" },
-            { name: "Kanan", description: "Description not assigned" },
-            { name: "Safia", description: "Description not assigned" },
-            { name: "Bahruza", description: "Description not assigned" },
-            { name: "Nijat", description: "Description not assigned" },
-            { name: "Yasin", description: "Description not assigned" },
-            { name: "Matin", description: "Description not assigned" },
-            { name: "Illia", description: "Description not assigned" },
-            { name: "Safiyya", description: "Description not assigned" },
-            { name: "Madina", description: "Description not assigned" },
-            { name: "Vagif", description: "Description not assigned" }
+        /* ---------- Class list (same as the main page) ---------- */
+        var people = [
+            { name: 'Yusif',     desc: 'DJ • Website Host',          icon: 'fa-headphones',   host: true },
+            { name: 'Kenan',     desc: 'Basketball Player • Website Host', icon: 'fa-basketball', host: true },
+            { name: 'Emil',      desc: 'Playing Games',              icon: 'fa-gamepad' },
+            { name: 'Khadija',   desc: 'Violin',                     icon: 'fa-music' },
+            { name: 'Maryam',    desc: 'Tennis',                     icon: 'fa-medal' },
+            { name: 'Murad',     desc: 'Playing Video Games',        icon: 'fa-gamepad' },
+            { name: 'Tahir',     desc: 'Archery',                    icon: 'fa-bullseye' },
+            { name: 'Ulvi',      desc: 'Hanging Out With Friends',   icon: 'fa-users' },
+            { name: 'Ummulbanu', desc: 'Ski',                        icon: 'fa-person-skiing' },
+            { name: 'Vasilisa',  desc: 'Playing Drums & Guitar',     icon: 'fa-drum' },
+            { name: 'Aliya',     desc: 'Piano CO - Host',            icon: 'fa-music' },
+            { name: 'Daniya',    desc: 'Creating Skins for Games',   icon: 'fa-palette' },
+            { name: 'Tamerlan',  desc: 'Handball',                   icon: 'fa-hand' },
+            { name: 'Safia',     desc: 'Volleyball CO - Host',       icon: 'fa-volleyball' },
+            { name: 'Bahruza',   desc: 'Badminton',                  icon: 'fa-feather' },
+            { name: 'Nijat',     desc: 'Chess',                      icon: 'fa-chess' },
+            { name: 'Yasin',     desc: 'Interested In Cars',         icon: 'fa-car' },
+            { name: 'Matin',     desc: 'Padel',                      icon: 'fa-table-tennis-paddle-ball' },
+            { name: 'Illia',     desc: 'Bicycle',                    icon: 'fa-bicycle' },
+            { name: 'Safiyya',   desc: 'Drawing',                    icon: 'fa-palette' },
+            { name: 'Madina',    desc: 'Reading & Dancing',          icon: 'fa-book-open' },
+            { name: 'Vagif',     desc: 'Swimming',                   icon: 'fa-person-swimming' }
         ];
 
-        // Colors for cards
-        const cardColors = [
-            "from-cyan-500 to-sky-500",
-            "from-red-500 to-pink-500",
-            "from-indigo-500 to-purple-500",
-            "from-teal-500 to-blue-500",
-            "from-purple-500 to-pink-500",
-            "from-cyan-500 to-blue-500",
-            "from-orange-500 to-red-500",
-            "from-green-500 to-cyan-500",
-            "from-pink-500 to-rose-500",
-            "from-blue-500 to-indigo-500",
-            "from-emerald-500 to-teal-500",
-            "from-violet-500 to-purple-500",
-            "from-rose-500 to-pink-500",
-            "from-cyan-500 to-sky-500",
-            "from-fuchsia-500 to-pink-500",
-            "from-lime-500 to-green-500"
-        ];
+        // pumpkin, slime green, ghost violet, blood red, candle yellow
+        var accents = ['255,122,26', '166,255,60', '181,123,255', '255,61,90', '255,194,51'];
 
-        // Icons for cards
-        const icons = [
-            "music", "gift", "feather", "moon", "sun", "cpu", "cloud", "shield", "bell", "bell", 
-            "camera", "video", "star", "feather", "video-off", "key", "smile", "smile", "paperclip", 
-            "camera", "tv"
-        ];
-        
-        // Generate name cards
-        const gridContainer = document.querySelector('.grid');
-        
-        names.forEach((nameObj, index) => {
-            const card = document.createElement('div');
-            const gradientClass = cardColors[index % cardColors.length];
-            card.className = `name-card bg-gradient-to-br ${gradientClass} rounded-3xl p-6 md:p-10 text-white shadow-2xl transform transition-all duration-500 hover:shadow-2xl relative overflow-hidden h-full`;
-            card.setAttribute('data-aos', 'fade-up');
-            card.setAttribute('data-aos-delay', `${index * 50}`);
-            
-            card.innerHTML = `
-                ${nameObj.host ? '<div class="absolute top-3 right-3 md:top-4 md:right-4 bg-white/25 backdrop-blur-sm rounded-full p-2 md:p-2.5" title="Website Host"><i class="fa-solid fa-crown text-sm md:text-base"></i></div>' : ''}
-                <div class="flex justify-center mb-4 md:mb-6">
-                    <div class="bg-white/20 p-4 md:p-5 rounded-full">
-                        <i data-feather="${icons[index % icons.length]}" class="w-12 h-12 md:w-16 md:h-16"></i>
-                    </div>
-                </div>
-                <h2 class="name-title text-3xl md:text-5xl font-bold mb-3 md:mb-5 text-center gradient-text">${nameObj.name}</h2>
-                <p class="text-center text-white/90 text-lg md:text-xl mb-4 md:mb-5">${nameObj.description}</p>
-            `;
-            
-            gridContainer.appendChild(card);
+        var grid = document.getElementById('grid');
+        var cards = [];
+        people.forEach(function (p, i) {
+            var card = document.createElement('article');
+            card.className = 'card';
+            card.style.setProperty('--a', accents[i % accents.length]);
+
+            if (p.host) {
+                var crown = document.createElement('span');
+                crown.className = 'crown';
+                crown.title = 'Website host';
+                crown.setAttribute('role', 'img');
+                crown.setAttribute('aria-label', 'Website host');
+                crown.innerHTML = '<i class="fa-solid fa-crown" aria-hidden="true"></i>';
+                card.appendChild(crown);
+            }
+
+            var icon = document.createElement('div');
+            icon.className = 'icon';
+            icon.innerHTML = '<i class="fa-solid ' + p.icon + '" aria-hidden="true"></i>';
+
+            var name = document.createElement('h2');
+            name.textContent = p.name;
+
+            var desc = document.createElement('p');
+            desc.textContent = p.desc;
+
+            card.appendChild(icon);
+            card.appendChild(name);
+            card.appendChild(desc);
+            grid.appendChild(card);
+            cards.push(card);
         });
-        
-        // Reinitialize Feather Icons after adding elements
-        feather.replace();
-        
-        // Dark mode toggle functionality
-        const darkModeToggle = document.getElementById('darkModeToggle');
-        const toggleIcon = darkModeToggle.querySelector('i');
-        
-        // Check for saved theme preference
-        const currentTheme = localStorage.getItem('theme');
-        
-        if (currentTheme === 'dark') {
-            document.body.classList.add('dark-mode');
-            toggleIcon.classList.remove('fa-moon');
-            toggleIcon.classList.add('fa-sun');
-        }
-        
-        darkModeToggle.addEventListener('click', () => {
-            document.body.classList.toggle('dark-mode');
-            
-            // Update icon
-            if (document.body.classList.contains('dark-mode')) {
-                toggleIcon.classList.remove('fa-moon');
-                toggleIcon.classList.add('fa-sun');
-                localStorage.setItem('theme', 'dark');
-            } else {
-                toggleIcon.classList.remove('fa-sun');
-                toggleIcon.classList.add('fa-moon');
-                localStorage.setItem('theme', 'light');
-            }
-        });
-        
-        // Music toggle functionality
-        const musicToggle = document.getElementById('musicToggle');
-        const musicIcon = musicToggle.querySelector('i');
-        const backgroundMusic = document.getElementById('background-music');
-        
-        // Set initial state - music is playing by default
-        musicIcon.classList.remove('fa-volume-mute');
-        musicIcon.classList.add('fa-volume-up');
-        localStorage.setItem('music', 'playing');
-        
-        musicToggle.addEventListener('click', () => {
-            if (backgroundMusic.paused) {
-                backgroundMusic.play().catch(e => {
-                    console.log("Audio play prevented by browser");
-                });
-                musicIcon.classList.remove('fa-volume-mute');
-                musicIcon.classList.add('fa-volume-up');
-                localStorage.setItem('music', 'playing');
-            } else {
-                backgroundMusic.pause();
-                musicIcon.classList.remove('fa-volume-up');
-                musicIcon.classList.add('fa-volume-mute');
-                localStorage.setItem('music', 'paused');
-            }
-        });
-        
-        // Create background stars
-        function createStars() {
-            const container = document.getElementById('stars-container');
-            const starCount = 100;
-            
-            for (let i = 0; i < starCount; i++) {
-                const star = document.createElement('div');
-                star.classList.add('star');
-                
-                // Random properties
-                const size = Math.random() * 3;
-                const posX = Math.random() * 100;
-                const posY = Math.random() * 100;
-                const duration = 2 + Math.random() * 5;
-                const delay = Math.random() * 5;
-                
-                star.style.width = `${size}px`;
-                star.style.height = `${size}px`;
-                star.style.left = `${posX}%`;
-                star.style.top = `${posY}%`;
-                star.style.setProperty('--duration', `${duration}s`);
-                star.style.animationDelay = `${delay}s`;
-                
-                container.appendChild(star);
-            }
-        }
-        
-        // Initialize on load
-        document.addEventListener('DOMContentLoaded', function() {
-            createStars();
-            
-            // Make iframe responsive
-            const iframe = document.querySelector('iframe');
-            if (iframe) {
-                iframe.style.maxWidth = '100%';
-                iframe.style.height = 'auto';
-                iframe.style.aspectRatio = '807 / 500';
-            }
-            
-            // Add hover animations to name cards
-            const nameCards = document.querySelectorAll('.name-card');
-            nameCards.forEach(card => {
-                card.addEventListener('mouseenter', function() {
-                    if (typeof anime !== 'undefined') {
-                        anime({
-                            targets: this,
-                            scale: 1.05,
-                            rotateY: '5deg',
-                            duration: 600,
-                            easing: 'easeOutElastic'
-                        });
+
+        /* ---------- Cards fade in as they scroll into view ---------- */
+        if ('IntersectionObserver' in window) {
+            var io = new IntersectionObserver(function (entries) {
+                entries.forEach(function (e) {
+                    if (e.isIntersecting) {
+                        e.target.classList.add('in');
+                        io.unobserve(e.target);
                     }
                 });
-                
-                card.addEventListener('mouseleave', function() {
-                    if (typeof anime !== 'undefined') {
-                        anime({
-                            targets: this,
-                            scale: 1,
-                            rotateY: '0deg',
-                            duration: 600,
-                            easing: 'easeOutElastic'
-                        });
-                    }
+            }, { threshold: 0.12 });
+            cards.forEach(function (c) { io.observe(c); });
+        } else {
+            cards.forEach(function (c) { c.classList.add('in'); });
+        }
+
+        /* ---------- Bats ---------- */
+        function makeBats() {
+            if (reduceMotion) return;
+            var wrap = document.getElementById('bats');
+            var count = window.innerWidth < 640 ? 4 : 7;
+            for (var i = 0; i < count; i++) {
+                var b = document.createElement('div');
+                b.className = 'bat' + (Math.random() < 0.4 ? ' rev' : '');
+                b.style.top = (6 + Math.random() * 50) + 'vh';
+                b.style.width = (22 + Math.random() * 26) + 'px';
+                b.style.animationDuration = (14 + Math.random() * 14) + 's';
+                b.style.animationDelay = (i === 0 ? 1.2 : Math.random() * 16) + 's';
+                b.innerHTML = '<svg viewBox="0 0 64 32" aria-hidden="true"><use href="#bat"></use></svg>';
+                wrap.appendChild(b);
+            }
+        }
+
+        /* ---------- Darker mode (shares the "theme" key with the other pages) ---------- */
+        var darkBtn = document.getElementById('darkToggle');
+        function applyTheme(dark) {
+            document.body.classList.toggle('dark-mode', dark);
+            darkBtn.querySelector('i').className = dark ? 'fa-solid fa-sun' : 'fa-solid fa-moon';
+            darkBtn.setAttribute('aria-pressed', String(dark));
+        }
+        try { applyTheme(localStorage.getItem('theme') === 'dark'); } catch (e) { applyTheme(false); }
+        darkBtn.addEventListener('click', function () {
+            var dark = !document.body.classList.contains('dark-mode');
+            applyTheme(dark);
+            try { localStorage.setItem('theme', dark ? 'dark' : 'light'); } catch (e) {}
+        });
+
+        /* ---------- Spooky sound: generated in the browser, no audio file needed ---------- */
+        var Spook = (function () {
+            var ctx = null, master = null, noteTimer = null, playing = false;
+            var scale = [440, 493.88, 523.25, 587.33, 659.25, 698.46, 830.61]; // A harmonic minor
+
+            function build() {
+                var AC = window.AudioContext || window.webkitAudioContext;
+                if (!AC) return false;
+                ctx = new AC();
+                master = ctx.createGain();
+                master.gain.value = 0;
+                master.connect(ctx.destination);
+
+                // low drone through a slowly moving filter
+                var lp = ctx.createBiquadFilter();
+                lp.type = 'lowpass';
+                lp.frequency.value = 380;
+                lp.Q.value = 2;
+                lp.connect(master);
+                [[55, 'sawtooth', 0.07], [55.7, 'sawtooth', 0.07], [82.4, 'triangle', 0.05]].forEach(function (d) {
+                    var o = ctx.createOscillator();
+                    var g = ctx.createGain();
+                    o.type = d[1];
+                    o.frequency.value = d[0];
+                    g.gain.value = d[2];
+                    o.connect(g);
+                    g.connect(lp);
+                    o.start();
                 });
-            });
-            
-            // Animate header text
-            if (typeof anime !== 'undefined') {
-                anime({
-                    targets: '.name-title',
-                    translateY: [-70, 0],
-                    opacity: [0, 1],
-                    duration: 2500,
-                    easing: 'easeOutExpo'
+                var lfo = ctx.createOscillator();
+                var lfoGain = ctx.createGain();
+                lfo.frequency.value = 0.07;
+                lfoGain.gain.value = 140;
+                lfo.connect(lfoGain);
+                lfoGain.connect(lp.frequency);
+                lfo.start();
+
+                // echo for the music-box notes
+                var delay = ctx.createDelay(1);
+                var fb = ctx.createGain();
+                delay.delayTime.value = 0.45;
+                fb.gain.value = 0.35;
+                delay.connect(fb);
+                fb.connect(delay);
+                delay.connect(master);
+                ctx._echo = delay;
+                return true;
+            }
+
+            function note() {
+                if (!playing) return;
+                var t = ctx.currentTime;
+                var f = scale[Math.floor(Math.random() * scale.length)];
+                [[f, 0.09], [f * 2, 0.03]].forEach(function (p) {
+                    var o = ctx.createOscillator();
+                    var g = ctx.createGain();
+                    o.type = 'sine';
+                    o.frequency.value = p[0];
+                    g.gain.setValueAtTime(0.0001, t);
+                    g.gain.exponentialRampToValueAtTime(p[1], t + 0.02);
+                    g.gain.exponentialRampToValueAtTime(0.0001, t + 1.9);
+                    o.connect(g);
+                    g.connect(master);
+                    g.connect(ctx._echo);
+                    o.start(t);
+                    o.stop(t + 2);
                 });
+                noteTimer = setTimeout(note, 900 + Math.random() * 1500);
+            }
+
+            return {
+                start: function () {
+                    if (!ctx && !build()) return false;
+                    ctx.resume();
+                    master.gain.cancelScheduledValues(ctx.currentTime);
+                    master.gain.linearRampToValueAtTime(0.5, ctx.currentTime + 1.5);
+                    playing = true;
+                    clearTimeout(noteTimer);
+                    note();
+                    return true;
+                },
+                stop: function () {
+                    if (!ctx) return;
+                    playing = false;
+                    clearTimeout(noteTimer);
+                    master.gain.cancelScheduledValues(ctx.currentTime);
+                    master.gain.linearRampToValueAtTime(0, ctx.currentTime + 0.6);
+                },
+                pauseTab: function () { if (ctx && playing) ctx.suspend(); },
+                resumeTab: function () { if (ctx && playing) ctx.resume(); },
+                isPlaying: function () { return playing; }
+            };
+        })();
+
+        var musicBtn = document.getElementById('musicToggle');
+        function setMusicUI(on) {
+            musicBtn.querySelector('i').className = on ? 'fa-solid fa-volume-high' : 'fa-solid fa-volume-xmark';
+            musicBtn.setAttribute('aria-pressed', String(on));
+            musicBtn.setAttribute('aria-label', on ? 'Turn spooky sound off' : 'Turn spooky sound on');
+        }
+        musicBtn.addEventListener('click', function () {
+            if (Spook.isPlaying()) {
+                Spook.stop();
+                setMusicUI(false);
+            } else {
+                setMusicUI(Spook.start());
             }
         });
+        document.addEventListener('visibilitychange', function () {
+            if (document.hidden) Spook.pauseTab(); else Spook.resumeTab();
+        });
+
+        /* ---------- Loading screen ---------- */
+        var hidden = false;
+        function hideLoader() {
+            if (hidden) return;
+            hidden = true;
+            var ls = document.getElementById('loading-screen');
+            if (!ls) return;
+            ls.style.opacity = '0';
+            setTimeout(function () { ls.style.display = 'none'; }, 500);
+        }
+        window.addEventListener('load', function () {
+            makeBats();
+            setTimeout(hideLoader, 400);
+        });
+    })();
     </script>
 </body>
 </html>
