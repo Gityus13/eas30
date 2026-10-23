@@ -23,8 +23,9 @@ export async function onRequestGet({ request, env, params }) {
     const url = new URL(request.url);
 
     const secure = isHttps(request);
+    const returnOrigin = (env.SITE_URL || "https://eas30.site").replace(/\\/$/, "");
     const fail = (code) =>
-        redirect(`/login.html?error=${code}`, [clearCookie(STATE_COOKIE, "/api/auth", secure)]);
+        redirect(`${returnOrigin}/login.html?error=${code}`, [clearCookie(STATE_COOKIE, "/api/auth", secure)]);
 
     if (!provider || !providerReady(name, env)) return fail("unconfigured");
 
@@ -42,7 +43,7 @@ export async function onRequestGet({ request, env, params }) {
             const saved = getCookie(request, STATE_COOKIE);
             if (!code || !state || !safeEqual(saved || "", `${name}.${state}`)) return fail("state");
 
-            const redirectUri = `${siteOrigin(request, env)}/api/auth/${name}/callback`;
+            const redirectUri = `${new URL(request.url).origin}/api/auth/${name}/callback`;
             user = await provider.fetchUser(env, code, redirectUri);
         }
     } catch (err) {
@@ -51,7 +52,7 @@ export async function onRequestGet({ request, env, params }) {
     }
 
     const token = await signSession(env, user);
-    return redirect("/login.html?auth=ok", [
+    return redirect(`${returnOrigin}/login.html?auth=ok`, [
         makeCookie(SESSION_COOKIE, token, { maxAge: SESSION_MAX_AGE, secure }),
         clearCookie(STATE_COOKIE, "/api/auth", secure),
     ]);
