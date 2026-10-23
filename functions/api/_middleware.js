@@ -4,7 +4,8 @@ const ALLOWED_ORIGINS = new Set([
     "https://www.eas30.site",
 ]);
 
-export async function onRequest(context) {\n    const { request } = context;
+export async function onRequest(context) {
+    const { request } = context;
     const origin = request.headers.get("Origin");
     const allowed = origin && ALLOWED_ORIGINS.has(origin);
     const headers = new Headers();
