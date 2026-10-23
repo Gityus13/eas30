@@ -322,6 +322,7 @@
 
     <script>
         const GOOGLE_CLIENT_ID = "695398839217-ql189kgqbelkpb1taavqdgoers63uuh0.apps.googleusercontent.com";
+        const AUTH_ORIGIN = "https://auth.eas30.site";
         const STORAGE_KEY = "eas_hobbies_user";
 
         const ERRORS = {
@@ -357,7 +358,7 @@
             const key = "eas_welcomed_" + user.id;
             if (localStorage.getItem(key)) return;
             localStorage.setItem(key, "1");
-            fetch("/api/login-email", { method: "POST", keepalive: true }).catch(() => {});
+            fetch(AUTH_ORIGIN + "/api/login-email", { method: "POST", credentials: "include", keepalive: true }).catch(() => {});
         }
 
         function parseJwt(token) {
@@ -378,7 +379,8 @@
 
         async function onGoogleCredential(response) {
             try {
-                const res = await fetch("/api/auth/google", {
+                const res = await fetch(AUTH_ORIGIN + "/api/auth/google", {
+                    credentials: "include",
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({ credential: response.credential })
@@ -455,7 +457,7 @@
             s.setAttribute("data-size", "large");
             s.setAttribute("data-radius", "20");
             s.setAttribute("data-userpic", "false");
-            s.setAttribute("data-auth-url", location.origin + "/api/auth/telegram/callback");
+            s.setAttribute("data-auth-url", AUTH_ORIGIN + "/api/auth/telegram/callback");
             slot.hidden = false;
             slot.appendChild(s);
         }
@@ -473,7 +475,7 @@
                 "To test Discord, GitHub, Microsoft and Telegram, run: npx wrangler pages dev . --port 8788 " +
                 "and open http://localhost:8788 (see AUTH_SETUP.md).";
             try {
-                const res = await fetch("/api/auth/providers", { cache: "no-store" });
+                const res = await fetch(AUTH_ORIGIN + "/api/auth/providers", { cache: "no-store", credentials: "include" });
                 if (!res.ok) {
                     devHint(NO_SERVER);
                     return;
@@ -531,7 +533,7 @@
             // Back from Discord / GitHub / Microsoft / Telegram: load the verified user.
             if (params.get("auth") === "ok") {
                 try {
-                    const res = await fetch("/api/auth/me", { cache: "no-store" });
+                    const res = await fetch(AUTH_ORIGIN + "/api/auth/me", { cache: "no-store", credentials: "include" });
                     if (res.ok) {
                         const data = await res.json();
                         if (data.user) {
@@ -549,6 +551,9 @@
                 return;
             }
 
+            document.getElementById("btn-discord").href = AUTH_ORIGIN + "/api/auth/discord/start";
+            document.getElementById("btn-github").href = AUTH_ORIGIN + "/api/auth/github/start";
+            document.getElementById("btn-microsoft").href = AUTH_ORIGIN + "/api/auth/microsoft/start";
             initGoogleSignIn();
             loadProviders();
         })();
