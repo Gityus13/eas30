@@ -14,6 +14,10 @@
             box-sizing: border-box;
         }
 
+        [hidden] {
+            display: none !important;
+        }
+
         body {
             font-family: 'Space Grotesk', sans-serif;
             background: linear-gradient(45deg, #050b18, #0b1f3a, #123a6b, #0e5a7a, #0f766e, #0b3b55, #0a1a33, #0f2a4a);
@@ -92,33 +96,98 @@
             padding-left: 12px;
         }
 
-        .google-btn {
+        /* ---------- sign-in buttons ---------- */
+
+        .provider-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .google-slot {
+            display: flex;
+            justify-content: center;
+            min-height: 44px;
+        }
+
+        .telegram-slot {
+            display: flex;
+            justify-content: center;
+            min-height: 40px;
+        }
+
+        .provider-btn {
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 12px;
             width: 100%;
-            background: white;
-            border: 1px solid #dadce0;
+            border: 1px solid transparent;
             border-radius: 40px;
-            padding: 14px 0;
+            padding: 13px 0;
+            font-family: inherit;
             font-size: 1rem;
             font-weight: 500;
-            color: #3c4043;
+            text-decoration: none;
             cursor: pointer;
-            transition: all 0.2s ease;
-            margin-bottom: 16px;
+            transition: transform 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
         }
 
-        .google-btn:hover {
-            background: #f8f9fa;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        .provider-btn i {
+            font-size: 1.25rem;
+        }
+
+        .provider-btn:hover {
             transform: translateY(-1px);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
         }
 
-        .google-btn i {
-            color: #4285f4;
-            font-size: 1.2rem;
+        .provider-btn.discord {
+            background: #5865f2;
+            color: #fff;
+        }
+        .provider-btn.discord:hover {
+            background: #4752c4;
+        }
+
+        .provider-btn.github {
+            background: #24292f;
+            color: #fff;
+            border-color: rgba(255, 255, 255, 0.18);
+        }
+        .provider-btn.github:hover {
+            background: #32383f;
+        }
+
+        .provider-btn.microsoft {
+            background: #fff;
+            color: #3c4043;
+            border-color: #dadce0;
+        }
+        .provider-btn.microsoft:hover {
+            background: #f8f9fa;
+        }
+
+        .ms-logo {
+            display: grid;
+            grid-template-columns: repeat(2, 9px);
+            grid-template-rows: repeat(2, 9px);
+            gap: 2px;
+        }
+        .ms-logo i {
+            display: block;
+            width: 9px;
+            height: 9px;
+        }
+        .ms-logo i:nth-child(1) { background: #f25022; }
+        .ms-logo i:nth-child(2) { background: #7fba00; }
+        .ms-logo i:nth-child(3) { background: #00a4ef; }
+        .ms-logo i:nth-child(4) { background: #ffb900; }
+
+        .provider-btn:focus-visible,
+        .guest-link:focus-visible {
+            outline: 3px solid #ffb347;
+            outline-offset: 3px;
         }
 
         .divider {
@@ -138,6 +207,7 @@
             background: none;
             border: none;
             color: #ffb347;
+            font-family: inherit;
             font-weight: 500;
             cursor: pointer;
             font-size: 0.9rem;
@@ -179,7 +249,23 @@
             font-size: 0.85rem;
             display: none;
         }
-        
+
+        .dev-hint {
+            margin-top: 16px;
+            padding: 10px 12px;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.08);
+            color: #cdd9ff;
+            font-size: 0.8rem;
+            line-height: 1.4;
+            text-align: left;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            body { animation: none; }
+            .provider-btn { transition: none; }
+            .provider-btn:hover { transform: none; }
+        }
     </style>
 </head>
 <body>
@@ -191,7 +277,7 @@
 
     <div class="login-card">
         <div class="logo-area">
-            <img src="logo.png" alt="Logo" class="logo-img">
+            <img src="logo.png" alt="EAS30 logo" class="logo-img" onerror="this.style.display='none'">
             <div class="brand">EAS30</div>
         </div>
         <h2>Welcome back</h2>
@@ -199,9 +285,31 @@
             Sign in to access the full gallery, games & community.
         </div>
 
-        <div id="errorMsg" class="error-message"></div>
+        <div id="errorMsg" class="error-message" role="alert"></div>
 
-<div id="googleLoginBtn"></div>
+        <div class="provider-list">
+            <div id="googleLoginBtn" class="google-slot"></div>
+
+            <!-- These stay hidden until the server says the provider is set up -->
+            <a id="btn-discord" class="provider-btn discord" href="/api/auth/discord/start" hidden>
+                <i class="fa-brands fa-discord" aria-hidden="true"></i>
+                <span>Continue with Discord</span>
+            </a>
+
+            <a id="btn-github" class="provider-btn github" href="/api/auth/github/start" hidden>
+                <i class="fa-brands fa-github" aria-hidden="true"></i>
+                <span>Continue with GitHub</span>
+            </a>
+
+            <a id="btn-microsoft" class="provider-btn microsoft" href="/api/auth/microsoft/start" hidden>
+                <span class="ms-logo" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+                <span>Continue with Microsoft</span>
+            </a>
+
+            <div id="telegramSlot" class="telegram-slot" hidden></div>
+        </div>
+
+        <p id="devHint" class="dev-hint" hidden></p>
 
         <div class="divider">
             <div class="divider-line"></div>
@@ -213,40 +321,45 @@
     </div>
 
     <script>
-        // YOUR GOOGLE CLIENT ID
         const GOOGLE_CLIENT_ID = "695398839217-ql189kgqbelkpb1taavqdgoers63uuh0.apps.googleusercontent.com";
         const STORAGE_KEY = "eas_hobbies_user";
-        
+
+        const ERRORS = {
+            cancelled: "Sign-in was cancelled.",
+            state: "That sign-in link expired. Please try again.",
+            exchange: "Couldn't finish signing in with that provider. Please try again.",
+            unconfigured: "That sign-in method isn't available yet.",
+            telegram: "Telegram couldn't be verified. Please try again.",
+            google: "Google sign-in couldn't be verified. Please try again.",
+            generic: "Something went wrong. Please try again."
+        };
+
         function showError(message) {
             const errorDiv = document.getElementById('errorMsg');
             errorDiv.textContent = message;
             errorDiv.style.display = 'block';
             setTimeout(() => {
                 errorDiv.style.display = 'none';
-            }, 5000);
+            }, 6000);
         }
-        
-        async function loginUser(userData) {
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(userData));
-            if (userData.provider === "google" && userData.email) {
-    try {
-        await fetch("https://eas30-email-api.farid-kurba.workers.dev", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                email: userData.email,
-                name: userData.name
-            })
-        });
-    } catch (error) {
-        console.error("Welcome email failed:", error);
-    }
-}
+
+        // Save the user for the rest of the site, then go to the home page.
+        function finishLogin(user) {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(user));
+            sendWelcomeOnce(user);
             window.location.href = "index.html";
         }
-        
+
+        // One welcome email per account per browser. The server only ever emails
+        // the verified address on the session, never an address sent by the page.
+        function sendWelcomeOnce(user) {
+            if (!user.email || !user.id || user.provider === "guest") return;
+            const key = "eas_welcomed_" + user.id;
+            if (localStorage.getItem(key)) return;
+            localStorage.setItem(key, "1");
+            fetch("/api/login-email", { method: "POST", keepalive: true }).catch(() => {});
+        }
+
         function parseJwt(token) {
             try {
                 const base64Url = token.split('.')[1];
@@ -260,90 +373,198 @@
                 return null;
             }
         }
-        
-        // Initialize Google Sign-In - NO SPINNER, DIRECT POPUP
+
+        /* ---------- Google ---------- */
+
+        async function onGoogleCredential(response) {
+            try {
+                const res = await fetch("/api/auth/google", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ credential: response.credential })
+                });
+                if (res.ok) {
+                    const data = await res.json();
+                    finishLogin(data.user);
+                    return;
+                }
+                if (res.status !== 404) {
+                    showError(ERRORS.google);
+                    return;
+                }
+                // 404 = no server functions here (plain static hosting). Fall through to the old local login.
+            } catch (e) {
+                showError(ERRORS.generic);
+                return;
+            }
+
+            const p = parseJwt(response.credential);
+            if (p) {
+                finishLogin({
+                    id: "google:" + p.sub,
+                    name: p.name,
+                    email: p.email,
+                    picture: p.picture,
+                    provider: "google"
+                });
+            } else {
+                showError(ERRORS.google);
+            }
+        }
+
         function initGoogleSignIn() {
-            // Load Google script
             const script = document.createElement('script');
             script.src = 'https://accounts.google.com/gsi/client';
             script.onload = () => {
-                console.log("Google Sign-In loaded");
-                
-                // Initialize with popup mode
                 google.accounts.id.initialize({
                     client_id: GOOGLE_CLIENT_ID,
-                    callback: (response) => {
-                        console.log("Google callback received");
-                        const userData = parseJwt(response.credential);
-                        if (userData) {
-                            loginUser({
-                                name: userData.name,
-                                email: userData.email,
-                                picture: userData.picture,
-                                provider: "google"
-                            });
-                        } else {
-                            showError("Failed to get user information. Please try again.");
-                        }
-                    },
+                    callback: onGoogleCredential,
                     cancel_on_tap_outside: true
                 });
-                
-        // Render the official Google Sign-In button
-const googleBtn = document.getElementById('googleLoginBtn');
 
-// Remove our old custom button contents
-googleBtn.innerHTML = "";
+                const card = document.querySelector('.login-card');
+                const width = Math.max(200, Math.min(400, card.clientWidth - 60));
 
-// Let Google create the real working button
-google.accounts.id.renderButton(
-    googleBtn,
-    {
-        type: "standard",
-        theme: "outline",
-        size: "large",
-        text: "continue_with",
-        shape: "pill",
-        width: 420
-    }
-);
-
+                google.accounts.id.renderButton(
+                    document.getElementById('googleLoginBtn'),
+                    {
+                        type: "standard",
+                        theme: "outline",
+                        size: "large",
+                        text: "continue_with",
+                        shape: "pill",
+                        locale: "en",
+                        width: width
+                    }
+                );
             };
             script.onerror = () => {
-                console.error("Failed to load Google Sign-In");
                 showError("Failed to load Google Sign-In. Please refresh the page.");
             };
             document.head.appendChild(script);
         }
-        
-        // Guest login
+
+        /* ---------- Discord / GitHub / Microsoft / Telegram ---------- */
+
+        function mountTelegram(botUsername) {
+            const slot = document.getElementById('telegramSlot');
+            const s = document.createElement('script');
+            s.async = true;
+            s.src = "https://telegram.org/js/telegram-widget.js?22";
+            s.setAttribute("data-telegram-login", botUsername);
+            s.setAttribute("data-size", "large");
+            s.setAttribute("data-radius", "20");
+            s.setAttribute("data-userpic", "false");
+            s.setAttribute("data-auth-url", location.origin + "/api/auth/telegram/callback");
+            slot.hidden = false;
+            slot.appendChild(s);
+        }
+
+        // Only shown when you open the site on your own computer (localhost).
+        function devHint(message) {
+            if (!["localhost", "127.0.0.1"].includes(location.hostname)) return;
+            const el = document.getElementById("devHint");
+            el.textContent = message;
+            el.hidden = false;
+        }
+
+        async function loadProviders() {
+            const NO_SERVER = "Dev note: only Google and guest work on a plain static server. " +
+                "To test Discord, GitHub, Microsoft and Telegram, run: npx wrangler pages dev . --port 8788 " +
+                "and open http://localhost:8788 (see AUTH_SETUP.md).";
+            try {
+                const res = await fetch("/api/auth/providers", { cache: "no-store" });
+                if (!res.ok) {
+                    devHint(NO_SERVER);
+                    return;
+                }
+                const cfg = await res.json();
+                let shown = 0;
+                ["discord", "github", "microsoft"].forEach((name) => {
+                    if (cfg[name]) {
+                        document.getElementById("btn-" + name).hidden = false;
+                        shown++;
+                    }
+                });
+                if (cfg.telegram) {
+                    mountTelegram(cfg.telegram);
+                    shown++;
+                }
+                if (!shown) {
+                    devHint(cfg.sessions
+                        ? "Dev note: no providers are set up yet. Add their keys to .dev.vars and restart."
+                        : "Dev note: SESSION_SECRET is missing. Copy .dev.vars.example to .dev.vars, fill it in and restart.");
+                }
+            } catch (e) {
+                devHint(NO_SERVER);
+            }
+        }
+
+        /* ---------- Guest ---------- */
+
         function guestLogin() {
             const guestName = "Guest_" + Math.floor(Math.random() * 10000);
-            loginUser({
+            finishLogin({
+                id: "guest:" + guestName,
                 name: guestName,
                 email: null,
                 picture: "https://ui-avatars.com/api/?background=6c5ce7&color=fff&name=" + guestName.charAt(0),
                 provider: "guest"
             });
         }
-        
-        // Event listeners
+
         document.getElementById('guestBtn').addEventListener('click', guestLogin);
-        
-        // Start Google Sign-In
-        initGoogleSignIn();
-        
-        // Dark mode toggle
+
+        /* ---------- Start ---------- */
+
+        (async function start() {
+            const params = new URLSearchParams(location.search);
+
+            if (params.has("error") || params.has("auth")) {
+                history.replaceState(null, "", location.pathname);
+            }
+
+            if (params.get("error")) {
+                showError(ERRORS[params.get("error")] || ERRORS.generic);
+            }
+
+            // Back from Discord / GitHub / Microsoft / Telegram: load the verified user.
+            if (params.get("auth") === "ok") {
+                try {
+                    const res = await fetch("/api/auth/me", { cache: "no-store" });
+                    if (res.ok) {
+                        const data = await res.json();
+                        if (data.user) {
+                            finishLogin(data.user);
+                            return;
+                        }
+                    }
+                } catch (e) { /* handled below */ }
+                showError(ERRORS.generic);
+            }
+
+            // Already logged in? Go home.
+            if (localStorage.getItem(STORAGE_KEY)) {
+                window.location.href = "index.html";
+                return;
+            }
+
+            initGoogleSignIn();
+            loadProviders();
+        })();
+
+        /* ---------- Dark mode toggle ---------- */
+
         const darkModeToggle = document.getElementById('darkModeToggle');
         const toggleIcon = darkModeToggle.querySelector('i');
         const body = document.body;
-        
+
         if (localStorage.getItem('loginTheme') === 'dark') {
             body.classList.add('dark-mode');
             toggleIcon.classList.remove('fa-moon');
             toggleIcon.classList.add('fa-sun');
         }
-        
+
         darkModeToggle.addEventListener('click', () => {
             body.classList.toggle('dark-mode');
             if (body.classList.contains('dark-mode')) {
@@ -356,11 +577,6 @@ google.accounts.id.renderButton(
                 localStorage.setItem('loginTheme', 'light');
             }
         });
-        
-        // If already logged in, redirect to home
-        if (localStorage.getItem(STORAGE_KEY)) {
-            window.location.href = "index.html";
-        }
     </script>
 </body>
 </html>

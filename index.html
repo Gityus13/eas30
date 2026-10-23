@@ -5630,11 +5630,18 @@ document.addEventListener("DOMContentLoaded", function () {
                 dropdownPicture.src = user.picture;
             }
 
-            // Google or Guest
+            // Guest, or the provider they signed in with
+            const providerLabels = {
+                google: "Google account",
+                discord: "Discord account",
+                github: "GitHub account",
+                microsoft: "Microsoft account",
+                telegram: "Telegram account"
+            };
             if (user.provider === "guest") {
                 dropdownEmail.textContent = "Guest account";
             } else {
-                dropdownEmail.textContent = user.email || "Google account";
+                dropdownEmail.textContent = user.email || providerLabels[user.provider] || "Signed in";
             }
 
         } catch (error) {
@@ -5657,6 +5664,8 @@ document.addEventListener("DOMContentLoaded", function () {
     // LOG OUT
     logoutButton.addEventListener("click", function () {
         localStorage.removeItem(STORAGE_KEY);
+        // Also clear the server session cookie (ignored if the site has no server functions)
+        fetch("/api/auth/logout", { method: "POST", keepalive: true }).catch(function () {});
         window.location.reload();
     });
 
