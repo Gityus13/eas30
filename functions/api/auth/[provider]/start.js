@@ -10,7 +10,7 @@ export async function onRequestGet({ request, env, params }) {
     const provider = PROVIDERS[name];
 
     if (!provider || !provider.authorizeUrl || !providerReady(name, env)) {
-        return redirect(`${(env.SITE_URL || "https://eas30.site").replace(/\\/$/, "")}/login.html?error=unconfigured`);
+        return redirect(`${(env.SITE_URL || "https://eas30.site").replace(/\/$/, "")}/login.html?error=unconfigured`);
     }
 
     const state = randomHex(16);
