@@ -10,11 +10,11 @@ export async function onRequestGet({ request, env, params }) {
     const provider = PROVIDERS[name];
 
     if (!provider || !provider.authorizeUrl || !providerReady(name, env)) {
-        return redirect("/login.html?error=unconfigured");
+        return redirect(`${(env.SITE_URL || "https://eas30.site").replace(/\\/$/, "")}/login.html?error=unconfigured`);
     }
 
     const state = randomHex(16);
-    const redirectUri = `${siteOrigin(request, env)}/api/auth/${name}/callback`;
+    const redirectUri = `${new URL(request.url).origin}/api/auth/${name}/callback`;
 
     return redirect(provider.authorizeUrl(env, redirectUri, state), [
         makeCookie(STATE_COOKIE, `${name}.${state}`, {
