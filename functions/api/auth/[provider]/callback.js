@@ -23,7 +23,7 @@ export async function onRequestGet({ request, env, params }) {
     const url = new URL(request.url);
 
     const secure = isHttps(request);
-    const returnOrigin = (env.SITE_URL || "https://eas30.site").replace(/\\/$/, "");
+    const returnOrigin = (env.SITE_URL || "https://eas30.site").replace(/\/$/, "");
     const fail = (code) =>
         redirect(`${returnOrigin}/login.html?error=${code}`, [clearCookie(STATE_COOKIE, "/api/auth", secure)]);
 
