@@ -4,7 +4,7 @@ const ALLOWED_ORIGINS = new Set([
     "https://www.eas30.site",
 ]);
 
-export async function onRequest({ request, next }) {
+export async function onRequest(context) {\n    const { request } = context;
     const origin = request.headers.get("Origin");
     const allowed = origin && ALLOWED_ORIGINS.has(origin);
     const headers = new Headers();
@@ -18,7 +18,7 @@ export async function onRequest({ request, next }) {
     if (request.method === "OPTIONS") {
         return new Response(null, { status: allowed ? 204 : 403, headers });
     }
-    const response = await next();
+    const response = await context.next();
     if (!allowed) return response;
     const merged = new Headers(response.headers);
     for (const [key, value] of headers) {
