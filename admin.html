@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -470,7 +469,7 @@ $('birthdayForm').addEventListener('submit',function(e){
 
 /* Delete one record */
 function deleteBirthday(b,button){
-    if(!confirm('Permanently delete '+b.name+'\\'s birthday?'))return;
+    if(!confirm('Permanently delete '+b.name+"'s birthday?"))return;
 
     button.disabled=true;
     api('DELETE','?id='+encodeURIComponent(b.id))
