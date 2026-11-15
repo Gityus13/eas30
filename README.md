@@ -68,6 +68,7 @@ Type a code into the input bar at the top of the page to activate a mode:
 | `countdown.html` | 14-day song-change countdown (transparent, embeddable) |
 | `thanks.html` | Premium animated "Thank You" page after form submit |
 | `404.html` | Custom 404 error page |
+| `admin.html` | Admin page: start / stop birthday mode |
 | `NewYear.html` | New Year celebration page |
 
 ### 🔐 Authentication
@@ -78,23 +79,15 @@ Type a code into the input bar at the top of the page to activate a mode:
 - Session stored in `localStorage` under key `eas_hobbies_user`
 
 ### 🎂 Birthday System (Admin)
-Admins can trigger a birthday celebration for any student by writing to `localStorage`:
+Open **`/admin.html`**, enter the admin key, type a name and press **Start birthday mode**. For every
+visitor the named student's card becomes a birthday card (👑, glow, ribbon, age badge), the main page
+turns into a party (confetti, balloons, festive background) and a "Happy Birthday" banner appears on
+the main page and the Games / Hosts / School / Info / Sponsor pages. It turns off by itself at midnight
+(Baku time) or when you remove it. Needs a Cloudflare KV store and an `ADMIN_KEY` secret, see
+[`BIRTHDAY_SETUP.md`](BIRTHDAY_SETUP.md).
 
-```javascript
-localStorage.setItem('eas_public_birthday', JSON.stringify({
-  active: true,
-  name: 'Yusif',
-  age: 14,             // optional
-  message: 'Have a great day!'  // optional
-}));
-```
-
-This triggers:
-- A banner at the top of every page
-- Confetti rain
-- The named student's card gets a 👑 crown and special glow
-
-To deactivate: `localStorage.removeItem('eas_public_birthday')`
+> The old `localStorage` snippet that used to be documented here only changed the page in the browser
+> where it was run, so other visitors never saw it. It has been replaced by the shared system above.
 
 ### 🤖 AI Chat
 An embedded [Pickaxe](https://pickaxe.co) AI assistant is embedded in the main page.
@@ -143,6 +136,7 @@ eas30.site/
 ├── thanks.html         # Thank-you animation page
 ├── NewYear.html        # New Year page
 ├── 404.html            # Custom 404
+├── admin.html          # Admin page (birthday mode)
 │
 ├── sitemap.xml         # XML sitemap for SEO
 ├── robots.txt          # Search engine crawl rules

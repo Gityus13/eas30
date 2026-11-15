@@ -45,6 +45,10 @@
         "Every second is part of the story.": ["Hər saniyə hekayənin bir hissəsidir.", "Каждая секунда — часть нашей истории.", "Her saniye hikâyenin bir parçasıdır.", "Jede Sekunde ist Teil der Geschichte.", "Chaque seconde fait partie de l'histoire.", "Cada segundo es parte de la historia."],
         "Journey to 2030": ["2030-a gedən yol", "Путь к 2030", "2030'a yolculuk", "Reise bis 2030", "Le voyage vers 2030", "El camino hacia 2030"],
 
+        /* birthday mode */
+        "Happy Birthday,": ["Ad günün mübarək,", "С днём рождения,", "Doğum günün kutlu olsun,", "Alles Gute zum Geburtstag,", "Joyeux anniversaire,", "¡Feliz cumpleaños,"],
+        "Happy Birthday!": ["Ad günün mübarək!", "С днём рождения!", "Doğum günün kutlu olsun!", "Alles Gute zum Geburtstag!", "Joyeux anniversaire !", "¡Feliz cumpleaños!"],
+
         /* buttons */
         "Your Managebac": ["Sənin Managebac-ın", "Твой Managebac", "Senin Managebac'in", "Dein Managebac", "Ton Managebac", "Tu Managebac"],
         "Our School EAS": ["Məktəbimiz EAS", "Наша школа EAS", "Okulumuz EAS", "Unsere Schule EAS", "Notre école EAS", "Nuestra escuela EAS"],
