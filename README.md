@@ -186,9 +186,9 @@ python -m http.server 3000
 | Role | Person |
 |---|---|
 | Website Creator & Host | **Yusif Gurbanzade** (YUSAI) |
-| Co-Host & Developer | **Farhad Ahmadov** (Farhadik) |
 | Co-Host | **Kenan Mikayilzade** (Kenanchik) |
-| Logo Design | **Rufiz A.** |
+| Logo Design | **Safia.** |
+| Logo Design | **Aliya.** |
 
 ---
 
@@ -198,7 +198,7 @@ Something incorrect, a lie, or you want to add something?
 
 - **Phone:** +994 50 549 99 33
 - **Find:** Yusif.G — Class 8A
-- **Instagram:** [@eashobies.site](https://www.instagram.com/eashobies.site/)
+- **Instagram:** [@eashobies.site](https://www.instagram.com/eas30.site/)
 - **Admin Panel:** [admin.eas30.site](https://admin.eas30.site)
 
 ---
@@ -211,7 +211,7 @@ This project is licensed under the **MIT License** — see the [LICENSE](LICENSE
 
 <div align="center">
 
-Made with ❤️ by Class 8A — EAS Baku · 2026–2027
+Made with ❤️ by Gityus — EAS Baku · 2026–2027
 
 ⭐ Star this repo if you like it!
 
