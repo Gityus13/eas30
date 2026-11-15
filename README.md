@@ -7,9 +7,8 @@
 **A premium class profile & hobbies website for Class 8A of EAS (Baku)**
 
 [![Live Site](https://img.shields.io/badge/🌐%20Live%20Site-eas30.site-6c63ff?style=for-the-badge)](https://eas30.site)
-[![Instagram](https://img.shields.io/badge/Instagram-@eashobies.site-E1306C?style=for-the-badge&logo=instagram)](https://www.instagram.com/eashobies.site/)
+[![Instagram](https://img.shields.io/badge/Instagram-@eas30.site-E1306C?style=for-the-badge&logo=instagram)](https://www.instagram.com/eas30.site/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)](LICENSE)
-[![Ask DeepWiki](https://devin.ai/assets/askdeepwiki.png)](https://deepwiki.com/Gityus13/Hobies)
 </div>
 
 ---
