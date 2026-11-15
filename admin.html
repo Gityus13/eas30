@@ -1,322 +1,534 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="robots" content="noindex, nofollow">
-    <title>EAS30 · Admin</title>
-    <link rel="icon" href="logo.png">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --bg1: #0b1f3a; --bg2: #311047;
-            --glass: rgba(255,255,255,.08); --line: rgba(255,255,255,.18);
-            --text: #f1f5f9; --muted: #aab6c8;
-            --pink: #ec4899; --violet: #7c3aed; --gold: #facc15; --danger: #f87171; --ok: #4ade80;
-        }
-        * { box-sizing: border-box; }
-        html, body { margin: 0; min-height: 100%; }
-        body {
-            font-family: 'Space Grotesk', system-ui, sans-serif;
-            color: var(--text);
-            background: linear-gradient(135deg, var(--bg1), var(--bg2));
-            background-attachment: fixed;
-            padding: 24px 16px 60px;
-        }
-        .wrap { max-width: 640px; margin: 0 auto; }
-        .top { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; }
-        .top img { width: 44px; height: 44px; border-radius: 12px; }
-        .top h1 { font-size: 22px; margin: 0; flex: 1; }
-        .top a, .linkbtn {
-            color: var(--muted); font-size: 14px; text-decoration: none; background: none; border: 0;
-            cursor: pointer; font-family: inherit; padding: 0;
-        }
-        .top a:hover, .linkbtn:hover { color: #fff; }
-        .card {
-            background: var(--glass); border: 1px solid var(--line); border-radius: 20px; padding: 20px;
-            backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); margin-bottom: 18px;
-        }
-        .card h2 { font-size: 17px; margin: 0 0 14px; }
-        label { display: block; font-size: 13px; color: var(--muted); margin: 12px 0 5px; }
-        input, select {
-            width: 100%; padding: 12px 14px; font: inherit; font-size: 15px; color: var(--text);
-            background: rgba(0,0,0,.28); border: 1px solid var(--line); border-radius: 12px; outline: none;
-        }
-        input:focus, select:focus { border-color: var(--pink); box-shadow: 0 0 0 3px rgba(236,72,153,.25); }
-        select option { color: #111; }
-        .row { display: grid; grid-template-columns: 1fr 120px; gap: 12px; }
-        .btn {
-            display: inline-flex; align-items: center; justify-content: center; gap: 8px; cursor: pointer;
-            padding: 12px 18px; border-radius: 12px; border: 0; font: inherit; font-weight: 700; font-size: 15px;
-            color: #fff; background: linear-gradient(135deg, var(--pink), var(--violet));
-        }
-        .btn:disabled { opacity: .55; cursor: wait; }
-        .btn.ghost { background: rgba(255,255,255,.12); font-weight: 500; }
-        .btn.danger { background: rgba(248,113,113,.18); color: #fecaca; font-weight: 500; }
-        .actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 18px; }
-        .msg { margin-top: 14px; font-size: 14px; min-height: 20px; }
-        .msg.err { color: var(--danger); } .msg.ok { color: var(--ok); }
-        .item {
-            display: flex; align-items: center; gap: 12px; padding: 12px 0; border-top: 1px solid var(--line);
-        }
-        .item:first-of-type { border-top: 0; }
-        .item .who { flex: 1; min-width: 0; }
-        .item .who b { font-size: 16px; overflow-wrap: anywhere; }
-        .item .who .sub { display: block; font-size: 12.5px; color: var(--muted); margin-top: 2px; overflow-wrap: anywhere; }
-        .age { background: var(--gold); color: #4a044e; font-weight: 700; border-radius: 999px; padding: 2px 9px; font-size: 13px; margin-left: 6px; }
-        .empty { color: var(--muted); font-size: 14px; padding: 6px 0; }
-        .hide { display: none !important; }
-        .hint { font-size: 12.5px; color: var(--muted); margin-top: 8px; }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>EAS30 · Birthday Manager</title>
+<link rel="icon" href="logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root {
+    --bg1:#0b1f3a;--bg2:#311047;--glass:rgba(255,255,255,.08);
+    --line:rgba(255,255,255,.18);--text:#f1f5f9;--muted:#aab6c8;
+    --pink:#ec4899;--violet:#7c3aed;--gold:#facc15;
+    --danger:#f87171;--ok:#4ade80;
+}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%}
+body{
+    font-family:'Space Grotesk',system-ui,sans-serif;color:var(--text);
+    background:linear-gradient(135deg,var(--bg1),var(--bg2));
+    background-attachment:fixed;padding:24px 16px 60px
+}
+.wrap{max-width:850px;margin:auto}
+.top{display:flex;align-items:center;gap:12px;margin-bottom:20px}
+.top img{width:44px;height:44px;border-radius:12px}
+.top h1{font-size:22px;margin:0;flex:1}
+.top a,.linkbtn{
+    color:var(--muted);font-size:14px;text-decoration:none;background:none;
+    border:0;cursor:pointer;font-family:inherit;padding:0
+}
+.top a:hover,.linkbtn:hover{color:white}
+.card{
+    background:var(--glass);border:1px solid var(--line);border-radius:20px;
+    padding:20px;backdrop-filter:blur(14px);margin-bottom:18px
+}
+.card h2{font-size:17px;margin:0 0 14px}
+label{display:block;font-size:13px;color:var(--muted);margin:12px 0 5px}
+input,select{
+    width:100%;padding:12px 14px;font:inherit;font-size:15px;color:var(--text);
+    background:rgba(0,0,0,.28);border:1px solid var(--line);
+    border-radius:12px;outline:none
+}
+input:focus,select:focus{border-color:var(--pink);box-shadow:0 0 0 3px rgba(236,72,153,.2)}
+select option{color:#111}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.dategrid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.btn{
+    display:inline-flex;align-items:center;justify-content:center;gap:8px;
+    cursor:pointer;padding:11px 17px;border-radius:12px;border:0;
+    font:inherit;font-weight:700;font-size:14px;color:white;
+    background:linear-gradient(135deg,var(--pink),var(--violet))
+}
+.btn:disabled{opacity:.55;cursor:wait}
+.btn.ghost{background:rgba(255,255,255,.12);font-weight:500}
+.btn.danger{background:rgba(248,113,113,.18);color:#fecaca;font-weight:500}
+.btn.small{padding:8px 12px;font-size:12px}
+.actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:17px}
+.msg{margin-top:13px;font-size:14px;min-height:20px}
+.msg.err{color:var(--danger)}.msg.ok{color:var(--ok)}
+.hint{font-size:12px;color:var(--muted);margin-top:9px;line-height:1.5}
+.hide{display:none!important}
+.search{margin-bottom:14px}
+.item{
+    display:flex;align-items:center;gap:12px;padding:14px 0;
+    border-top:1px solid var(--line)
+}
+.item:first-child{border-top:0}
+.who{flex:1;min-width:0}
+.who b{font-size:16px;overflow-wrap:anywhere}
+.sub{display:block;font-size:12.5px;color:var(--muted);margin-top:4px;overflow-wrap:anywhere;line-height:1.5}
+.age{
+    display:inline-block;background:var(--gold);color:#4a044e;font-weight:700;
+    border-radius:999px;padding:2px 9px;font-size:12px;margin-left:7px
+}
+.itemActions{display:flex;gap:7px;flex-wrap:wrap}
+.empty{color:var(--muted);font-size:14px;padding:10px 0}
+.sectionTop{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.count{font-size:12px;color:var(--muted)}
+@media(max-width:540px){
+    .grid{grid-template-columns:1fr}
+    .item{align-items:flex-start;flex-wrap:wrap}
+    .itemActions{width:100%;padding-left:0}
+}
+</style>
 </head>
 <body>
 <div class="wrap">
 
     <div class="top">
         <img src="logo.png" alt="" onerror="this.style.display='none'">
-        <h1>EAS30 Admin</h1>
+        <h1>EAS30 Birthday Manager</h1>
         <button class="linkbtn hide" id="lockBtn" type="button">Lock</button>
         <a href="/">← Site</a>
     </div>
 
-    <!-- LOCK SCREEN -->
     <div class="card" id="loginCard">
-        <h2>🔒 Admin key</h2>
+        <h2>🔒 Admin access</h2>
         <form id="loginForm">
-            <label for="keyInput">Enter the admin key (the ADMIN_KEY you set in Cloudflare)</label>
+            <label for="keyInput">Cloudflare ADMIN_KEY</label>
             <input id="keyInput" type="password" autocomplete="current-password" required>
-            <div class="actions"><button class="btn" id="loginBtn" type="submit">Unlock</button></div>
+            <div class="actions">
+                <button class="btn" id="loginBtn" type="submit">Unlock manager</button>
+            </div>
             <div class="msg" id="loginMsg" role="alert"></div>
         </form>
     </div>
 
-    <!-- PANEL -->
     <div id="panel" class="hide">
+
         <div class="card">
-            <h2>🎂 It's someone's birthday!</h2>
-            <form id="addForm">
-                <div class="row">
+            <h2 id="formTitle">🎂 Add a birthday</h2>
+            <form id="birthdayForm">
+                <div class="grid">
                     <div>
-                        <label for="nameInput">Name (same as on the card)</label>
-                        <input id="nameInput" list="studentNames" maxlength="40" placeholder="e.g. Emil" required autocomplete="off">
+                        <label for="nameInput">Name</label>
+                        <input id="nameInput" list="studentNames" maxlength="40"
+                               placeholder="e.g. Emil" required autocomplete="off">
                         <datalist id="studentNames"></datalist>
                     </div>
                     <div>
-                        <label for="ageInput">Turning</label>
-                        <input id="ageInput" type="number" min="1" max="120" inputmode="numeric" placeholder="14">
+                        <label for="ageInput">Current age</label>
+                        <input id="ageInput" type="number" min="1" max="120"
+                               inputmode="numeric" placeholder="14" required>
                     </div>
                 </div>
 
-                <label for="msgInput">Message (optional)</label>
-                <input id="msgInput" maxlength="140" placeholder="Have an amazing day!">
+                <div class="dategrid">
+                    <div>
+                        <label for="monthInput">Birthday month</label>
+                        <select id="monthInput" required>
+                            <option value="">Select month</option>
+                            <option value="1">January</option>
+                            <option value="2">February</option>
+                            <option value="3">March</option>
+                            <option value="4">April</option>
+                            <option value="5">May</option>
+                            <option value="6">June</option>
+                            <option value="7">July</option>
+                            <option value="8">August</option>
+                            <option value="9">September</option>
+                            <option value="10">October</option>
+                            <option value="11">November</option>
+                            <option value="12">December</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="dayInput">Birthday day</label>
+                        <input id="dayInput" type="number" min="1" max="31"
+                               placeholder="15" required>
+                    </div>
+                </div>
 
-                <label for="durInput">Keep birthday mode on</label>
-                <select id="durInput">
-                    <option value="today">Until the end of today (Baku time)</option>
-                    <option value="24h">For the next 24 hours</option>
-                    <option value="forever">Until I turn it off</option>
-                </select>
+                <label for="msgInput">Birthday wish / message</label>
+                <input id="msgInput" maxlength="140"
+                       placeholder="Have an amazing day!">
 
                 <div class="actions">
-                    <button class="btn" id="addBtn" type="submit">🎉 Start birthday mode</button>
-                    <button class="btn ghost" id="previewBtn" type="button">👀 Preview (only me)</button>
+                    <button class="btn" id="saveBtn" type="submit">🎉 Save birthday</button>
+                    <button class="btn ghost hide" id="cancelEditBtn" type="button">Cancel edit</button>
+                    <button class="btn ghost" id="previewBtn" type="button">👀 Preview</button>
                 </div>
-                <div class="msg" id="addMsg" role="status"></div>
+                <div class="hint">
+                    Save each person once. Their birthday mode will activate automatically
+                    every year. Their age will increase automatically after each birthday.
+                    No birth year is stored.
+                </div>
+                <div class="msg" id="formMsg" role="status"></div>
             </form>
         </div>
 
         <div class="card">
-            <h2>Running now</h2>
-            <div id="list"><div class="empty">Loading…</div></div>
-            <div class="actions" id="offRow"><button class="btn danger hide" id="offAll" type="button">Turn everything off</button></div>
-            <div class="hint">Visitors who already have the site open see changes within about a minute.</div>
+            <div class="sectionTop">
+                <h2>📚 Saved birthdays</h2>
+                <span class="count" id="count">0 records</span>
+            </div>
+            <input class="search" id="searchInput" type="search"
+                   placeholder="Search by name or birthday...">
+            <div id="list"><div class="empty">Loading birthdays...</div></div>
+            <div class="hint">
+                These are permanent records. Removing someone deletes their saved birthday.
+                Visitors see birthday changes within about a minute.
+            </div>
         </div>
     </div>
 </div>
 
 <script>
-(function () {
-    'use strict';
-    var API = 'https://eas30-birthday-api.farid-kurba.workers.dev/api/birthday-admin';
-    var STORE = 'eas_admin_key';          // sessionStorage: forgotten when this tab closes
-    var key = '';
+(function(){
+'use strict';
 
-    function $(id) { return document.getElementById(id); }
-    function setMsg(node, text, kind) { node.textContent = text || ''; node.className = 'msg' + (kind ? ' ' + kind : ''); }
+var API='https://eas30-birthday-api.farid-kurba.workers.dev/api/birthday-admin';
+var STORE='eas_admin_key';
+var key='';
+var birthdays=[];
+var editingId=null;
 
-    function api(method, query, body) {
-        return fetch(API + (query || ''), {
-            method: method,
-            headers: Object.assign({ 'X-Admin-Key': key }, body ? { 'Content-Type': 'application/json' } : {}),
-            body: body ? JSON.stringify(body) : undefined,
-            cache: 'no-store'
-        }).then(function (r) {
-            return r.json().catch(function () { return {}; }).then(function (data) {
-                if (!r.ok) {
-                    var err = new Error(data.error || ('Request failed (' + r.status + ')'));
-                    err.status = r.status;
-                    throw err;
-                }
-                return data;
-            });
-        });
-    }
+function $(id){return document.getElementById(id)}
+function setMsg(node,message,kind){
+    node.textContent=message||'';
+    node.className='msg'+(kind?' '+kind:'');
+}
 
-    /* ---------- lock / unlock ---------- */
-    function showPanel(on) {
-        $('panel').classList.toggle('hide', !on);
-        $('loginCard').classList.toggle('hide', on);
-        $('lockBtn').classList.toggle('hide', !on);
-    }
-
-    function unlock(k, silent) {
-        key = k;
-        $('loginBtn').disabled = true;
-        return api('GET').then(function (data) {
-            try { sessionStorage.setItem(STORE, k); } catch (e) { /* ignore */ }
-            showPanel(true);
-            renderList(data.birthdays);
-            loadNames();
-        }).catch(function (err) {
-            key = '';
-            try { sessionStorage.removeItem(STORE); } catch (e) { /* ignore */ }
-            showPanel(false);
-            if (!silent) {
-                var hint = err.status === 404 ? ' (Check that the Cloudflare Worker is deployed and the API URL is correct.)' : '';
-                setMsg($('loginMsg'), err.message + hint, 'err');
+function api(method,query,body){
+    return fetch(API+(query||''),{
+        method:method,
+        headers:Object.assign(
+            {'X-Admin-Key':key},
+            body?{'Content-Type':'application/json'}:{}
+        ),
+        body:body?JSON.stringify(body):undefined,
+        cache:'no-store'
+    }).then(function(response){
+        return response.json().catch(function(){return {} }).then(function(data){
+            if(!response.ok){
+                var error=new Error(data.error||('Request failed ('+response.status+')'));
+                error.status=response.status;
+                throw error;
             }
-        }).then(function () { $('loginBtn').disabled = false; });
-    }
-
-    $('loginForm').addEventListener('submit', function (e) {
-        e.preventDefault();
-        setMsg($('loginMsg'), '');
-        unlock($('keyInput').value.trim(), false);
+            return data;
+        });
     });
-    $('lockBtn').addEventListener('click', function () {
-        key = '';
-        try { sessionStorage.removeItem(STORE); } catch (e) { /* ignore */ }
-        $('keyInput').value = '';
+}
+
+/* Authentication */
+function showPanel(on){
+    $('panel').classList.toggle('hide',!on);
+    $('loginCard').classList.toggle('hide',on);
+    $('lockBtn').classList.toggle('hide',!on);
+}
+
+function unlock(savedKey,silent){
+    key=savedKey;
+    $('loginBtn').disabled=true;
+
+    return api('GET').then(function(data){
+        sessionStorage.setItem(STORE,savedKey);
+        birthdays=Array.isArray(data.birthdays)?data.birthdays:[];
+        showPanel(true);
+        renderList();
+        loadNames();
+    }).catch(function(error){
+        key='';
+        try{sessionStorage.removeItem(STORE)}catch(e){}
         showPanel(false);
-    });
-
-    /* ---------- list ---------- */
-    function fmtExpiry(ms) {
-        if (ms == null) return 'Stays on until you turn it off';
-        var when = new Date(ms).toLocaleString('en-GB', {
-            timeZone: 'Asia/Baku', day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit'
-        });
-        return 'Turns off automatically: ' + when + ' (Baku)';
-    }
-
-    function renderList(items) {
-        var box = $('list');
-        box.textContent = '';
-        $('offAll').classList.toggle('hide', !items.length);
-        if (!items.length) {
-            var empty = document.createElement('div');
-            empty.className = 'empty';
-            empty.textContent = 'Nobody right now. The site looks normal.';
-            box.appendChild(empty);
-            return;
+        if(!silent){
+            var hint=error.status===404
+                ?' Check that the Worker URL is correct.'
+                :'';
+            setMsg($('loginMsg'),error.message+hint,'err');
         }
-        items.forEach(function (b) {
-            var row = document.createElement('div');
-            row.className = 'item';
+    }).then(function(){
+        $('loginBtn').disabled=false;
+    });
+}
 
-            var who = document.createElement('div');
-            who.className = 'who';
-            var nm = document.createElement('b');
-            nm.textContent = b.name;
-            who.appendChild(nm);
-            if (b.age) {
-                var age = document.createElement('span');
-                age.className = 'age';
-                age.textContent = b.age;
-                nm.appendChild(age);
-            }
-            var sub = document.createElement('span');
-            sub.className = 'sub';
-            sub.textContent = (b.message ? '“' + b.message + '” · ' : '') + fmtExpiry(b.expires);
-            who.appendChild(sub);
-            row.appendChild(who);
+$('loginForm').addEventListener('submit',function(e){
+    e.preventDefault();
+    setMsg($('loginMsg'),'');
+    unlock($('keyInput').value.trim(),false);
+});
 
-            var del = document.createElement('button');
-            del.className = 'btn danger';
-            del.type = 'button';
-            del.textContent = 'Remove';
-            del.addEventListener('click', function () {
-                del.disabled = true;
-                api('DELETE', '?id=' + encodeURIComponent(b.id))
-                    .then(function (d) { renderList(d.birthdays); })
-                    .catch(function (err) { del.disabled = false; setMsg($('addMsg'), err.message, 'err'); });
-            });
-            row.appendChild(del);
-            box.appendChild(row);
+$('lockBtn').addEventListener('click',function(){
+    key='';
+    try{sessionStorage.removeItem(STORE)}catch(e){}
+    $('keyInput').value='';
+    showPanel(false);
+});
+
+/* Helpers */
+var months=[
+    'January','February','March','April','May','June',
+    'July','August','September','October','November','December'
+];
+
+function birthdayDate(b){
+    return (months[Number(b.month)-1]||'Unknown')+' '+b.day;
+}
+
+function escapeSearch(value){
+    return String(value||'').toLowerCase();
+}
+
+function resetForm(){
+    editingId=null;
+    $('birthdayForm').reset();
+    $('formTitle').textContent='🎂 Add a birthday';
+    $('saveBtn').textContent='🎉 Save birthday';
+    $('cancelEditBtn').classList.add('hide');
+}
+
+function refresh(){
+    return api('GET').then(function(data){
+        birthdays=Array.isArray(data.birthdays)?data.birthdays:[];
+        renderList();
+    }).catch(function(error){
+        setMsg($('formMsg'),'Could not refresh records: '+error.message,'err');
+    });
+}
+
+/* Saved birthday list */
+function renderList(){
+    var box=$('list');
+    var search=escapeSearch($('searchInput').value);
+    box.textContent='';
+
+    $('count').textContent=birthdays.length+
+        (birthdays.length===1?' record':' records');
+
+    var filtered=birthdays.filter(function(b){
+        var text=escapeSearch(
+            b.name+' '+birthdayDate(b)+' '+b.message
+        );
+        return text.includes(search);
+    });
+
+    filtered.sort(function(a,b){
+        return Number(a.month)-Number(b.month) ||
+               Number(a.day)-Number(b.day) ||
+               String(a.name).localeCompare(String(b.name));
+    });
+
+    if(!filtered.length){
+        var empty=document.createElement('div');
+        empty.className='empty';
+        empty.textContent=birthdays.length
+            ?'No matching birthdays found.'
+            :'No birthdays saved yet. Add the first one above!';
+        box.appendChild(empty);
+        return;
+    }
+
+    filtered.forEach(function(b){
+        var row=document.createElement('div');
+        row.className='item';
+
+        var who=document.createElement('div');
+        who.className='who';
+
+        var name=document.createElement('b');
+        name.textContent=b.name||'Unnamed';
+        who.appendChild(name);
+
+        var age=document.createElement('span');
+        age.className='age';
+        age.textContent='Age '+(b.age==null?'—':b.age);
+        name.appendChild(age);
+
+        var sub=document.createElement('span');
+        sub.className='sub';
+        sub.textContent='🎂 '+birthdayDate(b)+
+            (b.message?' · '+b.message:'');
+        who.appendChild(sub);
+
+        var actions=document.createElement('div');
+        actions.className='itemActions';
+
+        var edit=document.createElement('button');
+        edit.className='btn ghost small';
+        edit.type='button';
+        edit.textContent='Edit';
+        edit.addEventListener('click',function(){
+            startEdit(b);
         });
+
+        var remove=document.createElement('button');
+        remove.className='btn danger small';
+        remove.type='button';
+        remove.textContent='Delete';
+        remove.addEventListener('click',function(){
+            deleteBirthday(b,remove);
+        });
+
+        actions.appendChild(edit);
+        actions.appendChild(remove);
+        row.appendChild(who);
+        row.appendChild(actions);
+        box.appendChild(row);
+    });
+}
+
+$('searchInput').addEventListener('input',renderList);
+
+/* Add / edit */
+function startEdit(b){
+    editingId=b.id;
+    $('nameInput').value=b.name||'';
+    $('ageInput').value=b.startingAge!=null?b.startingAge:b.age;
+    $('monthInput').value=String(b.month);
+    $('dayInput').value=String(b.day);
+    $('msgInput').value=b.message||'';
+
+    $('formTitle').textContent='✏️ Edit birthday';
+    $('saveBtn').textContent='Save changes';
+    $('cancelEditBtn').classList.remove('hide');
+    setMsg($('formMsg'),'Editing '+b.name,'ok');
+
+    window.scrollTo({top:0,behavior:'smooth'});
+}
+
+$('cancelEditBtn').addEventListener('click',function(){
+    resetForm();
+    setMsg($('formMsg'),'Edit cancelled.','');
+});
+
+function validateBirthday(month,day){
+    var m=Number(month);
+    var d=Number(day);
+    if(!Number.isInteger(m)||!Number.isInteger(d)||m<1||m>12||d<1||d>31){
+        return false;
+    }
+    var days=[31,29,31,30,31,30,31,31,30,31,30,31];
+    return d<=days[m-1];
+}
+
+$('birthdayForm').addEventListener('submit',function(e){
+    e.preventDefault();
+
+    var name=$('nameInput').value.trim();
+    var age=Number($('ageInput').value);
+    var month=Number($('monthInput').value);
+    var day=Number($('dayInput').value);
+    var message=$('msgInput').value.trim();
+
+    if(!name){
+        setMsg($('formMsg'),'Enter a name.','err');
+        return;
+    }
+    if(!Number.isInteger(age)||age<1||age>120){
+        setMsg($('formMsg'),'Enter an age between 1 and 120.','err');
+        return;
+    }
+    if(!validateBirthday(month,day)){
+        setMsg($('formMsg'),'Enter a valid month and day. February 29 is supported.','err');
+        return;
     }
 
-    $('offAll').addEventListener('click', function () {
-        if (!confirm('Turn off birthday mode for everyone?')) return;
-        api('DELETE', '?all=1')
-            .then(function (d) { renderList(d.birthdays); setMsg($('addMsg'), 'Birthday mode is off.', 'ok'); })
-            .catch(function (err) { setMsg($('addMsg'), err.message, 'err'); });
-    });
+    var payload={
+        name:name,
+        month:month,
+        day:day,
+        startingAge:age,
+        message:message
+    };
 
-    /* ---------- add ---------- */
-    $('addForm').addEventListener('submit', function (e) {
-        e.preventDefault();
-        var name = $('nameInput').value.trim();
-        if (!name) return;
-        $('addBtn').disabled = true;
-        setMsg($('addMsg'), '');
-        api('POST', '', {
-            name: name,
-            age: $('ageInput').value ? Number($('ageInput').value) : null,
-            message: $('msgInput').value.trim(),
-            duration: $('durInput').value
-        }).then(function (d) {
-            renderList(d.birthdays);
-            setMsg($('addMsg'), '🎉 Birthday mode is ON for ' + name + '!', 'ok');
-            $('addForm').reset();
-        }).catch(function (err) {
-            setMsg($('addMsg'), err.message, 'err');
-        }).then(function () { $('addBtn').disabled = false; });
-    });
+    $('saveBtn').disabled=true;
+    setMsg($('formMsg'),'');
 
-    $('previewBtn').addEventListener('click', function () {
-        var name = $('nameInput').value.trim();
-        if (!name) { setMsg($('addMsg'), 'Type a name first.', 'err'); return; }
-        var url = '/?birthday_preview=' + encodeURIComponent(name);
-        if ($('ageInput').value) url += '&age=' + encodeURIComponent($('ageInput').value);
-        if ($('msgInput').value.trim()) url += '&message=' + encodeURIComponent($('msgInput').value.trim());
-        window.open(url, '_blank', 'noopener');
-    });
+    var request=editingId
+        ?api('PUT','?id='+encodeURIComponent(editingId),payload)
+        :api('POST','',payload);
 
-    /* ---------- name suggestions (read from the cards on the main page; the box still accepts any name) ---------- */
-    var namesLoaded = false;
-    function loadNames() {
-        if (namesLoaded) return;
-        namesLoaded = true;
-        fetch('/index.html').then(function (r) { return r.text(); }).then(function (html) {
-            var start = html.indexOf('const names = [');
-            if (start === -1) return;
-            var end = html.indexOf('];', start);
-            var block = html.slice(start, end === -1 ? undefined : end);
-            var re = /name:\s*"([^"]+)"/g, m, list = $('studentNames');
-            while ((m = re.exec(block))) {
-                var o = document.createElement('option');
-                o.value = m[1];
-                list.appendChild(o);
-            }
-        }).catch(function () { /* suggestions are optional */ });
+    request.then(function(data){
+        birthdays=Array.isArray(data.birthdays)?data.birthdays:[];
+        renderList();
+        resetForm();
+        setMsg(
+            $('formMsg'),
+            editingId?'Birthday updated successfully!':'Birthday saved permanently!',
+            'ok'
+        );
+    }).catch(function(error){
+        setMsg($('formMsg'),error.message,'err');
+    }).then(function(){
+        $('saveBtn').disabled=false;
+    });
+});
+
+/* Delete one record */
+function deleteBirthday(b,button){
+    if(!confirm('Permanently delete '+b.name+'\\'s birthday?'))return;
+
+    button.disabled=true;
+    api('DELETE','?id='+encodeURIComponent(b.id))
+        .then(function(data){
+            birthdays=Array.isArray(data.birthdays)?data.birthdays:[];
+            renderList();
+            if(editingId===b.id)resetForm();
+            setMsg($('formMsg'),b.name+' was deleted.','ok');
+        })
+        .catch(function(error){
+            button.disabled=false;
+            setMsg($('formMsg'),error.message,'err');
+        });
+}
+
+/* Preview */
+$('previewBtn').addEventListener('click',function(){
+    var name=$('nameInput').value.trim();
+    if(!name){
+        setMsg($('formMsg'),'Enter a name first.','err');
+        return;
     }
 
-    /* ---------- start: reuse the key from this tab if there is one ---------- */
-    var saved = '';
-    try { saved = sessionStorage.getItem(STORE) || ''; } catch (e) { /* ignore */ }
-    if (saved) unlock(saved, true);
+    var url='/?birthday_preview='+encodeURIComponent(name);
+    if($('ageInput').value)url+='&age='+encodeURIComponent($('ageInput').value);
+    if($('msgInput').value.trim()){
+        url+='&message='+encodeURIComponent($('msgInput').value.trim());
+    }
+    window.open(url,'_blank','noopener');
+});
+
+/* Optional name suggestions from the main site */
+var namesLoaded=false;
+function loadNames(){
+    if(namesLoaded)return;
+    namesLoaded=true;
+
+    fetch('/index.html').then(function(r){return r.text()})
+    .then(function(html){
+        var start=html.indexOf('const names = [');
+        if(start===-1)return;
+        var end=html.indexOf('];',start);
+        var block=html.slice(start,end===-1?undefined:end);
+        var regex=/name:\s*"([^"]+)"/g;
+        var match;
+        while((match=regex.exec(block))){
+            var option=document.createElement('option');
+            option.value=match[1];
+            $('studentNames').appendChild(option);
+        }
+    }).catch(function(){});
+}
+
+/* Restore this tab's admin session */
+var saved='';
+try{saved=sessionStorage.getItem(STORE)||''}catch(e){}
+if(saved)unlock(saved,true);
+
 })();
 </script>
 </body>
