@@ -19,7 +19,7 @@
     var script = document.currentScript;
     var FULL_THEME = !!(script && script.getAttribute('data-theme') === 'full');
 
-    var API = '/api/birthday';
+    var API = 'https://eas30-birthday-api.farid-kurba.workers.dev/api/birthday';
     var POLL_MS = 60 * 1000;
     var CLOSED_KEY = 'eas_bday_closed';
     var SECRET_MODES = ['disco', 'glitch', 'matrix', 'barbie', 'gta', 'halloween', 'christmas', 'birthday'];
@@ -350,7 +350,7 @@
     /* ---------- loading ---------- */
     function refresh() {
         if (document.hidden) return;
-        fetch(API, { headers: { Accept: 'application/json' }, credentials: 'same-origin' })
+        fetch(API, { headers: { Accept: 'application/json' }, mode: 'cors' })
             .then(function (r) { return r.ok ? r.json() : null; })
             .then(function (data) {
                 var list = cleanList(data);
