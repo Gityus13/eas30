@@ -138,7 +138,7 @@
 <script>
 (function () {
     'use strict';
-    var API = '/api/birthday-admin';
+    var API = 'https://eas30-birthday-api.farid-kurba.workers.dev/api/birthday-admin';
     var STORE = 'eas_admin_key';          // sessionStorage: forgotten when this tab closes
     var key = '';
 
@@ -183,7 +183,7 @@
             try { sessionStorage.removeItem(STORE); } catch (e) { /* ignore */ }
             showPanel(false);
             if (!silent) {
-                var hint = err.status === 404 ? ' (the /api folder isn\'t running here: this only works on Cloudflare Pages)' : '';
+                var hint = err.status === 404 ? ' (Check that the Cloudflare Worker is deployed and the API URL is correct.)' : '';
                 setMsg($('loginMsg'), err.message + hint, 'err');
             }
         }).then(function () { $('loginBtn').disabled = false; });
